@@ -1,0 +1,295 @@
+﻿
+@{
+  ViewData["Title"] = "Roles";
+  Layout = "_Layout";
+}
+
+<style>
+  #roles tbody tr {
+    cursor: pointer;
+  }
+
+  #roles tbody tr td:first-child {
+    width: 250px;
+  }
+
+  #rolemembers tbody tr td:first-child {
+    width: 250px;
+  }
+
+  .flex-container{
+    display: flex;
+    align-items: stretch;
+  }
+
+  .flex-container > div {
+    margin:10px;
+    text-align: left;
+  }
+
+  .disabledbutton{
+    color: grey;
+  }
+
+</style>
+<div class="flex-container">
+  <div style="flex-grow: 3">
+    <h3>Roles</h3>
+    <br />
+    <input placeholder="Filter" type="text" id="filterRole" />
+    <input placeholder="Add New Role" type="text" id="addRole" />
+    <br /><br />
+    <table id="roles">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+  <div id="roleMembersPanel" style="flex-grow: 7">
+    <h3>Members</h3>
+    <br />
+    <input type="text" id="editRoleMemberName" /> &nbsp;&nbsp; <button class="disabledbutton" disabled id="editRoleMember">Save Changes</button>
+    <br />    <br />
+    <input placeholder="Add New Member" type="text" id="addRoleMember" />
+    <br /><br />
+    <table id="rolemembers">
+      <thead>
+        <tr>
+          <th>Username</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</div>
+
+
+@section Scripts {
+  <script>
+
+    $(document).ready(function () {
+      showRoles();
+      $("#roleMembersPanel").hide();
+    });
+
+    $('#editRoleMemberName').keyup(function () { 
+      if (event.keyCode == 13) {
+        $('#editRoleMember').click();
+      }
+    });
+
+    $('#addRoleMember').keyup(function () {
+      $('#addRoleMember').autocomplete({source: '@Url.Action("FilterUsernames")'});
+    });
+
+    $("#filterRole").keyup(function () {
+
+      $.each($('#roles tbody tr'), function (key, value) {
+        $(this).hide();
+
+        if ($(this).find("td:first-child").text().toUpperCase().indexOf($("#filterRole").val().toUpperCase()) != -1)
+          $(this).show();
+      });
+
+    });
+
+    function showRoles() {
+      $('#roles tbody').html("Loading...");
+
+      $.ajax({
+        url: 'https://www.ccinvoice.com' + '@Url.Action("GetAll", "Roles")',
+        data: null,
+        type: 'GET',
+        success: function (roles) {
+          $('#roles tbody').html("");
+
+          $.each(roles, function (index, role) {
+
+            $('#roles tbody').append("<tr><td roleid='" + role.roleId + "' rolename='" + role.roleName + "'>" +
+              role.roleName + "</td><td><i onclick='RemoveRole(" + role.roleId + ");' class='glyphicon glyphicon-trash' ></i></td></tr>");
+          });
+          
+        },
+        error: function (xhr, error, ajax) {
+          showErrorHtml(jQuery.parseJSON(xhr.responseText));
+        }
+      });
+    };
+
+    function showErrorHtml(errorModel) {
+      window.location.href = "@Url.Action("Error", "Home", new { @area="Home"})" + "?Message=" + errorModel.message + "&BaseMessage=" + errorModel.baseMessage ;
+    }
+
+    $("#addRole").keyup(function (event) {
+
+      if (event.keyCode == 13) {
+
+        $.ajax({
+          url: 'https://www.ccinvoice.com' + '@Url.Action("AddRole", "Roles")',
+          type: "POST",
+          data: { RoleName: $(this).val() },
+          success: function (validationResult) {
+
+            if (validationResult.isValid) {
+              alert("Successfully Added Role");
+              location.reload();
+            } else {
+              alert(validationResult.messages[0].message);
+            }
+
+          },
+          error: function (xhr, something, ajax) {
+            alert("OOPS! The was an error processing your request - " + jQuery.parseJSON(xhr.responseText).message);
+          }
+        });
+      }
+
+    });
+
+    $("#editRoleMemberName").keyup(function (event) {
+      $("#editRoleMember").removeAttr("disabled");
+      $("#editRoleMember").removeClass("disabledbutton");
+    });
+
+    function RemoveRole(roleId) {
+
+      if (confirm("Are you sure?")) {
+
+        $.ajax({
+          url: 'https://www.ccinvoice.com' + '@Url.Action("RemoveRole", "Roles")',
+          data: { roleId: roleId },
+          type: "POST",
+          success: function () {
+
+            location.reload();
+
+          },
+          error: function (xhr, error, ajax) {
+            alert("OOPS! The was an error processing your request - " + jQuery.parseJSON(xhr.responseText).message);
+          }
+        });
+      }
+
+    }
+
+    $("#editRoleMember").click(function() {
+      var roleName = $("#editRoleMemberName").val();
+      var roleId = $("#editRoleMember").attr("selectedRole");
+
+      $.ajax({
+        url: 'https://www.ccinvoice.com' + '@Url.Action("EditRole", "Roles")',
+        type: "POST",
+        data: { RoleId: roleId, RoleName: roleName },
+        success: function (validationResult) {
+
+          if (validationResult.isValid) {
+            alert("Successfully Updated Role");
+            location.reload();
+          } else {
+            alert(validationResult.messages[0].message);
+          }
+
+        },
+        error: function (xhr, something, ajax) {
+          alert("OOPS! The was an error processing your request - " + jQuery.parseJSON(xhr.responseText).message);
+        }
+      });
+    });
+
+    $(document).on("click", "#roles tbody tr td:first-child", function () {
+      var roleId = $(this).attr("roleid");
+      var roleName = $(this).attr("rolename");
+
+      $("#roles tbody tr td:first-child").removeAttr("style");
+      $(this).attr("style", "background-color: lightgrey");
+
+      ShowRoleMembers(roleId, roleName);
+      $("#editRoleMember").attr("disabled");
+      $("#editRoleMember").addClass("disabledbutton");
+    });
+
+    function ShowRoleMembers(roleId, roleName) {
+      $("#addRoleMember").attr("selectedRole", roleId);
+      $("#editRoleMember").attr("selectedRole", roleId);
+
+      if(roleName !== "")
+        $("#editRoleMemberName").val(roleName);
+      
+      $.ajax({
+        url: 'https://www.ccinvoice.com' + '@Url.Action("GetRoleMembers", "Roles")',
+        data: { roleId: roleId },
+        type: "POST",
+        success: function (rolemembers) {
+          $("#roleMembersPanel").show();
+
+          $('#rolemembers tbody').html("");
+
+          $.each(rolemembers, function (index, rolemember) {
+
+            $('#rolemembers tbody').append("<tr><td rolememberid='" + rolemember.roleMemberId + "'>" +
+              rolemember.username + "</td><td><i onclick='RemoveRoleMember(" + roleId + ", " + rolemember.roleMemberId + ");' class='glyphicon glyphicon-trash' style='cursor:pointer' ></i></td></tr>");
+          });
+
+        },
+        error: function (xhr, error, ajax) {
+          alert("OOPS! The was an error processing your request - " + jQuery.parseJSON(xhr.responseText).message);
+        }
+      });
+    }
+
+    $("#addRoleMember").keyup(function (event) {
+
+      if (event.keyCode == 13) {
+        var roleId = $("#addRoleMember").attr("selectedRole");
+
+        $.ajax({
+          url: 'https://www.ccinvoice.com' + '@Url.Action("AddRoleMember", "Roles")',
+          type: "POST",
+          data: { RoleId: roleId, username: $(this).val() },
+          success: function (validationResult) {
+
+            if (validationResult.isValid) {
+              alert("Successfully Added Member");
+
+              ShowRoleMembers(roleId, "");
+              $("#addRoleMember").val("");
+            } else {
+              alert(validationResult.messages[0].message);
+            }
+
+          },
+          error: function (xhr, error, ajax) {
+            alert("OOPS! The was an error processing your request - " + jQuery.parseJSON(xhr.responseText).message);
+          }
+        });
+      }
+
+    });
+
+    function RemoveRoleMember(roleId, roleMemberId) {
+
+      if (confirm("Are you sure?")) {
+
+        $.ajax({
+          url: 'https://www.ccinvoice.com' + '@Url.Action("RemoveRoleMember", "Roles")',
+          data: { roleid: roleId, roleMemberId: roleMemberId },
+          type: "POST",
+          success: function () {
+            ShowRoleMembers(roleId, "");
+
+          },
+          error: function (xhr, error, ajax) {
+            alert("OOPS! The was an error processing your request - " + jQuery.parseJSON(xhr.responseText).message);
+          }
+        });
+      }
+
+    }
+
+  </script>
+}

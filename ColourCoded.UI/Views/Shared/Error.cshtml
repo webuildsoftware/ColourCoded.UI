@@ -1,0 +1,19 @@
+﻿@model ColourCoded.UI.Shared.GlobalErrorModel
+@{
+  ViewData["Title"] = "Error";
+}
+
+<h3 class="text-danger">Error.</h3>
+<h4 class="text-danger">An error occurred while processing your request.</h4>
+
+@if (Model.IsError)
+{
+  <p>
+    <strong>Detail:</strong> <code>@Model.Message</code>
+  </p>
+
+  <p>
+    <strong>Base error:</strong> <code>@Model.BaseMessage</code>
+  </p>
+}
+

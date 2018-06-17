@@ -1,0 +1,293 @@
+﻿@model ColourCoded.UI.Areas.Security.Models.Login.AuthenticateViewModel;
+
+@{
+  ViewData["Title"] = "Register";
+  Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+  input[type=button] {
+    width: 100px;
+  }
+
+  input[type=range] {
+    width: 300px;
+    margin-left: 150px;
+  }
+
+  label {
+    width: 150px;
+  }
+
+  .link-small {
+    font-size: 11px;
+    cursor: pointer;
+  }
+
+  .validationLabel {
+    color: red;
+    width: 150px;
+    font-size: 11px;
+  }
+</style>
+
+<h2>Register</h2>
+
+@using (Html.BeginForm("Register", "Authenticate", FormMethod.Post, new { id = "formRegistration" }))
+{
+  <label for="username">Username: </label>
+  <input id="username" name="username" type="text" maxlength="15" />
+  <label id="validusername" class="validationLabel"></label>
+  <br /><br />
+
+  <label for="validateUsername">Username available:</label>
+  <i id="validateUsername" class="glyphicon glyphicon-question-sign"></i>
+  <br /><br />
+
+  <label for="password">Password: </label>
+  <input type="password" id="password" name="password" /><a class="show-password link-small" href="">Show password</a>
+  <label id="validpassword" class="validationLabel"></label>
+  <br /><br />
+
+  <label for="confirmPassword">Confirm password: </label>
+  <input id="confirmPassword" name="confirmPassword" type="password" /><a class="show-confirmPassword link-small" href="">Show password</a>
+  <label id="validconfirmPassword" class="validationLabel"></label>
+  <br /><br />
+
+  <label for="firstName">First name: </label>
+  <input id="firstName" name="firstName" type="text" />
+  <label id="validfirstName" class="validationLabel"></label>
+  <br /><br />
+
+  <label for="lastName">Last name: </label>
+  <input id="lastName" name="lastName" type="text" />
+  <label id="validlastName" class="validationLabel"></label>
+  <br /><br />
+
+  <label for="emailAddress">Email: </label>
+  <input id="emailAddress" name="emailAddress" type="text" />
+  <label id="validemailAddress" class="validationLabel"></label>
+  <br /><br />
+
+  <input type="button" id="saveRegistration" value="Save" />
+  <input type="button" id="cancel" value="Cancel" />
+  <span class="validationLabel">@Html.DisplayFor(m => Model.ErrorMessage)</span>
+  <br /><br />
+  @Html.AntiForgeryToken();
+}
+
+@section Scripts
+{
+  <script>
+
+    // TODO: add ie 8/7 support, what browsers didnt support this check market share
+    $('.show-password').click(function (event) {
+      event.preventDefault();
+      if ($('#password').attr('type') === 'password') {
+        $('#password').attr('type', 'text');
+        $('.show-password').text('Hide password');
+      } else {
+        $('#password').attr('type', 'password');
+        $('.show-password').text('Show password');
+      }
+    });
+
+    $('.show-confirmPassword').click(function (event) {
+      event.preventDefault();
+      if ($('#confirmPassword').attr('type') === 'password') {
+        $('#confirmPassword').attr('type', 'text');
+        $('.show-confirmPassword').text('Hide password');
+      } else {
+        $('#confirmPassword').attr('type', 'password');
+        $('.show-confirmPassword').text('Show password');
+      }
+    });
+
+    $('#cancel').click(function () {
+      if (confirm('Are you sure?')) {
+        window.location.href = '@Url.Action("Index")';
+      }
+
+    });
+
+    $('#saveRegistration').click(function () {
+      if (validForm()) {
+        if (confirm('Are you sure?')) {
+          $('#formRegistration').submit();
+        }
+      }
+    });
+
+    $(document).ready(function () {
+      $('input[type=text]').keyup(function () {
+        var controlName = $(this).attr("name");
+        var validationLabel = 'valid' + controlName;
+        document.getElementById(validationLabel).innerHTML = "";
+        $(this).removeClass();
+      });
+
+      $('input[type=password]').keyup(function () {
+        var controlName = $(this).attr("name");
+        var validationLabel = 'valid' + controlName;
+        document.getElementById(validationLabel).innerHTML = "";
+        $(this).removeClass();
+      });
+
+      $('input[type=password]').change(function () {
+        var length = $(this).val().length;
+        var controlName = $(this).attr("name");
+        var label = 'valid' + controlName;
+
+        switch (controlName) {
+          case "password": if (length < 6) {
+            $(this).addClass("alert-danger");
+            document.getElementById(label).innerHTML = "Minimum length 6 characters";
+          }
+            break;
+          case "confirmPassword": if (length < 6) {
+            $(this).addClass("alert-danger");
+            document.getElementById(label).innerHTML = "Minimum length 6 characters";
+          }
+            break;
+          default: break;
+        }
+
+      });
+
+      $('#username').change(function () {
+        var controlName = $(this).attr("name");
+        var validationLabel = 'valid' + controlName;
+        var username = $(this).val();
+
+        if (username.length < 6) {
+          $(this).addClass("alert-danger");
+          document.getElementById(validationLabel).innerHTML = "Minimum length 6 characters";
+          return;
+        }
+
+        // call get method with validation result for availability
+        if (validateUsername(username)) {
+
+          $.ajax({
+            url: '@Url.Action("ValidateUser")' + '?username=' + username,
+            type: 'GET',
+            success: function (data) {
+
+              if (data.isValid) {
+                $(this).removeClass();
+                $('#validateUsername').removeClass();
+                $('#validateUsername').addClass("glyphicon glyphicon-ok-sign");
+                document.getElementById(validationLabel).setAttribute("isvalid", "true");
+              }
+              else {
+                $(this).addClass("alert-danger");
+                $('#validateUsername').removeClass();
+                $('#validateUsername').addClass("glyphicon glyphicon-remove-sign");
+                document.getElementById(validationLabel).innerHTML = data.messages[0].message;
+                document.getElementById(validationLabel).setAttribute("isvalid", "false");
+              }
+
+            },
+            error: function (xhr, options, error) {
+              alert("OOPS! The was an error processing your request - " + jQuery.parseJSON(xhr.responseText).message);
+            }
+          });
+        }
+        else {
+          $(this).addClass("alert-danger");
+          document.getElementById(validationLabel).innerHTML = "Invalid username";
+        }
+
+      });
+
+      $('#emailAddress').change(function () {
+        var controlName = $(this).attr("name");
+        var validationLabel = 'valid' + controlName;
+        var emailAddress = $(this).val();
+
+        if (!validateEmail($(this).val())) {
+          $(this).addClass("alert-danger");
+          document.getElementById(validationLabel).innerHTML = "Invalid email address";
+        }
+        else {
+          $.ajax({
+            url: '@Url.Action("ValidateEmail")' + '?emailAddress=' + emailAddress,
+            type: 'GET',
+            success: function (data) {
+
+              if (data.isValid) {
+                document.getElementById(validationLabel).innerHTML = "";
+                document.getElementById(validationLabel).setAttribute("isvalid", "true");
+              }
+              else {
+                document.getElementById(validationLabel).innerHTML = data.messages[0].message;
+                document.getElementById(validationLabel).setAttribute("isvalid", "false");
+              }
+
+            },
+            error: function (xhr, options, error) {
+              alert("OOPS! The was an error processing your request - " + jQuery.parseJSON(xhr.responseText).message);
+            }
+          });
+        }
+      });
+
+    });
+
+    function validForm() {
+      var isValid = true;
+
+      $.each($('input[type=text]'), function (index, control) {
+
+        if ($(control).val().length === 0) {
+          $(control).attr("placeholder", "Required");
+          $(control).addClass("alert-danger");
+          isValid = false;
+        }
+      });
+
+      if ($("#password").val().length === 0) {
+        $("#password").attr("placeholder", "Required");
+        $("#password").addClass("alert-danger");
+        isValid = false;
+      }
+
+      if ($("#confirmPassword").val().length === 0) {
+        $("#confirmPassword").attr("placeholder", "Required");
+        $("#confirmPassword").addClass("alert-danger");
+        isValid = false;
+      }
+
+      if ($("#confirmPassword").val() != $("#password").val()) {
+
+        $("#confirmPassword").attr("placeholder", "Required");
+        $("#password").attr("placeholder", "Required");
+        $("#confirmPassword").addClass("alert-danger");
+        $("#password").addClass("alert-danger");
+
+        $("#validpassword").text("Passwords must match.");
+
+        isValid = false;
+      }
+
+      if ($('#validusername').attr("isvalid") !== "true" || $('#validemailAddress').attr("isvalid") !== "true") {
+        isValid = false;
+        $('#validusername').addClass("alert-danger");
+        $('#validemailAddress').addClass("alert-danger");
+      }
+
+      return isValid;
+    }
+
+    function validateEmail(email) {
+      var pattern = /^[a-zA-Z0-9\-_]+(\.[a-zA-Z0-9\-_]+)*@@[a-z0-9]+(\-[a-z0-9]+)*(\.[a-z0-9]+(\-[a-z0-9]+)*)*\.[a-z]{2,4}$/;
+      return pattern.test(email);
+    }
+
+    function validateUsername(username) {
+      var pattern = /^[a-z0-9_-]{6,15}$/;
+      return pattern.test(username);
+    }
+
+  </script>
+}

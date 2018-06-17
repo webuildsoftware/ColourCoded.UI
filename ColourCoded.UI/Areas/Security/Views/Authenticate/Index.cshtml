@@ -1,0 +1,81 @@
+﻿@model ColourCoded.UI.Areas.Security.Models.Login.AuthenticateViewModel;
+
+@{
+  ViewData["Title"] = "Login";
+  Layout = "_Layout";
+}
+
+<style>
+  input[type=button] {
+    width: 100px;
+  }
+
+  .link-small {
+    font-size: 11px;
+    cursor: pointer;
+  }
+
+  .validationLabel {
+    color: red;
+    width: 150px;
+    font-size: 11px;
+  }
+</style>
+
+<h2>Login</h2>
+
+@using (Html.BeginForm("Login", "Authenticate", FormMethod.Post, new { id = "loginForm" }))
+{
+  <label for="username">Username: </label>
+  <input id="username" name="username" type="text" value="@Model.Username" /><br /><br />
+
+  <label for="password">Password: </label>
+  <input id="password" name="password" type="password" /><br /><br />
+
+  <input type="button" id="login" value="Login" />
+  <input type="button" id="register" value="Register" />
+  <span class="validationLabel">@Html.DisplayFor(m => Model.ErrorMessage, new { @class = "validationLabel" })</span>
+
+  @Html.AntiForgeryToken();
+}
+
+<a class="link-small" href="@Url.Action("ForgottenPasswordIndex", "Authenticate")">Forgotten password?</a>
+
+@section Scripts
+  {
+  <script>
+    $("#register").click(function () {
+      window.location.href = 'https://www.ccinvoice.com/' + '@Url.Action("RegisterIndex", "Authenticate")';
+    });
+
+    $("#username").keyup(function () {
+      $(this).removeClass();
+    });
+
+    $("#password").keyup(function () {
+      $(this).removeClass();
+    });
+
+    $("#login").click(function () {
+      if (validForm()) {
+        $("#loginForm").submit();
+      }
+    });
+
+    function validForm() {
+      var isValid = true;
+
+      if ($("#username").val() == "") {
+        $("#username").addClass("alert-danger");
+        isValid = false;
+      }
+
+      if ($("#password").val() == "") {
+        $("#password").addClass("alert-danger");
+        isValid = false;
+      }
+
+      return isValid;
+    }
+  </script>
+}

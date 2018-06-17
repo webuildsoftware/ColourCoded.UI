@@ -1,0 +1,309 @@
+﻿
+@{
+  ViewData["Title"] = "Artifacts";
+  Layout = "_Layout";
+}
+
+<style>
+  #artifacts tbody tr {
+    cursor: pointer;
+  }
+
+  #artifacts tbody tr td:first-child {
+      width: 250px;
+    }
+
+  #permissions tbody tr td:first-child {
+    width: 250px;
+  }
+
+  .flex-container {
+    display: flex;
+    align-items: stretch;
+  }
+
+  .flex-container > div {
+      margin: 10px;
+      text-align: left;
+    }
+
+  .disabledbutton {
+    color: grey;
+  }
+</style>
+<div class="flex-container">
+  <div style="flex-grow: 3">
+    <h3>Artifacts</h3>
+    <br />
+    <input placeholder="Filter" type="text" id="filterArtifacts" />
+    <input placeholder="Add New Artifact" type="text" id="addArtifact" />
+    <br /><br />
+    <table id="artifacts">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+  <div id="permissionsPanel" style="flex-grow: 5">
+    <h3>Permissions</h3>
+    <br />
+    <input type="text" id="editArtifactName" /> &nbsp;&nbsp; <button class="disabledbutton" disabled id="editArtifact">Save Changes</button>
+    <br />    <br />
+    Role <select id="roles"></select> &nbsp;&nbsp; <button id="addPermission">Add Permission</button>
+    <br /><br />
+    <table id="permissions">
+      <thead>
+        <tr>
+          <th>Permissions</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</div>
+
+
+@section Scripts {
+  <script>
+
+    $(document).ready(function () {
+      showArtifacts();
+      showRoles();
+      $("#permissionsPanel").hide();
+    });
+
+    function showRoles() {
+      $.ajax({
+        url: 'https://www.ccinvoice.com' + '@Url.Action("GetAll", "Roles")',
+        data: null,
+        type: 'GET',
+        success: function (roles) {
+          $.each(roles, function (index, role) {
+
+            $('#roles').append($('<option>', {
+              value: role.roleId,
+              text: role.roleName
+            }));
+
+          });
+
+        },
+        error: function (xhr, error, ajax) {
+          showErrorHtml(jQuery.parseJSON(xhr.responseText));
+        }
+      });
+    };
+
+    $('#editArtifactName').keyup(function () {
+      if (event.keyCode == 13) {
+        $('#editArtifact').click();
+      }
+    });
+
+    $("#filterArtifacts").keyup(function () {
+
+      $.each($('#artifacts tbody tr'), function (key, value) {
+        $(this).hide();
+
+        if ($(this).find("td:first-child").text().toUpperCase().indexOf($("#filterArtifacts").val().toUpperCase()) != -1)
+          $(this).show();
+      });
+
+    });
+
+    function showArtifacts() {
+      $('#artifacts tbody').html("Loading...");
+
+      $.ajax({
+        url: 'https://www.ccinvoice.com' + '@Url.Action("GetArtifacts", "Permissions")',
+        data: null,
+        type: 'GET',
+        success: function (artifacts) {
+          $('#artifacts tbody').html("");
+
+          $.each(artifacts, function (index, artifact) {
+
+            $('#artifacts tbody').append("<tr><td artifactid='" + artifact.artifactId + "' artifactname='" + artifact.artifactName + "'>" +
+              artifact.artifactName + "</td><td><i onclick='RemoveArtifact(" + artifact.artifactId + ");' class='glyphicon glyphicon-trash' ></i></td></tr>");
+          });
+
+        },
+        error: function (xhr, error, ajax) {
+          showErrorHtml(jQuery.parseJSON(xhr.responseText));
+        }
+      });
+    };
+
+    $("#addArtifact").keyup(function (event) {
+
+      if (event.keyCode == 13) {
+
+        $.ajax({
+          url: 'https://www.ccinvoice.com' + '@Url.Action("AddArtifact", "Permissions")',
+          type: "POST",
+          data: { ArtifactName: $(this).val() },
+          success: function (validationResult) {
+
+            if (validationResult.isValid) {
+              alert("Successfully Added Artifact");
+              location.reload();
+            } else {
+              alert(validationResult.messages[0].message);
+            }
+
+          },
+          error: function (xhr, something, ajax) {
+            alert("OOPS! The was an error processing your request - " + jQuery.parseJSON(xhr.responseText).message);
+          }
+        });
+      }
+
+    });
+
+    $("#editArtifactName").keyup(function (event) {
+      $("#editArtifact").removeAttr("disabled");
+      $("#editArtifact").removeClass("disabledbutton");
+    });
+
+    function RemoveArtifact(artifactId) {
+
+      if (confirm("Are you sure?")) {
+
+        $.ajax({
+          url: 'https://www.ccinvoice.com' + '@Url.Action("RemoveArtifact", "Permissions")',
+          data: { artifactId: artifactId },
+          type: "POST",
+          success: function () {
+
+            location.reload();
+
+          },
+          error: function (xhr, error, ajax) {
+            alert("OOPS! The was an error processing your request - " + jQuery.parseJSON(xhr.responseText).message);
+          }
+        });
+      }
+
+    }
+
+    $("#editArtifact").click(function() {
+      var artifactName = $("#editArtifactName").val();
+      var artifactId = $("#editArtifact").attr("selectedArtifact");
+
+      $.ajax({
+        url: 'https://www.ccinvoice.com' + '@Url.Action("EditArtifact", "Permissions")',
+        type: "POST",
+        data: { ArtifactId: artifactId, ArtifactName: artifactName },
+        success: function (validationResult) {
+
+          if (validationResult.isValid) {
+            alert("Successfully Updated Artifact");
+            location.reload();
+          } else {
+            alert(validationResult.messages[0].message);
+          }
+
+        },
+        error: function (xhr, something, ajax) {
+          alert("OOPS! The was an error processing your request - " + jQuery.parseJSON(xhr.responseText).message);
+        }
+      });
+    });
+
+    $(document).on("click", "#artifacts tbody tr td:first-child", function () {
+      var artifactId = $(this).attr("artifactId");
+      var artifactName = $(this).attr("artifactName");
+
+      $("#artifacts tbody tr td:first-child").removeAttr("style");
+      $(this).attr("style", "background-color: lightgrey");
+
+      ShowPermissions(artifactId, artifactName);
+      $("#editArtifact").attr("disabled");
+      $("#editArtifact").addClass("disabledbutton");
+    });
+
+    function ShowPermissions(artifactId, artifactName) {
+      $("#addPermission").attr("selectedArtifact", artifactId);
+      $("#editArtifact").attr("selectedArtifact", artifactId);
+
+      if (artifactName !== "")
+        $("#editArtifactName").val(artifactName);
+
+      $.ajax({
+        url: 'https://www.ccinvoice.com' + '@Url.Action("GetPermissions", "Permissions")',
+        data: { artifactId: artifactId },
+        type: "POST",
+        success: function (permissions) {
+          $("#permissionsPanel").show();
+
+          $('#permissions tbody').html("");
+
+          $.each(permissions, function (index, permission) {
+
+            $('#permissions tbody').append("<tr><td permissionid='" + permission.permissionId + "'>" +
+              permission.roleName + "</td><td><i onclick='RemovePermission(" + artifactId + ", " + permission.permissionId + ");' class='glyphicon glyphicon-trash' style='cursor:pointer' ></i></td></tr>");
+          });
+
+        },
+        error: function (xhr, error, ajax) {
+          alert("OOPS! The was an error processing your request - " + jQuery.parseJSON(xhr.responseText).message);
+        }
+      });
+    }
+
+    $("#addPermission").click(function (event) {
+      var artifactId = $("#addPermission").attr("selectedArtifact");
+
+      $.ajax({
+        url: 'https://www.ccinvoice.com' + '@Url.Action("AddPermission", "Permissions")',
+        type: "POST",
+        data: { artifactId: artifactId, roleId: $("#roles").val() },
+        success: function (validationResult) {
+
+          if (validationResult.isValid) {
+            alert("Successfully Added Permission");
+
+            ShowPermissions(artifactId, "");
+          } else {
+            alert(validationResult.messages[0].message);
+          }
+
+        },
+        error: function (xhr, error, ajax) {
+          alert("OOPS! The was an error processing your request - " + jQuery.parseJSON(xhr.responseText).message);
+        }
+      });
+
+    });
+
+    function RemovePermission(artifactId, permissionId) {
+
+      if (confirm("Are you sure?")) {
+
+        $.ajax({
+          url: 'https://www.ccinvoice.com' + '@Url.Action("RemovePermission", "Permissions")',
+          data: { artifactId: artifactId, permissionId: permissionId },
+          type: "POST",
+          success: function () {
+            ShowPermissions(artifactId, "");
+
+          },
+          error: function (xhr, error, ajax) {
+            alert("OOPS! The was an error processing your request - " + jQuery.parseJSON(xhr.responseText).message);
+          }
+        });
+      }
+
+    }
+
+    function showErrorHtml(errorModel) {
+      window.location.href = "@Url.Action("Error", "Home", new { @area="Home"})" + "?Message=" + errorModel.message + "&BaseMessage=" + errorModel.baseMessage ;
+    }
+
+  </script>
+}

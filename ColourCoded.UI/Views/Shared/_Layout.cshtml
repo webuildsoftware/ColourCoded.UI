@@ -1,0 +1,54 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>@ViewData["Title"] - ColourCoded.UI</title>
+  <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+  <link href="~/css/themes/base/jquery-ui.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="~/css/site.css" />
+  <script src="~/lib/jquery/dist/jquery.min.js"></script>
+  <script src="~/lib/jquery-ui/jquery-ui-1.12.1.min.js"></script>
+</head>
+<body>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">Colour Coded</a>
+            </div>
+            <div class="navbar-collapse collapse">
+              <ul class="nav navbar-nav">
+                <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                <li><a asp-area="Security" asp-controller="Roles" asp-action="Index">Roles</a></li>
+                <li><a asp-area="Security" asp-controller="Permissions" asp-action="Index">Permissions</a></li>
+                <li><a id="logout" asp-area="Security" asp-controller="Authenticate" asp-action="Logout">Logout</a></li>
+              </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; 2018 - Colour Coded</p>
+        </footer>
+    </div>
+
+    @RenderSection("Scripts", required: false)
+
+  <script>
+    $('#logout').click(function (event) {
+      if (!confirm('Are you sure you want to log out?')) {
+        event.preventDefault();
+      }
+
+    });
+  </script>
+</body>
+</html>

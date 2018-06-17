@@ -1,0 +1,10 @@
+﻿@model ColourCoded.UI.Areas.Home.Models.HomeViewModel;
+
+@{
+  ViewData["Title"] = "Home";
+  Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3>Home</h3>
+
+@Html.ActionLink("Change Password", "ChangePasswordIndex", "Authenticate", new { area="Security", username=Model.Username })
