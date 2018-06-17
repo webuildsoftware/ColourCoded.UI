@@ -3,6 +3,8 @@ using ColourCoded.UI.Areas.Security.Models.Login.RequestModels;
 using ColourCoded.UI.Areas.Security.Models.Login;
 using ColourCoded.UI.Areas.Security.Models.Permissions;
 using ColourCoded.UI.Areas.Security.Models.Permissions.RequestModels;
+using ColourCoded.UI.Areas.Home.Models;
+using System;
 
 namespace ColourCoded.UI.Shared.WebApiCaller
 {
@@ -18,6 +20,30 @@ namespace ColourCoded.UI.Shared.WebApiCaller
 
     public void ConfigureMock_RoleController_Responses()
     {
+      // "WebApi:Home:GetUserOrders"
+      var viewModel = new HomeViewModel
+      {
+        Orders = new List<HomeOrdersModel>
+          {
+            new HomeOrdersModel
+            {
+              CustomerName = "Test CustomerOne", OrderNo = 1, DeliveryDate = DateTime.Now.AddDays(24).ToShortDateString(), Total = "R 2 999.99"
+            },
+            new HomeOrdersModel
+            {
+              CustomerName = "Test CustomerTwo", OrderNo = 2, DeliveryDate = DateTime.Now.AddDays(2).ToShortDateString(), Total = "R 1 999.99"
+            },
+            new HomeOrdersModel
+            {
+              CustomerName = "Test CustomerThree", OrderNo = 3, DeliveryDate = DateTime.Now.ToShortDateString(), Total = "R 10 999.99"
+            },
+          },
+        OrdersFromDate = DateTime.Now.AddDays(-7),
+        OrdersToDate = DateTime.Now,
+      };
+
+
+      Responses.Add(new MockApiResponseModel { WepApiUrl = "WebApi:Home:GetUserOrders", RequestModel = new FindUserOrdersRequestModel { Username = "zunaid" }, ResponseContent = viewModel });
 
       // WebApi:Role:GetUsernames
       //var usernames = new List<string> { "Jon", "Jonny", "Jonathon", "Johno"};

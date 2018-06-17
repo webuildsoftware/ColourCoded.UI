@@ -8,7 +8,7 @@ namespace ColourCoded.Tests.Security
   {
     public T GetCookie<T>(string key)
     {
-      throw new System.NotImplementedException();
+      return default(T);
     }
 
     public void RemoveCookie(string key)

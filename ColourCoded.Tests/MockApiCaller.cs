@@ -3,7 +3,7 @@ using ColourCoded.UI.Shared.WebApiCaller;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
-namespace ColourCoded.Tests.Security
+namespace ColourCoded.Tests
 {
   public class MockApiCaller : IWebApiCaller
   {

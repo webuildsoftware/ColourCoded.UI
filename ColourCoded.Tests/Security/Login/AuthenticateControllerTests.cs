@@ -18,7 +18,6 @@ namespace ColourCoded.Tests.Security.Login
       public MockApiCaller MockApiCaller;
       public MockCookieHelper MockCookieHelper;
       public MockUserAgentHelper MockUserAgentHelper;
-      public IConfiguration Configuration;
 
       public Resources()
       {
@@ -41,7 +40,7 @@ namespace ColourCoded.Tests.Security.Login
 
       // Then
       Assert.IsNotNull(result);
-      Assert.AreEqual("ChangePassword", result.ViewName);
+      Assert.AreEqual("Index", result.ViewName);
     }
 
     [TestMethod]

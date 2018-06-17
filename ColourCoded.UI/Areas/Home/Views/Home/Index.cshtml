@@ -4,7 +4,63 @@
   ViewData["Title"] = "Home";
   Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<style>
+  table thead tr td {
+    background-color: lightgray;
+    width: 100px;
+  }
 
+    table thead tr td:first-child {
+      background-color: lightgray;
+      width: 150px;
+    }
+</style>
 <h3>Home</h3>
+<br />
+<h4>Create a Quote in 5 easy steps:</h4>
+<br />
+<ol>
+  <li>Add Customer Detail</li>
+  <li>Add Order Detail</li>
+  <li>Add Delivery Address Detail</li>
+  <li>Add My Company Detail</li>
+  <li>@Html.ActionLink("Create Quote Now...", "Index", "Orders", new { area = "Orders" })</li>
+</ol>
+<br />
+@if (Model.Orders.Count > 0)
+{
+  <h4>Your recent orders:</h4>
+  <br />
+  <div>
+    From: <input type="datetime" id="ordersFromDate" value="@Model.OrdersFromDate" />&nbsp;To: <input type="datetime" id="ordersToDate" value="@Model.OrdersToDate" />
+  </div>
+  <br />
+  <table id="orders">
+    <thead>
+      <tr>
+        <td>Customer</td>
+        <td>DeliveryDate</td>
+        <td>Total</td>
+      </tr>
+    </thead>
+    <tbody>
+      @foreach (var order in Model.Orders)
+      {
+        <tr>
+          <td data-orderno="@order.OrderNo">@order.CustomerName</td>
+          <td>@order.DeliveryDate</td>
+          <td>@order.Total</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+}
 
-@Html.ActionLink("Change Password", "ChangePasswordIndex", "Authenticate", new { area="Security", username=Model.Username })
+
+@section Scripts{
+  <script>
+    $(document).ready(function () {
+
+    });
+  </script>
+}

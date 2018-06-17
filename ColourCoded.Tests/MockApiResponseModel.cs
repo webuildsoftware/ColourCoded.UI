@@ -1,4 +1,4 @@
-﻿namespace ColourCoded.Tests.Security
+﻿namespace ColourCoded.Tests
 {
   public class MockApiResponseModel
   {
