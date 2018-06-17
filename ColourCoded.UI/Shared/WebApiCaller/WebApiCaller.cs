@@ -39,8 +39,13 @@ namespace ColourCoded.UI.Shared.WebApiCaller
           return (T)MockWebApi.Responses.FirstOrDefault(x => x.WepApiUrl == urlConfig && JsonConvert.SerializeObject(x.RequestModel).ToUpper() == JsonConvert.SerializeObject(requestModel).ToUpper()).ResponseContent;
       }
 
+      var webApiUrl = Configuration[urlConfig];
+
       var loggedInUser = CookieHelper.GetCookie<UserModel>("LoggedInUser");
-      var webApiUrl = Configuration[urlConfig] + "?token=" + loggedInUser?.ApiSessionToken; ;
+
+      if(loggedInUser != null)
+        webApiUrl +="?token=" + loggedInUser.ApiSessionToken;
+
       var webApiResponse = PostRequest(webApiUrl, requestModel);
 
       Exception innerException = null;

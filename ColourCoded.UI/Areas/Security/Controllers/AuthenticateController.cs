@@ -34,10 +34,12 @@ namespace ColourCoded.UI.Areas.Security.Controllers
 
     public ViewResult ChangePasswordIndex(AuthenticateViewModel viewModel)
     {
-      if (string.IsNullOrEmpty(viewModel.Username))
-        return View("Index", viewModel);
+      var loggedInUser = CookieHelper.GetCookie<UserModel>("LoggedInUser");
+      
+      if(loggedInUser != null)
+        return View("ChangePassword", viewModel);
 
-      return View("ChangePassword", viewModel);
+      return View("Index", viewModel); // Login screen
     }
 
     public ViewResult ForgottenPasswordIndex(AuthenticateViewModel model)
