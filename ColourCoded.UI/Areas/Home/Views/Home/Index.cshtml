@@ -47,7 +47,8 @@
       @foreach (var order in Model.Orders)
       {
         <tr>
-          <td data-orderno="@order.OrderNo">@order.CustomerName</td>
+          <td data-orderId="@order.OrderId">@order.OrderNo</td>
+          <td>@order.CustomerName</td>
           <td>@order.DeliveryDate</td>
           <td>@order.Total</td>
         </tr>

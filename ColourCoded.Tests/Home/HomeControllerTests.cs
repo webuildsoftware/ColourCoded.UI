@@ -60,7 +60,7 @@ namespace ColourCoded.Tests.Home
           {
             new HomeOrdersModel
             {
-              CustomerName = "Test Customer", OrderNo = 1, DeliveryDate = DateTime.Now.ToShortDateString(), Total = "R 2 999.99"
+              CustomerName = "Test Customer", OrderId = 1, OrderNo = "Moq001", DeliveryDate = DateTime.Now.ToShortDateString(), Total = "R 2 999.99"
             }
           },
         OrdersFromDate = DateTime.Now.AddDays(-7),

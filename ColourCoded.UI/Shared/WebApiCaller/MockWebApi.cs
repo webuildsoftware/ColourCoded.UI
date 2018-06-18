@@ -27,15 +27,15 @@ namespace ColourCoded.UI.Shared.WebApiCaller
           {
             new HomeOrdersModel
             {
-              CustomerName = "Test CustomerOne", OrderNo = 1, DeliveryDate = DateTime.Now.AddDays(24).ToShortDateString(), Total = "R 2 999.99"
+              CustomerName = "Test CustomerOne", OrderId = 1, OrderNo = "Moq001", DeliveryDate = DateTime.Now.AddDays(24).ToShortDateString(), Total = "R 2 999.99"
             },
             new HomeOrdersModel
             {
-              CustomerName = "Test CustomerTwo", OrderNo = 2, DeliveryDate = DateTime.Now.AddDays(2).ToShortDateString(), Total = "R 1 999.99"
+              CustomerName = "Test CustomerTwo", OrderId = 2, OrderNo = "Moq002", DeliveryDate = DateTime.Now.AddDays(2).ToShortDateString(), Total = "R 1 999.99"
             },
             new HomeOrdersModel
             {
-              CustomerName = "Test CustomerThree", OrderNo = 3, DeliveryDate = DateTime.Now.ToShortDateString(), Total = "R 10 999.99"
+              CustomerName = "Test CustomerThree", OrderId = 3, OrderNo = "Moq003", DeliveryDate = DateTime.Now.ToShortDateString(), Total = "R 10 999.99"
             },
           },
         OrdersFromDate = DateTime.Now.AddDays(-7),
