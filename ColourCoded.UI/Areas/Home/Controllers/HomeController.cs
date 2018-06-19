@@ -5,6 +5,7 @@ using ColourCoded.UI.Shared;
 using ColourCoded.UI.Shared.WebApiCaller;
 using ColourCoded.UI.Areas.Security.Models.Login;
 using System;
+using System.Collections.Generic;
 
 namespace ColourCoded.UI.Areas.Home.Controllers
 {
@@ -27,9 +28,9 @@ namespace ColourCoded.UI.Areas.Home.Controllers
       {
         var loggedInUser = CookieHelper.GetCookie<UserModel>("LoggedInUser");
 
-        var model = WebApiCaller.PostAsync<HomeViewModel>("WebApi:Home:GetUserOrders", new FindUserOrdersRequestModel { Username = loggedInUser.Username });
+        var result = WebApiCaller.PostAsync<List<HomeOrdersModel>>("WebApi:Home:GetUserOrders", new FindUserOrdersRequestModel { Username = loggedInUser.Username });
 
-        return View("Index", model);
+        return View("Index", new HomeViewModel { Orders = result });
       }
       catch (Exception Ex)
       {

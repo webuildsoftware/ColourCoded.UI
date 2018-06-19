@@ -62,9 +62,7 @@ namespace ColourCoded.Tests.Home
             {
               CustomerName = "Test Customer", OrderId = 1, OrderNo = "Moq001", DeliveryDate = DateTime.Now.ToShortDateString(), Total = "R 2 999.99"
             }
-          },
-        OrdersFromDate = DateTime.Now.AddDays(-7),
-        OrdersToDate = DateTime.Now,
+          }
       };
 
       resources.MockApiCaller.AddMockResponse("WebApi:Home:GetUserOrders", new FindUserOrdersRequestModel { Username = resources.TestUsername }, viewModel);
