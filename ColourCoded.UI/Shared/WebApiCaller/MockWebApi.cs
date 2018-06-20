@@ -32,18 +32,12 @@ namespace ColourCoded.UI.Shared.WebApiCaller
       //      new HomeOrdersModel
       //      {
       //        CustomerName = "Test CustomerTwo", OrderId = 2, OrderNo = "Moq002", DeliveryDate = DateTime.Now.AddDays(2).ToShortDateString(), Total = "R 1 999.99"
-      //      },
-      //      new HomeOrdersModel
-      //      {
-      //        CustomerName = "Test CustomerThree", OrderId = 3, OrderNo = "Moq003", DeliveryDate = DateTime.Now.ToShortDateString(), Total = "R 10 999.99"
-      //      },
-      //    },
-      //  OrdersFromDate = DateTime.Now.AddDays(-7),
-      //  OrdersToDate = DateTime.Now,
+      //      }
+      //    }
       //};
 
 
-      //Responses.Add(new MockApiResponseModel { WepApiUrl = "WebApi:Home:GetUserOrders", RequestModel = new FindUserOrdersRequestModel { Username = "zunaid" }, ResponseContent = viewModel });
+      //Responses.Add(new MockApiResponseModel { WepApiUrl = "WebApi:Home:GetUserOrdersByPeriod", RequestModel = new FindUserOrdersPeriodRequestModel { Username = "zunaid", StartDate = DateTime.Now.Date, EndDate = DateTime.Now.Date }, ResponseContent = viewModel });
 
       // WebApi:Role:GetUsernames
       //var usernames = new List<string> { "Jon", "Jonny", "Jonathon", "Johno"};

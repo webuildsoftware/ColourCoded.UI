@@ -14,11 +14,13 @@ namespace ColourCoded.UI.Areas.Home.Controllers
   {
     protected IWebApiCaller WebApiCaller;
     protected ICookieHelper CookieHelper;
+    protected UserModel CurrentUser;
 
     public HomeController(IWebApiCaller webApiCaller, ICookieHelper cookieHelper)
     {
       WebApiCaller = webApiCaller;
       CookieHelper = cookieHelper;
+      CurrentUser = CookieHelper.GetCookie<UserModel>("LoggedInUser");
     }
 
     [Authorize]
@@ -26,9 +28,23 @@ namespace ColourCoded.UI.Areas.Home.Controllers
     {
       try
       {
-        var loggedInUser = CookieHelper.GetCookie<UserModel>("LoggedInUser");
+        var result = WebApiCaller.PostAsync<List<HomeOrdersModel>>("WebApi:Home:GetUserOrders", new FindUserOrdersRequestModel { Username = CurrentUser.Username });
 
-        var result = WebApiCaller.PostAsync<List<HomeOrdersModel>>("WebApi:Home:GetUserOrders", new FindUserOrdersRequestModel { Username = loggedInUser.Username });
+        return View("Index", new HomeViewModel { Orders = result });
+      }
+      catch (Exception Ex)
+      {
+        return RedirectToAction("Error", new GlobalErrorModel(Ex.Message, Ex.StackTrace, Ex.GetBaseException().Message));
+      }
+    }
+
+    [Authorize]
+    [HttpPost]
+    public IActionResult GetUserOrdersByPeriod(DateTime startDate, DateTime endDate)
+    {
+      try
+      {
+        var result = WebApiCaller.PostAsync<List<HomeOrdersModel>>("WebApi:Home:GetUserOrdersByPeriod", new FindUserOrdersPeriodRequestModel { Username = CurrentUser.Username, StartDate = startDate, EndDate = endDate });
 
         return View("Index", new HomeViewModel { Orders = result });
       }

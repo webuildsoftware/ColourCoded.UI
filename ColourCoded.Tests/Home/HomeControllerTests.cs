@@ -35,8 +35,7 @@ namespace ColourCoded.Tests.Home
     {
       // Given
       var resources = new Resources();
-      resources.MockApiCaller.AddMockResponse("WebApi:Home:GetUserOrders", new FindUserOrdersRequestModel { Username = resources.TestUsername }, new HomeViewModel());
-
+      resources.MockApiCaller.AddMockResponse("WebApi:Home:GetUserOrders", new FindUserOrdersRequestModel { Username = resources.TestUsername }, new List<HomeOrdersModel>());
 
       // When
       var result = resources.Controller.Index() as ViewResult;
@@ -54,18 +53,15 @@ namespace ColourCoded.Tests.Home
     {
       // Given
       var resources = new Resources();
-      var viewModel = new HomeViewModel
-      {
-        Orders = new List<HomeOrdersModel>
-          {
-            new HomeOrdersModel
-            {
-              CustomerName = "Test Customer", OrderId = 1, OrderNo = "Moq001", DeliveryDate = DateTime.Now.ToShortDateString(), Total = "R 2 999.99"
-            }
-          }
-      };
+      var orders = new List<HomeOrdersModel>{ new HomeOrdersModel {
+                                                                    CustomerName = "Test Customer",
+                                                                    OrderId = 1,
+                                                                    OrderNo = "Moq001",
+                                                                    DeliveryDate = DateTime.Now.ToShortDateString(),
+                                                                    Total = "R 2 999.99"
+                                                                  }  };
 
-      resources.MockApiCaller.AddMockResponse("WebApi:Home:GetUserOrders", new FindUserOrdersRequestModel { Username = resources.TestUsername }, viewModel);
+      resources.MockApiCaller.AddMockResponse("WebApi:Home:GetUserOrders", new FindUserOrdersRequestModel { Username = resources.TestUsername }, orders);
 
       // When
       var result = resources.Controller.Index() as ViewResult;
@@ -76,10 +72,42 @@ namespace ColourCoded.Tests.Home
 
       var model = (HomeViewModel)result.Model;
       Assert.AreEqual(1, model.Orders.Count);
-      Assert.AreEqual(viewModel.Orders[0].OrderNo, model.Orders[0].OrderNo);
-      Assert.AreEqual(viewModel.Orders[0].CustomerName, model.Orders[0].CustomerName);
-      Assert.AreEqual(viewModel.Orders[0].DeliveryDate, model.Orders[0].DeliveryDate);
-      Assert.AreEqual(viewModel.Orders[0].Total, model.Orders[0].Total);
+      Assert.AreEqual(orders[0].OrderNo, model.Orders[0].OrderNo);
+      Assert.AreEqual(orders[0].CustomerName, model.Orders[0].CustomerName);
+      Assert.AreEqual(orders[0].DeliveryDate, model.Orders[0].DeliveryDate);
+      Assert.AreEqual(orders[0].Total, model.Orders[0].Total);
+    }
+
+    [TestMethod]
+    public void GetUserOrdersByPeriod_Success()
+    {
+      // Given
+      var resources = new Resources();
+      var orders = new List<HomeOrdersModel>{ new HomeOrdersModel {
+                                                                    CustomerName = "Test Customer",
+                                                                    OrderId = 1,
+                                                                    OrderNo = "Moq001",
+                                                                    DeliveryDate = DateTime.Now.ToShortDateString(),
+                                                                    Total = "R 2 999.99"
+                                                                  }  };
+      var startDate = DateTime.Now.AddMonths(-1);
+      var endDate = DateTime.Now;
+
+      resources.MockApiCaller.AddMockResponse("WebApi:Home:GetUserOrdersByPeriod", new FindUserOrdersPeriodRequestModel { Username = resources.TestUsername, StartDate = startDate, EndDate = endDate}, orders);
+
+      // When
+      var result = resources.Controller.GetUserOrdersByPeriod(startDate, endDate) as ViewResult;
+
+      // Then
+      Assert.IsNotNull(result);
+      Assert.AreEqual("Index", result.ViewName);
+
+      var model = (HomeViewModel)result.Model;
+      Assert.AreEqual(1, model.Orders.Count);
+      Assert.AreEqual(orders[0].OrderNo, model.Orders[0].OrderNo);
+      Assert.AreEqual(orders[0].CustomerName, model.Orders[0].CustomerName);
+      Assert.AreEqual(orders[0].DeliveryDate, model.Orders[0].DeliveryDate);
+      Assert.AreEqual(orders[0].Total, model.Orders[0].Total);
     }
   }
 }
