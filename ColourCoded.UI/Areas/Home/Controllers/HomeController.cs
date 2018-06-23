@@ -44,9 +44,9 @@ namespace ColourCoded.UI.Areas.Home.Controllers
     {
       try
       {
-        var result = WebApiCaller.PostAsync<List<HomeOrdersModel>>("WebApi:Home:GetUserOrdersByPeriod", new FindUserOrdersPeriodRequestModel { Username = CurrentUser.Username, StartDate = startDate, EndDate = endDate });
+        var result = WebApiCaller.PostAsync<List<HomeOrdersModel>>("WebApi:Home:GetUserOrdersInPeriod", new FindUserOrdersPeriodRequestModel { Username = CurrentUser.Username, StartDate = startDate, EndDate = endDate });
 
-        return View("Index", new HomeViewModel { Orders = result });
+        return View("Index", new HomeViewModel { Orders = result, StartDate = startDate, EndDate = endDate });
       }
       catch (Exception Ex)
       {

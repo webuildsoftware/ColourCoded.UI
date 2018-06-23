@@ -11,10 +11,10 @@
     width: 100px;
   }
 
-  table thead tr td:first-child {
-    background-color: lightgray;
-    width: 150px;
-  }
+    table thead tr td:first-child {
+      background-color: lightgray;
+      width: 150px;
+    }
 
   input[type=button] {
     width: 100px;
@@ -26,6 +26,9 @@
     font-size: 11px;
   }
 
+  .spaced {
+    padding: 3px;
+  }
 </style>
 
 <h3>Home</h3>
@@ -36,73 +39,82 @@
   <li>Add Order Detail</li>
   <li>Add Customer Detail [Optional]</li>
   <li>Add Delivery Address Detail [Optional]</li>
-  <li>Add My Company Detail [Optional]</li>
-  <li>@Html.ActionLink("Create Quote Now...", "Index", "Orders", new { area = "Orders" })</li>
+  <li>Add Company Detail [Optional]</li>
+  <li><a href='@Url.Action("OrderDetail", "Orders", new { area = "Orders" })'>Create Quote Now...</a></li>
 </ol>
 <br />
 @if (Model.Orders.Count > 0)
 {
-  <h4>Your recent orders:</h4>
-
-  <table id="orders">
-    <thead>
-      <tr>
-        <td>OrderNo</td>
-        <td>Customer</td>
-        <td>DeliveryDate</td>
-        <td>Total</td>
-      </tr>
-    </thead>
-    <tbody>
-      @foreach (var order in Model.Orders)
-      {
+  <h4>Recent Orders:</h4>
+  <form id="period" method="post" action="@Url.Action("GetUserOrdersByPeriod")">
+    <div class="spaced">
+      <input id="filter" type="text" placeholder="Filter" />
+    </div>
+    <div class="spaced">
+      From: <input type="date" id="startDate" name="startDate" min="2018-01-01" max="2018-12-31" />
+      &nbsp;&nbsp;To: <input type="date" id="endDate" name="endDate" min="2018-01-01" max="2018-12-31" />
+      &nbsp;&nbsp;<input id="search" type="button" value="Search" />
+    </div>
+  </form>
+  <div class="spaced">
+    <table id="orders">
+      <thead>
         <tr>
-          <td data-orderId="@order.OrderId">@order.OrderNo</td>
-          <td>@order.CustomerName</td>
-          <td>@order.DeliveryDate</td>
-          <td>@order.Total</td>
+          <td>Customer</td>
+          <td>OrderNo</td>
+          <td>CreateDate</td>
+          <td>DeliveryDate</td>
+          <td>Total</td>
         </tr>
-      }
-    </tbody>
-  </table>
-  <br />
-  <div>
-    Start: <input type="date" id="ordersFromDate" min="2018-01-01" max="2018-12-31" />&nbsp;End: <input type="date" id="ordersToDate" min="2018-01-01" max="2018-12-31" />&nbsp;<input id="filter" type="button" value="Filter" />
+      </thead>
+      <tbody>
+        @foreach (var order in Model.Orders)
+        {
+          <tr customername="@order.CustomerName.ToUpper()" orderno="@order.OrderNo.ToUpper()" >
+            <td>@order.CustomerName</td>
+            <td data-orderId="@order.OrderId">@order.OrderNo</td>
+            <td>@order.CreateDate</td>
+            <td>@order.DeliveryDate</td>
+            <td>@order.Total</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+    <br />
   </div>
-  <br />
+
 }
 
-
 @section Scripts
-{
+  {
   <script>
-    $(document).ready(function () {
 
+    $("#filter").keyup(function () {
+      var filter = $("#filter").val().toUpperCase();
+
+      if (filter !== "") {
+        $("#orders tbody tr").hide();
+        $("#orders tbody tr[customername*='" + filter + "']").show();
+        $("#orders tbody tr[orderno*='" + filter + "']").show();
+      }
+      else {
+        $("#orders tbody tr").show();
+      }
     });
 
-    $("#filter").click(function () {
+    $("#search").click(function () {
       var patternV1 = /(2018)\/([0-9]{2})\/([0-9]{2})/;
       var patternV2 = /(2018)-([0-9]{2})-([0-9]{2})/;
 
-      var startDate = $("#ordersFromDate").val();
-      var endDate = $("#ordersToDate").val();
+      var startDate = $("#startDate").val();
+      var endDate = $("#endDate").val();
 
       if (patternV1.test(startDate) || patternV2.test(startDate)) {
 
         if (patternV1.test(endDate) || patternV2.test(endDate)) {
-          
-          $.ajax({
-            url: 'https://www.ccinvoice.com' + '@Url.Action("GetUserOrdersByPeriod", "Home")',
-            data: { startDate: startDate, endDate: endDate },
-            type: 'POST',
-            error: function (xhr, error, ajax) {
-              showErrorHtml(jQuery.parseJSON(xhr.responseText));
-            }
-          });
-
+          $('#period').submit();
         }
       }
-
     });
   </script>
 }

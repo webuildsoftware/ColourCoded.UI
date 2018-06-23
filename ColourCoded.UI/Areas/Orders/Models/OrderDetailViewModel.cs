@@ -2,7 +2,7 @@
 
 namespace ColourCoded.UI.Areas.Orders.Models
 {
-  public class OrdersViewModel
+  public class OrderDetailViewModel
   {
     public ValidationResult ValidationResult { get; set; }
   }

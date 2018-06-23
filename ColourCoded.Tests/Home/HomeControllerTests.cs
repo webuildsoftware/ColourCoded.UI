@@ -25,8 +25,8 @@ namespace ColourCoded.Tests.Home
         TestUsername = "testuser";
         MockApiCaller = new MockApiCaller();
         MockCookieHelper = new Mock<ICookieHelper>();
-        Controller = new HomeController(MockApiCaller, MockCookieHelper.Object);
         MockCookieHelper.Setup(x => x.GetCookie<UserModel>("LoggedInUser")).Returns(new UserModel { Username = TestUsername, ApiSessionToken = Guid.NewGuid().ToString(), IsAuthenticated = true });
+        Controller = new HomeController(MockApiCaller, MockCookieHelper.Object);
       }
     }
 
@@ -79,7 +79,7 @@ namespace ColourCoded.Tests.Home
     }
 
     [TestMethod]
-    public void GetUserOrdersByPeriod_Success()
+    public void GetUserOrdersInPeriod_Success()
     {
       // Given
       var resources = new Resources();
@@ -93,7 +93,7 @@ namespace ColourCoded.Tests.Home
       var startDate = DateTime.Now.AddMonths(-1);
       var endDate = DateTime.Now;
 
-      resources.MockApiCaller.AddMockResponse("WebApi:Home:GetUserOrdersByPeriod", new FindUserOrdersPeriodRequestModel { Username = resources.TestUsername, StartDate = startDate, EndDate = endDate}, orders);
+      resources.MockApiCaller.AddMockResponse("WebApi:Home:GetUserOrdersInPeriod", new FindUserOrdersPeriodRequestModel { Username = resources.TestUsername, StartDate = startDate, EndDate = endDate}, orders);
 
       // When
       var result = resources.Controller.GetUserOrdersByPeriod(startDate, endDate) as ViewResult;

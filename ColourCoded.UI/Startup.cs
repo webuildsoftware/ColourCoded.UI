@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Globalization;
 
 namespace ColourCoded.UI
 {
@@ -46,6 +47,12 @@ namespace ColourCoded.UI
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
     public void Configure(IApplicationBuilder app, IHostingEnvironment env)
     {
+      var cultureInfo = new CultureInfo("en-US");
+      cultureInfo.NumberFormat.CurrencySymbol = "R";
+
+      CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
+      CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
+
       app.UseAuthentication();
 
       if (env.IsDevelopment())
@@ -64,7 +71,7 @@ namespace ColourCoded.UI
       {
         routes.MapRoute(
            name: "default",
-           template: "{area:exists}/{controller:exists}/{action=Index}/{id?}");
+           template: "{area}/{controller}/{action=Index}/{id?}");
       });
     }
   }

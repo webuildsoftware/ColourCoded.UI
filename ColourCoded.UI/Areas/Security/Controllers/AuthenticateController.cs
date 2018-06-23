@@ -74,7 +74,13 @@ namespace ColourCoded.UI.Areas.Security.Controllers
         }
         catch {  }
 
-        var userModel = WebApiCaller.PostAsync<UserModel>("WebApi:Authenticate:Login", new LoginRequestModel { Username = username, Password = password, Browser = browserInfo, Device = deviceInfo });
+        var userModel = WebApiCaller.PostAsync<UserModel>("WebApi:Authenticate:Login", new LoginRequestModel
+        {
+          Username = username,
+          Password = password,
+          Browser = browserInfo,
+          Device = deviceInfo
+        });
 
         if (userModel.Username != null)
         {
@@ -104,6 +110,7 @@ namespace ColourCoded.UI.Areas.Security.Controllers
       {
         if (ModelState.IsValid)
         {
+          // default browser detection values
           string browserInfo = "Unable to determine";
           string deviceInfo = "Unable to determine";
 
@@ -170,18 +177,39 @@ namespace ColourCoded.UI.Areas.Security.Controllers
     {
       try
       {
-        var userModel = WebApiCaller.PostAsync<UserModel>("WebApi:Authenticate:Login", new LoginRequestModel { Username = username, Password = currentPassword });
+        // default browser detection values
+        string browserInfo = "Unable to determine";
+        string deviceInfo = "Unable to determine";
+
+        try
+        {
+          UserAgentHelper.SetUserAgent(Request.Headers["User-Agent"]);
+          browserInfo = UserAgentHelper.Browser.Name + " " + UserAgentHelper.Browser.Version + " " + UserAgentHelper.Browser.Major;
+          deviceInfo = UserAgentHelper.OS.Name + " " + UserAgentHelper.OS.Version;
+        }
+        catch { }
+
+        var userModel = WebApiCaller.PostAsync<UserModel>("WebApi:Authenticate:Login", new LoginRequestModel
+        {
+          Username = username,
+          Password = currentPassword,
+          Browser = browserInfo,
+          Device = deviceInfo
+        });
 
         if (userModel.IsAuthenticated)
         {
-          var user = WebApiCaller.PostAsync<UserModel>("WebApi:Authenticate:ChangePassword", new ChangePasswordRequestModel { Username = username, NewPassword = newPassword });
-          CookieHelper.SignIn(user);
+          WebApiCaller.PostAsync<bool>("WebApi:Authenticate:ChangePassword", new ChangePasswordRequestModel
+          {
+            Username = username,
+            NewPassword = newPassword
+          });
 
-          return RedirectToAction("Index", "Home", new { area = "Home", user.Username });
+          CookieHelper.SignIn(userModel);
+          return RedirectToAction("Index", "Home", new { area = "Home", userModel.Username });
         }
         else
           return RedirectToAction("ChangePasswordIndex", "Authenticate", new AuthenticateViewModel { Username = username, ErrorMessage = "Invalid current password. Please try again." });
-
       }
       catch (Exception ex)
       {

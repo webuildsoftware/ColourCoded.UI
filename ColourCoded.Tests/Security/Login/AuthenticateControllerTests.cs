@@ -57,6 +57,8 @@ namespace ColourCoded.Tests.Security.Login
       {
         Username = username,
         Password = currentPassword,
+        Browser = "Unable to determine",
+        Device = "Unable to determine",
       }, new UserModel { Username = username, ApiSessionToken = Guid.NewGuid().ToString(), IsAuthenticated = true });
 
 
@@ -64,8 +66,7 @@ namespace ColourCoded.Tests.Security.Login
       {
         Username = username,
         NewPassword = newPassword,
-      }, new UserModel { Username = viewModel.Username, ApiSessionToken = Guid.NewGuid().ToString(), IsAuthenticated = true });
-
+      }, true);
 
       // When
       var result = resources.Controller.ChangePassword(username, currentPassword, newPassword) as RedirectToActionResult;
@@ -90,6 +91,8 @@ namespace ColourCoded.Tests.Security.Login
       {
         Username = username,
         Password = currentPassword,
+        Browser = "Unable to determine",
+        Device = "Unable to determine",
       }, new UserModel { Username = username, IsAuthenticated = false });
 
       // When

@@ -1,0 +1,346 @@
+﻿
+@{
+  ViewData["Title"] = "OrderDetail";
+  Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+  table thead tr td {
+    background-color: lightgray;
+    padding:3px;
+  }
+
+  table thead tr td:first-child {
+    background-color: lightgray;
+    width: 150px;
+  }
+
+  table i {
+    cursor: pointer;
+  }
+
+  input[type=button] {
+    width: 75px;
+  }
+
+  .validationLabel {
+    color: red;
+    width: 150px;
+    font-size: 11px;
+  }
+
+  #main div {
+    padding: 3px;
+  }
+
+  #main div span {
+    font-size: 11px;
+  }
+
+  .orderno {
+    width:100px;
+  }
+</style>
+<h3>Create Quote</h3>
+<div id="main">
+  <div>
+    <span>Add Product/Service</span>
+    <br />
+    <input type="text" id="product" placeholder="Enter description" />
+    <label id="validproduct" class="validationLabel"></label>
+  </div>
+  <div>
+    <span>Unit Price</span>
+    <br />
+    <input type="text" id="unitprice" placeholder="Enter amount" />
+    <label id="validunitprice" class="validationLabel"></label>
+  </div>
+  <div>
+    <span>Quantity</span>
+    <br />
+    <input type="text" id="quantity" placeholder="Enter quantity" />
+    <label id="validquantity" class="validationLabel"></label>
+  </div>
+  <div>
+    <span>Discount</span>
+    <br />
+    <input type="text" id="discount" placeholder="Enter discount amount" />
+    <label id="validdiscount" class="validationLabel"></label>
+  </div>
+  <div>
+    <input id="lineitem" value="Add" type="button" />
+  </div>
+  <div>
+    <br />
+    <table id="orderdetail">
+      <thead>
+        <tr>
+          <td>Item Description</td>
+          <td>Quantity</td>
+          <td>Unit Price</td>
+          <td>Discount</td>
+          <td>Line Total</td>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+  <div>
+    <br /><span>Order No</span><br />
+    <input type="text" id="ordernoprefix" class="orderno" placeholder="Enter prefix" />
+    <input type="text" id="ordernoseed" class="orderno" onkeypress="return false;" />&nbsp;&nbsp;
+    <input id="done" value="Done" type="button" />
+    <label id="validorder" class="validationLabel"></label>
+  </div>
+</div>
+
+@section Scripts{
+  <script>
+    var order = {
+      "orderdetail": []
+    };
+    var vatrate = 0.0;
+    var ordernoseed = 0;
+
+    $(document).ready(function () {
+
+      $.ajax({
+        url: '@Url.Action("GetVatRate")',
+        type: 'GET',
+        success: function (data) {
+          vatrate = data;
+        },
+        error: function (xhr, options, error) {
+          alert("OOPS! The was an error processing your request - " + jQuery.parseJSON(xhr.responseText).message);
+        }
+      });
+
+       $.ajax({
+        url: '@Url.Action("GetOrderNoSeed")',
+        type: 'GET',
+        success: function (data) {
+          ordernoseed = data;
+          $("#ordernoseed").val("QUOTE" +ordernoseed);
+        },
+        error: function (xhr, options, error) {
+          alert("OOPS! The was an error processing your request - " + jQuery.parseJSON(xhr.responseText).message);
+        }
+      });
+    });
+
+    $("#ordernoseed").change(function (event) {
+      $("#ordernoseed").val(ordernoseed);
+    })
+
+    $("#quantity").keyup(function (event) {
+      var quantity = $(this).val();
+
+      if (!$.isNumeric(event.key))
+        $(this).val(quantity.replace(event.key, ""));
+
+      if (event.keyCode == 13) {
+        $("#lineitem").click();
+      }
+    })
+
+    $("#quantity").change(function (event) {
+      if (!$.isNumeric($(this).val()))
+        $(this).val("");
+    })
+
+    $("#unitprice").keyup(function (event) {
+      var unitprice = $(this).val();
+
+      if (!$.isNumeric(event.key) && event.key !== ".")
+        $(this).val(unitprice.replace(event.key, ""));
+
+      if (event.keyCode == 13) {
+        $("#lineitem").click();
+      }
+    })
+
+    $("#unitprice").change(function (event) {
+      if (!$.isNumeric($(this).val()))
+        $(this).val("");
+
+    })
+
+    $("#discount").keyup(function (event) {
+      var discount = $(this).val();
+
+      if (!$.isNumeric(event.key) && event.key !== ".")
+        $(this).val(discount.replace(event.key, ""));
+
+      if (event.keyCode == 13) {
+        $("#lineitem").click();
+      }
+    })
+
+    $("#discount").change(function (event) {
+      if (!$.isNumeric($(this).val()))
+        $(this).val("");
+    })
+
+    $("#lineitem").click(function () {
+      var product = $("#product");
+      var quantity = $("#quantity");
+      var unitprice = $("#unitprice");
+      var discount = $("#discount");
+      var linetotal = (quantity.val() * unitprice.val()) - discount.val();
+
+      // refresh validation
+      product.removeClass();
+      quantity.removeClass();
+      unitprice.removeClass();
+
+      if (product.val() === "") { product.addClass("alert-danger"); return; }
+      if (quantity.val() === "") { quantity.addClass("alert-danger"); return; }
+      if (unitprice.val() === "") { unitprice.addClass("alert-danger"); return; }
+
+ 
+      var exists = false;
+
+      $.each(order.orderdetail, function (index, lineitem) {
+        // line item already exists check
+        if (lineitem.product === product.val() && lineitem.unitprice === Number(unitprice.val())) {
+          lineitem.quantity = lineitem.quantity + Number(quantity.val());
+          lineitem.linetotal = (lineitem.quantity * lineitem.unitprice) - lineitem.discount;
+          exists = true;
+        }
+      });
+
+      if (!exists) {
+        order.orderdetail.push(
+          {
+            "product": product.val(),
+            "quantity": Number(quantity.val()),
+            "unitprice": Number(unitprice.val()),
+            "discount": Number(discount.val()),
+            "linetotal": Number(linetotal)
+          });
+      }
+
+      updateOrderDetailGrid();
+
+      // refresh input
+      product.val("");
+      product.focus();
+      quantity.val("");
+      unitprice.val("");
+      discount.val("");
+
+    });
+
+    function updateOrderDetailGrid() {
+      var grid = $("#orderdetail tbody").html("");
+      var subtotal = 0.0;
+      var vattotal = 0.0;
+      var discount = 0.0;
+      var ordertotal = 0.0;
+
+      var exists = false;
+      $.each(order.orderdetail, function (index, lineitem) {
+        // sum totals
+        subtotal += lineitem.linetotal;
+        discount += lineitem.discount;
+
+        // append to grid
+        grid.append("<tr>");
+        grid.append("<td>" + lineitem.product + "</td>");
+        grid.append("<td>" + lineitem.quantity + "</td>");
+        grid.append("<td>" + lineitem.unitprice + "</td>");
+        grid.append("<td>" + lineitem.discount + "</td>");
+        grid.append("<td>R" + lineitem.linetotal + "</td>");
+        grid.append("<td><i class='glyphicon glyphicon-trash' onclick='removeLineItem(" + index + ")'></i></td>");
+        grid.append("</tr>");
+        exists = true;
+      });
+
+
+      if (exists) {
+        vattotal = subtotal * vatrate;
+        ordertotal += subtotal + vattotal - discount;
+
+        //  Sub Total
+        grid.append("<tr>");
+        grid.append("<td colspan='3'></td>");
+        grid.append("<td><strong>Sub Total</strong></td>");
+        grid.append("<td><strong>R " + subtotal + "</strong></td>");
+        grid.append("</tr>");
+
+        // Vat Total
+        grid.append("<tr>");
+        grid.append("<td colspan='3'></td>");
+        grid.append("<td><strong>VAT</strong></td>");
+        grid.append("<td><strong>R " + vattotal + "</strong></td>");
+        grid.append("</tr>");
+
+        // Discount Total
+        grid.append("<tr>");
+        grid.append("<td colspan='3'></td>");
+        grid.append("<td><strong>Discount</strong></td>");
+        grid.append("<td><strong>R " + discount + "</strong></td>");
+        grid.append("</tr>");
+
+        // Order Total
+        grid.append("<tr>");
+        grid.append("<td colspan='3'></td>");
+        grid.append("<td><strong>Order Total &nbsp;&nbsp;&nbsp;</strong></td>");
+        grid.append("<td><strong>R " + ordertotal + "</strong></td>");
+        grid.append("</tr>");
+
+        $("#validorder").html("");
+      }
+    }
+
+    function removeLineItem(index) {
+      order.orderdetail.splice(index, 1);
+      updateOrderDetailGrid();
+    }
+
+    $("#done").click(function () {
+
+      if (order.orderdetail.length == 0) {
+        $("#validorder").html("Please add order detail");
+      }
+      else {
+
+        $.ajax({
+          url: '@Url.Action("AddOrder")',
+          data: { orderNo: $("#ordernoprefix").val() + $("#ordernoseed").val() },
+          type: 'POST',
+          success: function (data) {
+            // if success: send orderId and json orderdetail list to controller to create order detail
+            var orderId = data;
+
+            $.ajax({
+              url: '@Url.Action("AddOrderDetail")',
+              data: { orderId: orderId, vatRate: vatrate, inputModel: order.orderdetail },
+              type: 'POST',
+              success: function (validResult) {
+                // if success: route to confirmation screen
+                if (validResult.isValid) {
+                  alert('success');
+                  return;
+                  window.location.href = '@Url.Action("ConfirmOrder")' + '?orderId=' + orderId;
+                }
+                else {
+                  $("#validorder").html("Error occured: " + validResult.messages[0].message);
+                }
+                // end if success
+              },
+              error: function (xhr, options, error) {
+                alert("OOPS! The was an error processing your request - " + jQuery.parseJSON(xhr.responseText).message);
+              }
+            });
+            // end if success
+          },
+          error: function (xhr, options, error) {
+            alert("OOPS! The was an error processing your request - " + jQuery.parseJSON(xhr.responseText).message);
+          }
+        });
+
+      }
+    });
+  </script>
+}

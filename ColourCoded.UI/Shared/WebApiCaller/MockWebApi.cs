@@ -5,6 +5,8 @@ using ColourCoded.UI.Areas.Security.Models.Permissions;
 using ColourCoded.UI.Areas.Security.Models.Permissions.RequestModels;
 using ColourCoded.UI.Areas.Home.Models;
 using System;
+using ColourCoded.UI.Areas.Orders.Models;
+using ColourCoded.UI.Areas.Orders.Models.RequestModels;
 
 namespace ColourCoded.UI.Shared.WebApiCaller
 {
@@ -20,10 +22,8 @@ namespace ColourCoded.UI.Shared.WebApiCaller
 
     public void ConfigureMock_RoleController_Responses()
     {
-      // "WebApi:Home:GetUserOrders"
-      //var viewModel = new HomeViewModel
-      //{
-      //  Orders = new List<HomeOrdersModel>
+      //"WebApi:Home:GetUserOrders"
+      //var viewModel = new List<HomeOrdersModel>
       //    {
       //      new HomeOrdersModel
       //      {
@@ -33,11 +33,51 @@ namespace ColourCoded.UI.Shared.WebApiCaller
       //      {
       //        CustomerName = "Test CustomerTwo", OrderId = 2, OrderNo = "Moq002", DeliveryDate = DateTime.Now.AddDays(2).ToShortDateString(), Total = "R 1 999.99"
       //      }
-      //    }
-      //};
+      //    };
 
+      // resources.MockApiCaller.AddMockResponse("WebApi:Home:GetVatRate", null, vatRate);
+      Responses.Add(new MockApiResponseModel { WepApiUrl = "WebApi:Orders:GetVatRate", RequestModel = null, ResponseContent = 0.15M });
+      Responses.Add(new MockApiResponseModel { WepApiUrl = "WebApi:Orders:GetOrderNoSeed", RequestModel = null, ResponseContent = 123 });
 
-      //Responses.Add(new MockApiResponseModel { WepApiUrl = "WebApi:Home:GetUserOrdersByPeriod", RequestModel = new FindUserOrdersPeriodRequestModel { Username = "zunaid", StartDate = DateTime.Now.Date, EndDate = DateTime.Now.Date }, ResponseContent = viewModel });
+      Responses.Add(new MockApiResponseModel { WepApiUrl = "WebApi:Orders:AddOrder", RequestModel = new AddOrderRequestModel { OrderNo = "QUOTE123" }, ResponseContent = 123 });
+
+      var inputModel = new List<OrderDetailInputModel>
+      {
+        new OrderDetailInputModel
+        {
+          Product = "test",
+          UnitPrice = 1M,
+          Quantity = 1M,
+          Discount = 0M,
+          LineTotal = 1M
+        },
+        new OrderDetailInputModel
+        {
+          Product = "delivery",
+          UnitPrice = 1M,
+          Quantity = 1M,
+          Discount = 0M,
+          LineTotal = 1M
+        }
+      };
+
+      foreach (var model in inputModel)
+      {
+        var requestModel = new AddOrderDetailRequestModel
+        {
+          OrderId = 123,
+          ItemDescription = model.Product,
+          UnitPrice = model.UnitPrice,
+          Quantity = model.Quantity,
+          Discount = model.Discount,
+          LineTotal = model.LineTotal,
+          Vat = Convert.ToDecimal(model.LineTotal * 0.15M)
+        };
+
+        Responses.Add(new MockApiResponseModel { WepApiUrl = "WebApi:Orders:AddOrderDetail", RequestModel = requestModel, ResponseContent = new ValidationResult() });
+      }
+
+      //Responses.Add(new MockApiResponseModel { WepApiUrl = "WebApi:Home:GetUserOrders", RequestModel = new FindUserOrdersRequestModel { Username = "zunaid" }, ResponseContent = viewModel });
 
       // WebApi:Role:GetUsernames
       //var usernames = new List<string> { "Jon", "Jonny", "Jonathon", "Johno"};
