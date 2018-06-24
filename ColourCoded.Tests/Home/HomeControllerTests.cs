@@ -53,13 +53,12 @@ namespace ColourCoded.Tests.Home
     {
       // Given
       var resources = new Resources();
-      var orders = new List<HomeOrdersModel>{ new HomeOrdersModel {
-                                                                    CustomerName = "Test Customer",
-                                                                    OrderId = 1,
-                                                                    OrderNo = "Moq001",
-                                                                    DeliveryDate = DateTime.Now.ToShortDateString(),
-                                                                    Total = "R 2 999.99"
-                                                                  }  };
+      var orders = new List<HomeOrdersModel>{ new HomeOrdersModel
+      {
+        OrderId = 1,
+        OrderNo = "Moq001",
+        Total = "R 2 999.99"
+      }  };
 
       resources.MockApiCaller.AddMockResponse("WebApi:Home:GetUserOrders", new FindUserOrdersRequestModel { Username = resources.TestUsername }, orders);
 
@@ -73,8 +72,6 @@ namespace ColourCoded.Tests.Home
       var model = (HomeViewModel)result.Model;
       Assert.AreEqual(1, model.Orders.Count);
       Assert.AreEqual(orders[0].OrderNo, model.Orders[0].OrderNo);
-      Assert.AreEqual(orders[0].CustomerName, model.Orders[0].CustomerName);
-      Assert.AreEqual(orders[0].DeliveryDate, model.Orders[0].DeliveryDate);
       Assert.AreEqual(orders[0].Total, model.Orders[0].Total);
     }
 
@@ -83,13 +80,16 @@ namespace ColourCoded.Tests.Home
     {
       // Given
       var resources = new Resources();
-      var orders = new List<HomeOrdersModel>{ new HomeOrdersModel {
-                                                                    CustomerName = "Test Customer",
-                                                                    OrderId = 1,
-                                                                    OrderNo = "Moq001",
-                                                                    DeliveryDate = DateTime.Now.ToShortDateString(),
-                                                                    Total = "R 2 999.99"
-                                                                  }  };
+      var orders = new List<HomeOrdersModel>
+      {
+        new HomeOrdersModel
+        {
+          OrderId = 1,
+          OrderNo = "Moq001",
+          Total = "R 2 999.99"
+        }
+      };
+
       var startDate = DateTime.Now.AddMonths(-1);
       var endDate = DateTime.Now;
 
@@ -105,8 +105,6 @@ namespace ColourCoded.Tests.Home
       var model = (HomeViewModel)result.Model;
       Assert.AreEqual(1, model.Orders.Count);
       Assert.AreEqual(orders[0].OrderNo, model.Orders[0].OrderNo);
-      Assert.AreEqual(orders[0].CustomerName, model.Orders[0].CustomerName);
-      Assert.AreEqual(orders[0].DeliveryDate, model.Orders[0].DeliveryDate);
       Assert.AreEqual(orders[0].Total, model.Orders[0].Total);
     }
   }

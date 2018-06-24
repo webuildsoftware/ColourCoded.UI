@@ -11,10 +11,14 @@
     width: 100px;
   }
 
-    table thead tr td:nth-child(2) {
-      background-color: lightgray;
-      width: 150px;
-    }
+  table thead tr td:first-child {
+    background-color: lightgray;
+    width: 150px;
+  }
+
+  table {
+    padding:3px;
+  }
 
   input[type=button] {
     width: 100px;
@@ -60,21 +64,17 @@
     <table id="orders">
       <thead>
         <tr>
-          <td>Customer</td>
           <td>OrderNo</td>
           <td>CreateDate</td>
-          <td>DeliveryDate</td>
           <td>Total</td>
         </tr>
       </thead>
       <tbody>
         @foreach (var order in Model.Orders)
         {
-        <tr customername="@order.CustomerName.ToUpper()" orderno="@order.OrderNo.ToUpper()">
-          <td data-orderId="@order.OrderId"><a href='@Url.Action("ConfirmOrderDetail", "Orders", new { area="Orders" })?orderId=123'>@order.OrderNo</a></td>
-          <td>@order.CustomerName</td>
+        <tr orderno="@order.OrderNo.ToUpper()">
+          <td data-orderId="@order.OrderId"><a href='@Url.Action("ConfirmOrderDetail", "Orders", new { area="Orders" })?orderId=@order.OrderId'>@order.OrderNo</a></td>
           <td>@order.CreateDate</td>
-          <td>@order.DeliveryDate</td>
           <td>@order.Total</td>
         </tr>
         }
@@ -94,7 +94,6 @@
 
       if (filter !== "") {
         $("#orders tbody tr").hide();
-        $("#orders tbody tr[customername*='" + filter + "']").show();
         $("#orders tbody tr[orderno*='" + filter + "']").show();
       }
       else {
