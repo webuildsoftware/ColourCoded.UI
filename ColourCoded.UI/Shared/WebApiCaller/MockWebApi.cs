@@ -39,6 +39,7 @@ namespace ColourCoded.UI.Shared.WebApiCaller
       Responses.Add(new MockApiResponseModel { WepApiUrl = "WebApi:Orders:GetVatRate", RequestModel = null, ResponseContent = 0.15M });
       Responses.Add(new MockApiResponseModel { WepApiUrl = "WebApi:Orders:GetOrderNoSeed", RequestModel = null, ResponseContent = 123 });
       Responses.Add(new MockApiResponseModel { WepApiUrl = "WebApi:Orders:GetOrderDetailLineNo", RequestModel = new GetOrderDetailLineNoRequestModel { OrderId = 123 }, ResponseContent = 1 });
+      Responses.Add(new MockApiResponseModel { WepApiUrl = "WebApi:Orders:EditOrderNo", RequestModel = new EditOrderNoRequestModel { OrderId = 123, OrderNo = "QUOTE123", Username = "zunaid" }, ResponseContent = "Success" });
 
       Responses.Add(new MockApiResponseModel { WepApiUrl = "WebApi:Orders:AddOrder", RequestModel = new AddOrderRequestModel { OrderNo = "QUOTE123", Username = "zunaid" }, ResponseContent = 123 });
 

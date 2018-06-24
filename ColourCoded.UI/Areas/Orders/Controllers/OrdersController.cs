@@ -62,14 +62,17 @@ namespace ColourCoded.UI.Areas.Orders.Controllers
     }
 
     [HttpPost]
-    public JsonResult AddOrder(string orderNo, int orderId)
+    public JsonResult AddOrder(string orderNo)
     {
-      if (orderId != 0)
-        return Json(orderId);
+      var result = WebApiCaller.PostAsync<int>("WebApi:Orders:AddOrder", new AddOrderRequestModel { OrderNo = orderNo, Username = CurrentUser.Username });
 
-      var loggedInUser = CookieHelper.GetCookie<UserModel>("LoggedInUser");
+      return Json(result);
+    }
 
-      var result = WebApiCaller.PostAsync<int>("WebApi:Orders:AddOrder", new AddOrderRequestModel { OrderNo = orderNo, Username = loggedInUser.Username });
+    [HttpPost]
+    public JsonResult EditOrderNo(int orderId, string orderNo)
+    {
+      var result = WebApiCaller.PostAsync<string>("WebApi:Orders:EditOrderNo", new EditOrderNoRequestModel { OrderId = orderId, OrderNo = orderNo, Username = CurrentUser.Username });
 
       return Json(result);
     }
@@ -77,8 +80,6 @@ namespace ColourCoded.UI.Areas.Orders.Controllers
     [HttpPost]
     public JsonResult AddOrderDetail(int orderId, decimal vatRate, List<OrderDetailInputModel> inputModel)
     {
-      var loggedInUser = CookieHelper.GetCookie<UserModel>("LoggedInUser");
-
       var validationResult = new ValidationResult();
 
       // get max line number for orderId
@@ -96,7 +97,7 @@ namespace ColourCoded.UI.Areas.Orders.Controllers
           Discount = model.Discount,
           LineTotal = model.LineTotal,
           Vat = Convert.ToDecimal(model.LineTotal * vatRate),
-          Username = loggedInUser.Username
+          Username = CurrentUser.Username
         });
 
         if (!validationResult.IsValid)

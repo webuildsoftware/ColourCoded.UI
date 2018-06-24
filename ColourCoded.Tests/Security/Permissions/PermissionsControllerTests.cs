@@ -9,6 +9,7 @@ using ColourCoded.UI.Areas.Security.Models.Permissions.RequestModels;
 using System.Linq;
 using Moq;
 using ColourCoded.UI.Areas.Security.Models.Login;
+using System;
 
 namespace ColourCoded.Tests.Security.Roles
 {
@@ -28,8 +29,8 @@ namespace ColourCoded.Tests.Security.Roles
         Username = "testuser";
         MockApiCaller = new MockApiCaller();
         MockCookieHelper = new Mock<ICookieHelper>();
+        MockCookieHelper.Setup(x => x.GetCookie<UserModel>("LoggedInUser")).Returns(new UserModel { Username = Username, ApiSessionToken = Guid.NewGuid().ToString(), IsAuthenticated = true });
         Controller = new PermissionsController(MockApiCaller, MockCookieHelper.Object);
-        MockCookieHelper.Setup(x => x.GetCookie<UserModel>("LoggedInUser")).Returns(new UserModel { Username = Username, ApiSessionToken = System.Guid.NewGuid().ToString(), IsAuthenticated = true });
       }
     }
 
@@ -105,7 +106,7 @@ namespace ColourCoded.Tests.Security.Roles
     {
       // Given
       var resources = new Resources();
-      var requestModel = new EditArtifactRequestModel { ArtifactId = 1, ArtifactName = "Test Artifact", UpdateUsername = resources.Username };
+      var requestModel = new EditArtifactRequestModel { ArtifactId = 1, ArtifactName = "Test Artifact", CreateUser = resources.Username };
 
       var responseModel = new ValidationResult();
       resources.MockApiCaller.AddMockResponse("WebApi:Permissions:EditArtifact", requestModel, responseModel);

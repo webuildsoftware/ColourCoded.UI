@@ -76,7 +76,7 @@ namespace ColourCoded.Tests.Orders
       resources.MockApiCaller.AddMockResponse("WebApi:Orders:AddOrder", requestModel, orderId);
 
       // when 
-      var result = resources.Controller.AddOrder(orderNo, 0) as JsonResult;
+      var result = resources.Controller.AddOrder(orderNo) as JsonResult;
 
       // then
       Assert.IsNotNull(result);
@@ -84,21 +84,23 @@ namespace ColourCoded.Tests.Orders
     }
 
     [TestMethod]
-    public void AddOrder_EditOrder_ReturnsOrderIdInt()
+    public void EditOrder_ReturnsOrderIdInt()
     {
       // given
       var resources = new Resources();
       const string orderNo = "TestQuote123";
       const int orderId = 101010;
       const string username = "testuser";
-      var requestModel = new AddOrderRequestModel { OrderNo = orderNo, Username = username };
+      var requestModel = new EditOrderNoRequestModel { OrderId = orderId, OrderNo = orderNo, Username = username };
+
+      resources.MockApiCaller.AddMockResponse("WebApi:Orders:EditOrderNo", requestModel, "Success");
 
       // when 
-      var result = resources.Controller.AddOrder(orderNo, orderId) as JsonResult;
+      var result = resources.Controller.EditOrderNo(orderId, orderNo) as JsonResult;
 
       // then
       Assert.IsNotNull(result);
-      Assert.AreEqual(orderId, result.Value);
+      Assert.AreEqual("Success", result.Value);
     }
 
     [TestMethod]

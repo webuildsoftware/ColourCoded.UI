@@ -18,11 +18,13 @@ namespace ColourCoded.UI.Areas.Security.Controllers
   {
     protected IWebApiCaller WebApiCaller;
     protected ICookieHelper CookieHelper;
+    protected UserModel CurrentUser;
 
     public PermissionsController(IWebApiCaller webApiCaller, ICookieHelper cookieHelper)
     {
       WebApiCaller = webApiCaller;
       CookieHelper = cookieHelper;
+      CurrentUser = CookieHelper.GetCookie<UserModel>("LoggedInUser");
     }
 
     public ViewResult Index()
@@ -38,8 +40,7 @@ namespace ColourCoded.UI.Areas.Security.Controllers
     [HttpPost]
     public JsonResult AddArtifact(AddArtifactRequestModel requestModel)
     {
-      var loggedInUser = CookieHelper.GetCookie<UserModel>("LoggedInUser");
-      requestModel.CreateUser = loggedInUser.Username;
+      requestModel.CreateUser = CurrentUser.Username;
 
       return Json(WebApiCaller.PostAsync<ValidationResult>("WebApi:Permissions:AddArtifact", requestModel));
     }
@@ -47,8 +48,7 @@ namespace ColourCoded.UI.Areas.Security.Controllers
     [HttpPost]
     public JsonResult EditArtifact(EditArtifactRequestModel requestModel)
     {
-      var loggedInUser = CookieHelper.GetCookie<UserModel>("LoggedInUser");
-      requestModel.UpdateUsername = loggedInUser.Username;
+      requestModel.CreateUser = CurrentUser.Username;
 
       return Json(WebApiCaller.PostAsync<ValidationResult>("WebApi:Permissions:EditArtifact", requestModel));
     }
@@ -70,8 +70,7 @@ namespace ColourCoded.UI.Areas.Security.Controllers
     [HttpPost]
     public JsonResult AddPermission(AddPermissionRequestModel requestModel)
     {
-      var loggedInUser = CookieHelper.GetCookie<UserModel>("LoggedInUser");
-      requestModel.CreateUser = loggedInUser.Username;
+      requestModel.CreateUser = CurrentUser.Username;
 
       return Json(WebApiCaller.PostAsync<ValidationResult>("WebApi:Permissions:Add", requestModel));
     }

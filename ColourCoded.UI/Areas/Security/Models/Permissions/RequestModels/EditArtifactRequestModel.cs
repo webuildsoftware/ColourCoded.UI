@@ -4,6 +4,6 @@
   {
     public int ArtifactId { get; set; }
     public string ArtifactName { get; set; }
-    public string UpdateUsername { get; set; }
+    public string CreateUser { get; set; }
   }
 }

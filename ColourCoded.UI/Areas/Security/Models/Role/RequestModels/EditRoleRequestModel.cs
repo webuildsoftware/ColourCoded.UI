@@ -6,6 +6,6 @@
 
     public string RoleName { get; set; }
 
-    public string AuditUsername { get; set; }
+    public string CreateUser { get; set; }
   }
 }

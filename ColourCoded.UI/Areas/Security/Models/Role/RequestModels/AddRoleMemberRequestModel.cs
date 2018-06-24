@@ -3,9 +3,7 @@
   public class AddRoleMemberRequestModel
   {
     public int RoleId { get; set; }
-
     public string Username { get; set; }
-
-    public string AuditUsername { get; set; }
+    public string CreateUser { get; set; }
   }
 }

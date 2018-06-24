@@ -7,7 +7,9 @@ using ColourCoded.UI.Shared;
 using ColourCoded.UI.Shared.WebApiCaller;
 using ColourCoded.UI.Areas.Security.Models.Role.RequestModels;
 using System.Linq;
-
+using Moq;
+using ColourCoded.UI.Areas.Security.Models.Login;
+using System;
 
 namespace ColourCoded.Tests.Security.Roles
 {
@@ -19,11 +21,16 @@ namespace ColourCoded.Tests.Security.Roles
     {
       public RolesController Controller;
       public MockApiCaller MockApiCaller;
+      public Mock<ICookieHelper> MockCookieHelper;
+      public string TestUsername { get; set; }
 
       public Resources()
       {
+        TestUsername = "testuser";
         MockApiCaller = new MockApiCaller();
-        Controller = new RolesController(MockApiCaller);
+        MockCookieHelper = new Mock<ICookieHelper>();
+        MockCookieHelper.Setup(x => x.GetCookie<UserModel>("LoggedInUser")).Returns(new UserModel { Username = TestUsername, ApiSessionToken = Guid.NewGuid().ToString(), IsAuthenticated = true });
+        Controller = new RolesController(MockApiCaller, MockCookieHelper.Object);
       }
     }
 
@@ -56,7 +63,7 @@ namespace ColourCoded.Tests.Security.Roles
     {
       // Given
       var resources = new Resources();
-      var requestModel = new AddRoleRequestModel { RoleName = "Test Role" };
+      var requestModel = new AddRoleRequestModel { RoleName = "Test Role", CreateUser = resources.TestUsername };
       resources.MockApiCaller.AddMockResponse("WebApi:Role:AddRole", requestModel, new ValidationResult());
 
       // When
@@ -95,7 +102,7 @@ namespace ColourCoded.Tests.Security.Roles
     {
       // Given
       var resources = new Resources();
-      var requestModel = new EditRoleRequestModel { RoleId = 1, RoleName = "Test Role" };
+      var requestModel = new EditRoleRequestModel { RoleId = 1, RoleName = "Test Role", CreateUser = resources.TestUsername };
 
       var responseModel = new ValidationResult();
       resources.MockApiCaller.AddMockResponse("WebApi:Role:EditRole", requestModel, responseModel);
@@ -157,7 +164,7 @@ namespace ColourCoded.Tests.Security.Roles
     {
       // Given
       var resources = new Resources();
-      var requestModel = new AddRoleMemberRequestModel { RoleId = 1, Username = "SomeUsername" };
+      var requestModel = new AddRoleMemberRequestModel { RoleId = 1, Username = "SomeUsername", CreateUser = resources.TestUsername };
       resources.MockApiCaller.AddMockResponse("WebApi:Role:AddRoleMember", requestModel, new ValidationResult());
 
       // When
@@ -175,7 +182,7 @@ namespace ColourCoded.Tests.Security.Roles
     {
       // Given
       var resources = new Resources();
-      var requestModel = new AddRoleMemberRequestModel { RoleId = 1, Username = "SomeUsername" };
+      var requestModel = new AddRoleMemberRequestModel { RoleId = 1, Username = "SomeUsername", CreateUser = resources.TestUsername };
       var validationResult = new ValidationResult();
       validationResult.InValidate("", "The member already exists");
       resources.MockApiCaller.AddMockResponse("WebApi:Role:AddRoleMember", requestModel, validationResult);

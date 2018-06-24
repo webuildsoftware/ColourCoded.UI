@@ -108,8 +108,10 @@
     var ordernoseed = 0;
     var queryString = location.href.split("?")[1];
     var orderId = 0;
+    var orderNo = "";
 
     $(document).ready(function () {
+
       $.ajax({
         url: '@Url.Action("GetVatRate")',
         type: 'GET',
@@ -136,13 +138,20 @@
       // check if the view is in edit mode
       if (queryString != undefined) {
         // get order id from query string
-        orderId = queryString.split("=")[1];
+        orderId = queryString.split("&")[0].split("=")[1];
+        orderNo = queryString.split("&")[1].split("=")[1];
+
+        // change header and update ordernoprefix
         $("#header").html("Edit Quote");
+        $("#ordernoprefix").val(orderNo);
 
         $.ajax({
           url: '@Url.Action("GetOrderLineDetails")' + '?orderId=' + orderId,
           type: 'GET',
           success: function (lineitems) {
+            ordernoseed = "";
+            $("#ordernoseed").val(ordernoseed);
+            $("#ordernoseed").attr("disabled", "disabled");
             // loop through order line details
             $.each(lineitems, function (index, lineitem) {
               order.orderdetail.push(
@@ -343,38 +352,75 @@
       }
       else {
 
-        $.ajax({
-          url: '@Url.Action("AddOrder")',
-          data: { orderNo: $("#ordernoprefix").val() + $("#ordernoseed").val() },
-          type: 'POST',
-          success: function (data) {
-            // if success: send orderId and json orderdetail list to controller to create order detail
-            var orderId = data;
+        if (orderId == 0) {
+          // perform the add of the new order
+          $.ajax({
+            url: '@Url.Action("AddOrder")',
+            data: { orderNo: $("#ordernoprefix").val() + $("#ordernoseed").val() },
+            type: 'POST',
+            success: function (data) {
+              // if success: send orderId and json orderdetail list to controller to add new  order detail
+              var orderId = data;
 
-            $.ajax({
-              url: '@Url.Action("AddOrderDetail")',
-              data: { orderId: orderId, vatRate: vatrate, inputModel: order.orderdetail },
-              type: 'POST',
-              success: function (validResult) {
-                // if success: route to confirmation screen
-                if (validResult.isValid) {
-                  window.location.href = '@Url.Action("ConfirmOrderDetail")' + '?orderId=' + orderId;
+              $.ajax({
+                url: '@Url.Action("AddOrderDetail")',
+                data: { orderId: orderId, vatRate: vatrate, inputModel: order.orderdetail },
+                type: 'POST',
+                success: function (validResult) {
+                  // if success: route to confirmation screen
+                  if (validResult.isValid) {
+                    window.location.href = '@Url.Action("ConfirmOrderDetail")' + '?orderId=' + orderId;
+                  }
+                  else {
+                    $("#validorder").html("Error occured: " + validResult.messages[0].message);
+                  }
+                  // end if success
+                },
+                error: function (xhr, options, error) {
+                  alert("OOPS! The was an error processing your request - " + jQuery.parseJSON(xhr.responseText).message);
                 }
-                else {
-                  $("#validorder").html("Error occured: " + validResult.messages[0].message);
+              });
+              // end if success
+            },
+            error: function (xhr, options, error) {
+              alert("OOPS! The was an error processing your request - " + jQuery.parseJSON(xhr.responseText).message);
+            }
+          });
+        }
+        else {
+          // perform the edit of the order
+          $.ajax({
+            url: '@Url.Action("EditOrderNo")',
+            data: { orderId: orderId, orderNo: orderNo },
+            type: 'POST',
+            success: function (data) {
+
+              // if success: send orderId and json orderdetail list to controller to add new order detail
+              $.ajax({
+                url: '@Url.Action("AddOrderDetail")',
+                data: { orderId: orderId, vatRate: vatrate, inputModel: order.orderdetail },
+                type: 'POST',
+                success: function (validResult) {
+                  // if success: route to confirmation screen
+                  if (validResult.isValid) {
+                    window.location.href = '@Url.Action("ConfirmOrderDetail")' + '?orderId=' + orderId;
+                  }
+                  else {
+                    $("#validorder").html("Error occured: " + validResult.messages[0].message);
+                  }
+                  // end if success
+                },
+                error: function (xhr, options, error) {
+                  alert("OOPS! The was an error processing your request - " + jQuery.parseJSON(xhr.responseText).message);
                 }
-                // end if success
-              },
-              error: function (xhr, options, error) {
-                alert("OOPS! The was an error processing your request - " + jQuery.parseJSON(xhr.responseText).message);
-              }
-            });
-            // end if success
-          },
-          error: function (xhr, options, error) {
-            alert("OOPS! The was an error processing your request - " + jQuery.parseJSON(xhr.responseText).message);
-          }
-        });
+              });
+              // end if success
+            },
+            error: function (xhr, options, error) {
+              alert("OOPS! The was an error processing your request - " + jQuery.parseJSON(xhr.responseText).message);
+            }
+          });
+        }
 
       }
     });

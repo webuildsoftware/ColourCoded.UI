@@ -5,6 +5,7 @@ using ColourCoded.UI.Areas.Security.Models.Role;
 using ColourCoded.UI.Areas.Security.Models.Role.RequestModels;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
+using ColourCoded.UI.Areas.Security.Models.Login;
 
 namespace ColourCoded.UI.Areas.Security.Controllers
 {
@@ -13,10 +14,14 @@ namespace ColourCoded.UI.Areas.Security.Controllers
   public class RolesController : Controller
   {
     protected IWebApiCaller WebApiCaller;
+    protected ICookieHelper CookieHelper;
+    protected UserModel CurrentUser;
 
-    public RolesController(IWebApiCaller webApiCaller)
+    public RolesController(IWebApiCaller webApiCaller, ICookieHelper cookieHelper)
     {
       WebApiCaller = webApiCaller;
+      CookieHelper = cookieHelper;
+      CurrentUser = CookieHelper.GetCookie<UserModel>("LoggedInUser");
     }
 
     public ViewResult Index()
@@ -29,10 +34,15 @@ namespace ColourCoded.UI.Areas.Security.Controllers
       return Json(WebApiCaller.PostAsync<List<RoleModel>>("WebApi:Role:GetAll", null));
     }
 
+    public JsonResult FilterUsernames(string term)
+    {
+      return Json(WebApiCaller.PostAsync<List<string>>("WebApi:Role:SearchUsers", new SearchUsersRequestModel { SearchTerm = term }));
+    }
+
     [HttpPost]
     public JsonResult AddRole(AddRoleRequestModel requestModel)
     {
-      requestModel.AuditUsername = string.Empty;
+      requestModel.CreateUser = CurrentUser.Username;
 
       return Json(WebApiCaller.PostAsync<ValidationResult>("WebApi:Role:AddRole", requestModel));
     }
@@ -40,7 +50,7 @@ namespace ColourCoded.UI.Areas.Security.Controllers
     [HttpPost]
     public JsonResult EditRole(EditRoleRequestModel requestModel)
     {
-      requestModel.AuditUsername = string.Empty;
+      requestModel.CreateUser = CurrentUser.Username;
 
       return Json(WebApiCaller.PostAsync<ValidationResult>("WebApi:Role:EditRole", requestModel));
     }
@@ -62,7 +72,7 @@ namespace ColourCoded.UI.Areas.Security.Controllers
     [HttpPost]
     public JsonResult AddRoleMember(AddRoleMemberRequestModel requestModel)
     {
-      requestModel.AuditUsername = string.Empty;
+      requestModel.CreateUser = CurrentUser.Username;
 
       return Json(WebApiCaller.PostAsync<ValidationResult>("WebApi:Role:AddRoleMember", requestModel));
     }
@@ -73,11 +83,6 @@ namespace ColourCoded.UI.Areas.Security.Controllers
       WebApiCaller.PostAsync<string>("WebApi:Role:RemoveRoleMember", requestModel);
 
       return Json("Success");
-    }
-
-    public JsonResult FilterUsernames(string term)
-    {
-      return Json(WebApiCaller.PostAsync<List<string>>("WebApi:Role:SearchUsers", new SearchUsersRequestModel { SearchTerm = term}));
     }
   }
 }
