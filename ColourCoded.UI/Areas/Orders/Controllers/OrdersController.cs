@@ -30,14 +30,21 @@ namespace ColourCoded.UI.Areas.Orders.Controllers
       return View();
     }
 
-    public ViewResult ConfirmOrderDetail(int orderId)
+    public IActionResult ConfirmOrderDetail(int orderId)
     {
-      var result = WebApiCaller.PostAsync<OrderDetailModel>("WebApi:Orders:GetOrderDetail", new GetOrderDetailRequestModel { OrderId = orderId });
+      try
+      {
+        var result = WebApiCaller.PostAsync<OrderDetailModel>("WebApi:Orders:GetOrderDetail", new GetOrderDetailRequestModel { OrderId = orderId });
 
-      return View("ConfirmOrderDetail", result);
+        return View("ConfirmOrderDetail", result);
+      }
+      catch (Exception ex)
+      {
+        return RedirectToAction("Error", "Home", new { area = "Home", IsError = "True", ex.Message, BaseMessage = ex.GetBaseException().Message });
+      }
     }
 
-    [HttpGet]
+    [HttpGet] // edit mode usage
     public JsonResult GetOrderLineDetails(int orderId)
     {
       var result = WebApiCaller.PostAsync<List<OrderLineDetailModel>>("WebApi:Orders:GetOrderLineDetails", new GetOrderLineDetailsRequestModel { OrderId = orderId });
@@ -78,16 +85,16 @@ namespace ColourCoded.UI.Areas.Orders.Controllers
     }
 
     [HttpPost]
-    public JsonResult AddOrderDetail(int orderId, decimal vatRate, List<OrderDetailInputModel> inputModel)
+    public JsonResult AddOrderDetail(int orderId, List<OrderDetailInputModel> inputModel)
     {
-      var validationResult = new ValidationResult();
-
       // get max line number for orderId
       var lineNo = WebApiCaller.PostAsync<int>("WebApi:Orders:GetOrderDetailLineNo", new GetOrderDetailLineNoRequestModel { OrderId = orderId });
 
+      var requestModel = new List<AddOrderDetailRequestModel>();
+
       foreach (var model in inputModel)
       {
-        validationResult = WebApiCaller.PostAsync<ValidationResult>("WebApi:Orders:AddOrderDetail", new AddOrderDetailRequestModel
+        requestModel.Add(new AddOrderDetailRequestModel
         {
           LineNo = lineNo,
           OrderId = orderId,
@@ -96,13 +103,11 @@ namespace ColourCoded.UI.Areas.Orders.Controllers
           Quantity = model.Quantity,
           Discount = model.Discount,
           LineTotal = model.LineTotal,
-          Vat = Convert.ToDecimal(model.LineTotal * vatRate),
           Username = CurrentUser.Username
-        });
-
-        if (!validationResult.IsValid)
-          break;
+        }); 
       }
+
+      var validationResult = WebApiCaller.PostAsync<ValidationResult>("WebApi:Orders:AddOrderDetail", requestModel);
 
       return Json(validationResult);
     }

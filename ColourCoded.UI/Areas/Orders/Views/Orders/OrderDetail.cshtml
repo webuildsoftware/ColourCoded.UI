@@ -174,6 +174,12 @@
 
     });
 
+    $("#ordernoprefix").keyup(function (event) {
+      if (event.keyCode == 13) {
+        $("#done").click();
+      }
+    })
+
     $("#ordernoseed").change(function (event) {
       $("#ordernoseed").val(ordernoseed);
     })
@@ -306,7 +312,7 @@
       if (exists) {
 
         vattotal = subtotal * vatrate;
-        ordertotal += subtotal + vattotal - discount;
+        ordertotal += subtotal + vattotal;
 
         //  Sub Total
         grid.append("<tr>");
@@ -315,18 +321,18 @@
         grid.append("<td align='right'><strong>R " + subtotal.toFixed(2) + "</strong></td>");
         grid.append("</tr>");
 
+        // Discount Total
+        grid.append("<tr>");
+        grid.append("<td colspan='3'></td>");
+        grid.append("<td><strong>Discount Incl.&nbsp;&nbsp;&nbsp;</strong></td>");
+        grid.append("<td align='right'><strong>R " + discount.toFixed(2) + "</strong></td>");
+        grid.append("</tr>");
+
         // Vat Total
         grid.append("<tr>");
         grid.append("<td colspan='3'></td>");
         grid.append("<td><strong>VAT</strong></td>");
         grid.append("<td align='right'><strong>R " + vattotal.toFixed(2) + "</strong></td>");
-        grid.append("</tr>");
-
-        // Discount Total
-        grid.append("<tr>");
-        grid.append("<td colspan='3'></td>");
-        grid.append("<td><strong>Discount &nbsp;&nbsp;&nbsp;</strong></td>");
-        grid.append("<td align='right'><strong>R " + discount.toFixed(2) + "</strong></td>");
         grid.append("</tr>");
 
         // Order Total
@@ -364,7 +370,7 @@
 
               $.ajax({
                 url: '@Url.Action("AddOrderDetail")',
-                data: { orderId: orderId, vatRate: vatrate, inputModel: order.orderdetail },
+                data: { orderId: orderId, inputModel: order.orderdetail },
                 type: 'POST',
                 success: function (validResult) {
                   // if success: route to confirmation screen
@@ -391,7 +397,7 @@
           // perform the edit of the order
           $.ajax({
             url: '@Url.Action("EditOrderNo")',
-            data: { orderId: orderId, orderNo: orderNo },
+            data: { orderId: orderId, orderNo: $("#ordernoprefix").val() + $("#ordernoseed").val() },
             type: 'POST',
             success: function (data) {
 

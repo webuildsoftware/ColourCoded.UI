@@ -120,7 +120,7 @@ namespace ColourCoded.Tests.Orders
         {
           Product = "Pizza",
           UnitPrice = 100M,
-          Quantity = 10M,
+          Quantity = 10,
           Discount = 100M,
           LineTotal = 900M
         },
@@ -128,15 +128,17 @@ namespace ColourCoded.Tests.Orders
         {
           Product = "Delivery Fee",
           UnitPrice = 80M,
-          Quantity = 1M,
+          Quantity = 1,
           Discount = 0M,
           LineTotal = 80M
         }
       };
 
+      var requestModel = new List<AddOrderDetailRequestModel>();
+
       foreach (var model in inputModel)
       {
-        var requestModel = new AddOrderDetailRequestModel
+        requestModel.Add(new AddOrderDetailRequestModel
         {
           LineNo = 1,
           OrderId = orderId,
@@ -145,15 +147,14 @@ namespace ColourCoded.Tests.Orders
           Quantity = model.Quantity,
           Discount = model.Discount,
           LineTotal = model.LineTotal,
-          Vat = Convert.ToDecimal(model.LineTotal * vatRate),
           Username = username
-        };
-
-        resources.MockApiCaller.AddMockResponse("WebApi:Orders:AddOrderDetail", requestModel, new ValidationResult());
+        });
       }
-      
+
+      resources.MockApiCaller.AddMockResponse("WebApi:Orders:AddOrderDetail", requestModel, new ValidationResult());
+
       // when 
-      var result = resources.Controller.AddOrderDetail(orderId, vatRate, inputModel) as JsonResult;
+      var result = resources.Controller.AddOrderDetail(orderId, inputModel) as JsonResult;
 
       // then
       Assert.IsNotNull(result);
@@ -173,20 +174,21 @@ namespace ColourCoded.Tests.Orders
 
       resources.MockApiCaller.AddMockResponse("WebApi:Orders:GetOrderDetailLineNo", new GetOrderDetailLineNoRequestModel { OrderId = orderId }, 1);
 
-
       var inputModel = new List<OrderDetailInputModel>
       {
         new OrderDetailInputModel
         {
           Product = "Pizza",
           UnitPrice = 100M,
-          Quantity = 10M,
+          Quantity = 10,
           Discount = 100M,
           LineTotal = 0M
         }
       };
 
-      var requestModel = new AddOrderDetailRequestModel
+      var requestModel = new List<AddOrderDetailRequestModel>();
+
+      requestModel.Add(new AddOrderDetailRequestModel
       {
         LineNo = 1,
         OrderId = orderId,
@@ -195,9 +197,8 @@ namespace ColourCoded.Tests.Orders
         Quantity = inputModel[0].Quantity,
         Discount = inputModel[0].Discount,
         LineTotal = inputModel[0].LineTotal,
-        Vat = Convert.ToDecimal(inputModel[0].LineTotal * vatRate),
         Username = username
-      };
+      });
 
       var validationResult = new ValidationResult();
       validationResult.InValidate("", "The line total provided is incorrect.");
@@ -205,7 +206,7 @@ namespace ColourCoded.Tests.Orders
       resources.MockApiCaller.AddMockResponse("WebApi:Orders:AddOrderDetail", requestModel, validationResult);
 
       // when 
-      var result = resources.Controller.AddOrderDetail(orderId, vatRate, inputModel) as JsonResult;
+      var result = resources.Controller.AddOrderDetail(orderId, inputModel) as JsonResult;
 
       // then
       Assert.IsNotNull(result);
@@ -231,13 +232,15 @@ namespace ColourCoded.Tests.Orders
         {
           Product = "Pizza",
           UnitPrice = -100M,
-          Quantity = 10M,
+          Quantity = 10,
           Discount = 100M,
           LineTotal = 900M
         }
       };
 
-      var requestModel = new AddOrderDetailRequestModel
+      var requestModel = new List<AddOrderDetailRequestModel>();
+
+      requestModel.Add(new AddOrderDetailRequestModel
       {
         LineNo = 1,
         OrderId = orderId,
@@ -246,9 +249,8 @@ namespace ColourCoded.Tests.Orders
         Quantity = inputModel[0].Quantity,
         Discount = inputModel[0].Discount,
         LineTotal = inputModel[0].LineTotal,
-        Vat = Convert.ToDecimal(inputModel[0].LineTotal * vatRate),
         Username = username
-      };
+      });
 
       var validationResult = new ValidationResult();
       validationResult.InValidate("", "Unit price less than zero.");
@@ -256,7 +258,7 @@ namespace ColourCoded.Tests.Orders
       resources.MockApiCaller.AddMockResponse("WebApi:Orders:AddOrderDetail", requestModel, validationResult);
 
       // when 
-      var result = resources.Controller.AddOrderDetail(orderId, vatRate, inputModel) as JsonResult;
+      var result = resources.Controller.AddOrderDetail(orderId, inputModel) as JsonResult;
 
       // then
       Assert.IsNotNull(result);
@@ -288,7 +290,7 @@ namespace ColourCoded.Tests.Orders
             OrderId = orderId,
             ItemDescription = "TestProduct",
             UnitPrice = 111M,
-            Quantity = 2M,
+            Quantity = 2,
             Discount = 0M,
             LineTotal = 242M
           }
