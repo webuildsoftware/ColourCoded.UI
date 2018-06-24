@@ -7,7 +7,12 @@
 <style>
   table thead tr td {
     background-color: lightgray;
-    padding:3px;
+    padding: 3px;
+    font-weight: bold;
+  }
+
+  table tbody tr td {
+    padding: 3px;
   }
 
   table thead tr td:first-child {
@@ -41,7 +46,7 @@
     width:100px;
   }
 </style>
-<h3>Create Quote</h3>
+<h3 id="header">Create Quote</h3>
 <div id="main">
   <div>
     <span>Add Product/Service</span>
@@ -76,7 +81,7 @@
       <thead>
         <tr>
           <td>Item Description</td>
-          <td>Quantity</td>
+          <td>Unit</td>
           <td>Unit Price</td>
           <td>Discount</td>
           <td>Line Total</td>
@@ -101,9 +106,10 @@
     };
     var vatrate = 0.0;
     var ordernoseed = 0;
+    var queryString = location.href.split("?")[1];
+    var orderId = 0;
 
     $(document).ready(function () {
-
       $.ajax({
         url: '@Url.Action("GetVatRate")',
         type: 'GET',
@@ -126,6 +132,37 @@
           alert("OOPS! The was an error processing your request - " + jQuery.parseJSON(xhr.responseText).message);
         }
       });
+
+      // check if the view is in edit mode
+      if (queryString != undefined) {
+        // get order id from query string
+        orderId = queryString.split("=")[1];
+        $("#header").html("Edit Quote");
+
+        $.ajax({
+          url: '@Url.Action("GetOrderLineDetails")' + '?orderId=' + orderId,
+          type: 'GET',
+          success: function (lineitems) {
+            // loop through order line details
+            $.each(lineitems, function (index, lineitem) {
+              order.orderdetail.push(
+                {
+                  "product": lineitem.itemDescription,
+                  "quantity": Number(lineitem.quantity),
+                  "unitprice": Number(lineitem.unitPrice),
+                  "discount": Number(lineitem.discount),
+                  "linetotal": Number(lineitem.lineTotal)
+                });
+            });
+            updateOrderDetailGrid();
+          },
+          error: function (xhr, options, error) {
+            alert("OOPS! The was an error processing your request - " + jQuery.parseJSON(xhr.responseText).message);
+          }
+        });
+
+      }
+
     });
 
     $("#ordernoseed").change(function (event) {
@@ -247,10 +284,10 @@
         // append to grid
         grid.append("<tr>");
         grid.append("<td>" + lineitem.product + "</td>");
-        grid.append("<td>" + lineitem.quantity + "</td>");
-        grid.append("<td>" + lineitem.unitprice + "</td>");
-        grid.append("<td>" + lineitem.discount + "</td>");
-        grid.append("<td>R" + lineitem.linetotal + "</td>");
+        grid.append("<td align='center'>" + lineitem.quantity + "</td>");
+        grid.append("<td align='right'>R " + lineitem.unitprice.toFixed(2) + "</td>");
+        grid.append("<td align='right'>R " + lineitem.discount.toFixed(2) + "</td>");
+        grid.append("<td align='right'>R " + lineitem.linetotal.toFixed(2) + "</td>");
         grid.append("<td><i class='glyphicon glyphicon-trash' onclick='removeLineItem(" + index + ")'></i></td>");
         grid.append("</tr>");
         exists = true;
@@ -258,6 +295,7 @@
 
 
       if (exists) {
+
         vattotal = subtotal * vatrate;
         ordertotal += subtotal + vattotal - discount;
 
@@ -265,28 +303,28 @@
         grid.append("<tr>");
         grid.append("<td colspan='3'></td>");
         grid.append("<td><strong>Sub Total</strong></td>");
-        grid.append("<td><strong>R " + subtotal + "</strong></td>");
+        grid.append("<td align='right'><strong>R " + subtotal.toFixed(2) + "</strong></td>");
         grid.append("</tr>");
 
         // Vat Total
         grid.append("<tr>");
         grid.append("<td colspan='3'></td>");
         grid.append("<td><strong>VAT</strong></td>");
-        grid.append("<td><strong>R " + vattotal + "</strong></td>");
+        grid.append("<td align='right'><strong>R " + vattotal.toFixed(2) + "</strong></td>");
         grid.append("</tr>");
 
         // Discount Total
         grid.append("<tr>");
         grid.append("<td colspan='3'></td>");
-        grid.append("<td><strong>Discount</strong></td>");
-        grid.append("<td><strong>R " + discount + "</strong></td>");
+        grid.append("<td><strong>Discount &nbsp;&nbsp;&nbsp;</strong></td>");
+        grid.append("<td align='right'><strong>R " + discount.toFixed(2) + "</strong></td>");
         grid.append("</tr>");
 
         // Order Total
         grid.append("<tr>");
         grid.append("<td colspan='3'></td>");
-        grid.append("<td><strong>Order Total &nbsp;&nbsp;&nbsp;</strong></td>");
-        grid.append("<td><strong>R " + ordertotal + "</strong></td>");
+        grid.append("<td><strong>Total</strong></td>");
+        grid.append("<td align='right'><strong>R " + ordertotal.toFixed(2) + "</strong></td>");
         grid.append("</tr>");
 
         $("#validorder").html("");
@@ -320,9 +358,7 @@
               success: function (validResult) {
                 // if success: route to confirmation screen
                 if (validResult.isValid) {
-                  alert('success');
-                  return;
-                  window.location.href = '@Url.Action("ConfirmOrder")' + '?orderId=' + orderId;
+                  window.location.href = '@Url.Action("ConfirmOrderDetail")' + '?orderId=' + orderId;
                 }
                 else {
                   $("#validorder").html("Error occured: " + validResult.messages[0].message);

@@ -1,15 +1,12 @@
-﻿namespace ColourCoded.UI.Areas.Orders.Models.RequestModels
+﻿namespace ColourCoded.UI.Areas.Orders.Models
 {
-  public class AddOrderDetailRequestModel
+  public class OrderLineDetailModel
   {
-    public int LineNo { get; set; }
     public int OrderId { get; set; }
     public string ItemDescription { get; set; }
     public decimal UnitPrice { get; set; }
     public decimal Quantity { get; set; }
     public decimal Discount { get; set; }
-    public decimal Vat { get; set; }
     public decimal LineTotal { get; set; }
-    public string Username { get; set; }
   }
 }

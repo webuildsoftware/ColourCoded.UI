@@ -69,13 +69,32 @@ namespace ColourCoded.Tests.Orders
       // given
       var resources = new Resources();
       const string orderNo = "TestQuote123";
+      const string username = "testuser";
       const int orderId = 101010;
-      var requestModel = new AddOrderRequestModel { OrderNo = orderNo };
+      var requestModel = new AddOrderRequestModel { OrderNo = orderNo, Username = username };
 
       resources.MockApiCaller.AddMockResponse("WebApi:Orders:AddOrder", requestModel, orderId);
 
       // when 
-      var result = resources.Controller.AddOrder(orderNo) as JsonResult;
+      var result = resources.Controller.AddOrder(orderNo, 0) as JsonResult;
+
+      // then
+      Assert.IsNotNull(result);
+      Assert.AreEqual(orderId, result.Value);
+    }
+
+    [TestMethod]
+    public void AddOrder_EditOrder_ReturnsOrderIdInt()
+    {
+      // given
+      var resources = new Resources();
+      const string orderNo = "TestQuote123";
+      const int orderId = 101010;
+      const string username = "testuser";
+      var requestModel = new AddOrderRequestModel { OrderNo = orderNo, Username = username };
+
+      // when 
+      var result = resources.Controller.AddOrder(orderNo, orderId) as JsonResult;
 
       // then
       Assert.IsNotNull(result);
@@ -89,6 +108,9 @@ namespace ColourCoded.Tests.Orders
       var resources = new Resources();
       const int orderId = 101010;
       const decimal vatRate = 0.15M;
+      const string username = "testuser";
+
+      resources.MockApiCaller.AddMockResponse("WebApi:Orders:GetOrderDetailLineNo", new GetOrderDetailLineNoRequestModel { OrderId = orderId }, 1);
 
       var inputModel = new List<OrderDetailInputModel> 
       {
@@ -114,13 +136,15 @@ namespace ColourCoded.Tests.Orders
       {
         var requestModel = new AddOrderDetailRequestModel
         {
+          LineNo = 1,
           OrderId = orderId,
           ItemDescription = model.Product,
           UnitPrice = model.UnitPrice,
           Quantity = model.Quantity,
           Discount = model.Discount,
           LineTotal = model.LineTotal,
-          Vat = Convert.ToDecimal(model.LineTotal * vatRate)
+          Vat = Convert.ToDecimal(model.LineTotal * vatRate),
+          Username = username
         };
 
         resources.MockApiCaller.AddMockResponse("WebApi:Orders:AddOrderDetail", requestModel, new ValidationResult());
@@ -143,6 +167,10 @@ namespace ColourCoded.Tests.Orders
       var resources = new Resources();
       const int orderId = 101010;
       const decimal vatRate = 0.15M;
+      const string username = "testuser";
+
+      resources.MockApiCaller.AddMockResponse("WebApi:Orders:GetOrderDetailLineNo", new GetOrderDetailLineNoRequestModel { OrderId = orderId }, 1);
+
 
       var inputModel = new List<OrderDetailInputModel>
       {
@@ -158,13 +186,15 @@ namespace ColourCoded.Tests.Orders
 
       var requestModel = new AddOrderDetailRequestModel
       {
+        LineNo = 1,
         OrderId = orderId,
         ItemDescription = inputModel[0].Product,
         UnitPrice = inputModel[0].UnitPrice,
         Quantity = inputModel[0].Quantity,
         Discount = inputModel[0].Discount,
         LineTotal = inputModel[0].LineTotal,
-        Vat = Convert.ToDecimal(inputModel[0].LineTotal * vatRate)
+        Vat = Convert.ToDecimal(inputModel[0].LineTotal * vatRate),
+        Username = username
       };
 
       var validationResult = new ValidationResult();
@@ -189,6 +219,9 @@ namespace ColourCoded.Tests.Orders
       var resources = new Resources();
       const int orderId = 101010;
       const decimal vatRate = 0.15M;
+      const string username = "testuser";
+
+      resources.MockApiCaller.AddMockResponse("WebApi:Orders:GetOrderDetailLineNo", new GetOrderDetailLineNoRequestModel { OrderId = orderId }, 1);
 
       var inputModel = new List<OrderDetailInputModel>
       {
@@ -204,13 +237,15 @@ namespace ColourCoded.Tests.Orders
 
       var requestModel = new AddOrderDetailRequestModel
       {
+        LineNo = 1,
         OrderId = orderId,
         ItemDescription = inputModel[0].Product,
         UnitPrice = inputModel[0].UnitPrice,
         Quantity = inputModel[0].Quantity,
         Discount = inputModel[0].Discount,
         LineTotal = inputModel[0].LineTotal,
-        Vat = Convert.ToDecimal(inputModel[0].LineTotal * vatRate)
+        Vat = Convert.ToDecimal(inputModel[0].LineTotal * vatRate),
+        Username = username
       };
 
       var validationResult = new ValidationResult();
@@ -227,5 +262,60 @@ namespace ColourCoded.Tests.Orders
       Assert.IsNotNull(resultModel);
       Assert.IsFalse(resultModel.IsValid);
     }
+
+    [TestMethod]
+    public void ConfirmOrderDetail_Load()
+    {
+      // given
+      var resources = new Resources();
+      var orderId = 1234;
+      var requestModel = new GetOrderDetailRequestModel { OrderId = orderId };
+      var responseModel = new OrderDetailModel
+      {
+        OrderId = orderId,
+        OrderNo = "QUOTE" + orderId.ToString(),
+        CreateDate = DateTime.Now,
+        SubTotal = 222M,
+        VatTotal = 20M,
+        Total = 242M,
+        Discount = 0M,
+        OrderLineDetails = new List<OrderLineDetailModel>
+        {
+          new OrderLineDetailModel
+          {
+            OrderId = orderId,
+            ItemDescription = "TestProduct",
+            UnitPrice = 111M,
+            Quantity = 2M,
+            Discount = 0M,
+            LineTotal = 242M
+          }
+        }
+      };
+
+      resources.MockApiCaller.AddMockResponse("WebApi:Orders:GetOrderDetail", requestModel, responseModel);
+
+      // when
+      var result = resources.Controller.ConfirmOrderDetail(orderId) as ViewResult;
+
+      // then
+      Assert.IsNotNull(result);
+      Assert.AreEqual("ConfirmOrderDetail", result.ViewName);
+      var model = (OrderDetailModel)result.Model;
+      Assert.AreEqual(1, model.OrderLineDetails.Count);
+      Assert.AreEqual(responseModel.OrderId, model.OrderId);
+      Assert.AreEqual(responseModel.OrderNo, model.OrderNo);
+      Assert.AreEqual(responseModel.SubTotal, model.SubTotal);
+      Assert.AreEqual(responseModel.VatTotal, model.VatTotal);
+      Assert.AreEqual(responseModel.Discount, model.Discount);
+      Assert.AreEqual(responseModel.Total, model.Total);
+      Assert.AreEqual(responseModel.OrderLineDetails[0].ItemDescription, model.OrderLineDetails[0].ItemDescription);
+      Assert.AreEqual(responseModel.OrderLineDetails[0].Quantity, model.OrderLineDetails[0].Quantity);
+      Assert.AreEqual(responseModel.OrderLineDetails[0].UnitPrice, model.OrderLineDetails[0].UnitPrice);
+      Assert.AreEqual(responseModel.OrderLineDetails[0].Discount, model.OrderLineDetails[0].Discount);
+      Assert.AreEqual(responseModel.OrderLineDetails[0].OrderId, model.OrderLineDetails[0].OrderId);
+      Assert.AreEqual(responseModel.OrderLineDetails[0].LineTotal, model.OrderLineDetails[0].LineTotal);
+    }
+
   }
 }

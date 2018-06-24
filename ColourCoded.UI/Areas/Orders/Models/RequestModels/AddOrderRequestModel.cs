@@ -3,5 +3,6 @@
   public class AddOrderRequestModel
   {
     public string OrderNo { get; set; }
+    public string Username { get; set; }
   }
 }

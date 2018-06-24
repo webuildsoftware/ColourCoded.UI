@@ -25,11 +25,27 @@ namespace ColourCoded.UI.Areas.Orders.Controllers
       CurrentUser = CookieHelper.GetCookie<UserModel>("LoggedInUser");
     }
 
-    public IActionResult OrderDetail()
+    public ViewResult OrderDetail(int orderId)
     {
       return View();
     }
 
+    public ViewResult ConfirmOrderDetail(int orderId)
+    {
+      var result = WebApiCaller.PostAsync<OrderDetailModel>("WebApi:Orders:GetOrderDetail", new GetOrderDetailRequestModel { OrderId = orderId });
+
+      return View("ConfirmOrderDetail", result);
+    }
+
+    [HttpGet]
+    public JsonResult GetOrderLineDetails(int orderId)
+    {
+      var result = WebApiCaller.PostAsync<List<OrderLineDetailModel>>("WebApi:Orders:GetOrderLineDetails", new GetOrderLineDetailsRequestModel { OrderId = orderId });
+
+      return Json(result);
+    }
+
+    [HttpGet]
     public JsonResult GetVatRate()
     {
       var result = WebApiCaller.PostAsync<decimal>("WebApi:Orders:GetVatRate", null);
@@ -37,6 +53,7 @@ namespace ColourCoded.UI.Areas.Orders.Controllers
       return Json(result);
     }
 
+    [HttpGet]
     public JsonResult GetOrderNoSeed()
     {
       var result = WebApiCaller.PostAsync<int>("WebApi:Orders:GetOrderNoSeed", null);
@@ -44,9 +61,15 @@ namespace ColourCoded.UI.Areas.Orders.Controllers
       return Json(result);
     }
 
-    public JsonResult AddOrder(string orderNo)
+    [HttpPost]
+    public JsonResult AddOrder(string orderNo, int orderId)
     {
-      var result = WebApiCaller.PostAsync<int>("WebApi:Orders:AddOrder", new AddOrderRequestModel { OrderNo = orderNo });
+      if (orderId != 0)
+        return Json(orderId);
+
+      var loggedInUser = CookieHelper.GetCookie<UserModel>("LoggedInUser");
+
+      var result = WebApiCaller.PostAsync<int>("WebApi:Orders:AddOrder", new AddOrderRequestModel { OrderNo = orderNo, Username = loggedInUser.Username });
 
       return Json(result);
     }
@@ -54,19 +77,26 @@ namespace ColourCoded.UI.Areas.Orders.Controllers
     [HttpPost]
     public JsonResult AddOrderDetail(int orderId, decimal vatRate, List<OrderDetailInputModel> inputModel)
     {
+      var loggedInUser = CookieHelper.GetCookie<UserModel>("LoggedInUser");
+
       var validationResult = new ValidationResult();
+
+      // get max line number for orderId
+      var lineNo = WebApiCaller.PostAsync<int>("WebApi:Orders:GetOrderDetailLineNo", new GetOrderDetailLineNoRequestModel { OrderId = orderId });
 
       foreach (var model in inputModel)
       {
         validationResult = WebApiCaller.PostAsync<ValidationResult>("WebApi:Orders:AddOrderDetail", new AddOrderDetailRequestModel
         {
+          LineNo = lineNo,
           OrderId = orderId,
           ItemDescription = model.Product,
           UnitPrice = model.UnitPrice,
           Quantity = model.Quantity,
           Discount = model.Discount,
           LineTotal = model.LineTotal,
-          Vat = Convert.ToDecimal(model.LineTotal * vatRate)
+          Vat = Convert.ToDecimal(model.LineTotal * vatRate),
+          Username = loggedInUser.Username
         });
 
         if (!validationResult.IsValid)

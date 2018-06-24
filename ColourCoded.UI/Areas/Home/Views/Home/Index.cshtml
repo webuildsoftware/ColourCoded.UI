@@ -11,7 +11,7 @@
     width: 100px;
   }
 
-    table thead tr td:first-child {
+    table thead tr td:nth-child(2) {
       background-color: lightgray;
       width: 150px;
     }
@@ -70,13 +70,13 @@
       <tbody>
         @foreach (var order in Model.Orders)
         {
-          <tr customername="@order.CustomerName.ToUpper()" orderno="@order.OrderNo.ToUpper()" >
-            <td>@order.CustomerName</td>
-            <td data-orderId="@order.OrderId">@order.OrderNo</td>
-            <td>@order.CreateDate</td>
-            <td>@order.DeliveryDate</td>
-            <td>@order.Total</td>
-          </tr>
+        <tr customername="@order.CustomerName.ToUpper()" orderno="@order.OrderNo.ToUpper()">
+          <td data-orderId="@order.OrderId"><a href='@Url.Action("ConfirmOrderDetail", "Orders", new { area="Orders" })?orderId=123'>@order.OrderNo</a></td>
+          <td>@order.CustomerName</td>
+          <td>@order.CreateDate</td>
+          <td>@order.DeliveryDate</td>
+          <td>@order.Total</td>
+        </tr>
         }
       </tbody>
     </table>

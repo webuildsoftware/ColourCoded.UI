@@ -1,0 +1,114 @@
+﻿@model ColourCoded.UI.Areas.Orders.Models.OrderDetailModel
+
+@{
+  ViewData["Title"] = "ConfirmOrderDetail";
+  Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+  table thead tr td {
+    background-color: lightgray;
+    padding: 3px;
+    border: 1px solid;
+    font-weight:bold;
+  }
+
+  table tbody tr td {
+    padding: 3px;
+
+  }
+
+  table thead tr td:first-child {
+    background-color: lightgray;
+    width: 150px;
+  }
+
+  input[type=button] {
+    width: 120px;
+  }
+
+  #main div {
+    padding: 3px;
+  }
+
+  #main div span {
+    font-size: 11px;
+  }
+
+  #orderdetail {
+    border:1px solid;
+  }
+
+</style>
+<h3>Order Confirmation</h3>
+<br />
+<div id="main">
+  <div orderId="@Model.OrderId">
+    Quote No:&nbsp;<strong>@Model.OrderNo</strong>
+  </div>
+  <div>
+    Created:&nbsp;<strong>@Model.CreateDate.ToLongDateString()</strong>
+  </div>
+  <div>
+    <table id="orderdetail">
+      <thead>
+        <tr>
+          <td>Item Description</td>
+          <td>Unit</td>
+          <td>Unit Price</td>
+          <td>Discount</td>
+          <td>Line Total</td>
+        </tr>
+      </thead>
+      <tbody>
+        @if (Model.OrderLineDetails.Count > 0)
+        {
+          @foreach (var lineDetail in Model.OrderLineDetails)
+          {
+            <tr>
+              <td style="border-right:1px solid">@lineDetail.ItemDescription</td>
+              <td style="border-right:1px solid" align="center">@lineDetail.Quantity</td>
+              <td style="border-right:1px solid" align="right">R @lineDetail.UnitPrice.ToString("0.00")</td>
+              <td style="border-right:1px solid" align="right">R @lineDetail.Discount.ToString("0.00")</td>
+              <td align="right">R @lineDetail.LineTotal.ToString("0.00")</td>
+            </tr>
+          }
+          <tr style="border-top:1px solid">
+            <td colspan="3" style="border-right:1px solid"></td>
+            <td style="border-right:1px solid"><strong>Sub Total</strong></td>
+            <td align="right"><strong>R @Model.SubTotal.ToString("0.00")</strong></td>
+          </tr>
+          <tr>
+            <td colspan="3" style="border-right:1px solid"></td>
+            <td style="border-right:1px solid"><strong>VAT</strong></td>
+            <td align="right"><strong>R @Model.VatTotal.ToString("0.00")</strong></td>
+          </tr>
+          <tr>
+            <td colspan="3" style="border-right:1px solid"></td>
+            <td style="border-right:1px solid"><strong>Discount&nbsp;&nbsp;&nbsp;</strong></td>
+            <td align="right"><strong>R @Model.Discount.ToString("0.00")</strong></td>
+          </tr>
+          <tr>
+            <td colspan="3" style="border-right:1px solid"></td>
+            <td style="border-right:1px solid"><strong>Total</strong></td>
+            <td align="right"><strong>R @Model.Total.ToString("0.00")</strong></td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  <div>
+    <br />
+    <input id="edit" value="Make Changes" type="button" data-orderid="@Model.OrderId" />
+    <input id="accept" value="Accept Order" type="button" />
+    <label id="validorder" class="validationLabel"></label>
+  </div>
+</div>
+
+@section Scripts{ 
+  <script>
+    $("#edit").click(function () {
+      window.location.href = '@Url.Action("OrderDetail")' + '?orderId=' + $(this).data("orderid");
+    });
+  </script>
+}
