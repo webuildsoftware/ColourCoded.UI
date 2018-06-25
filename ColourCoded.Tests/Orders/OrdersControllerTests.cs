@@ -48,7 +48,7 @@ namespace ColourCoded.Tests.Orders
     }
 
     [TestMethod]
-    public void GetVatRate_ReturnsInt()
+    public void GetOrderNoSeed_ReturnsInt()
     {
       // given
       var resources = new Resources();
