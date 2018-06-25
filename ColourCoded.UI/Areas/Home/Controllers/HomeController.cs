@@ -28,9 +28,9 @@ namespace ColourCoded.UI.Areas.Home.Controllers
     {
       try
       {
-        var result = WebApiCaller.PostAsync<List<HomeOrdersModel>>("WebApi:Home:GetUserOrders", new FindUserOrdersRequestModel { Username = CurrentUser.Username });
+        var orders = WebApiCaller.PostAsync<List<HomeOrdersModel>>("WebApi:Home:GetHomeOrders", new GetHomeOrdersRequestModel { Username = CurrentUser.Username, CompanyProfileId = CurrentUser.CompanyProfileId });
 
-        return View("Index", new HomeViewModel { Orders = result });
+        return View("Index", new HomeViewModel { Orders = orders });
       }
       catch (Exception Ex)
       {
@@ -40,11 +40,11 @@ namespace ColourCoded.UI.Areas.Home.Controllers
 
     [Authorize]
     [HttpPost]
-    public IActionResult GetUserOrdersByPeriod(DateTime startDate, DateTime endDate)
+    public IActionResult GetHomeOrdersByPeriod(DateTime startDate, DateTime endDate)
     {
       try
       {
-        var result = WebApiCaller.PostAsync<List<HomeOrdersModel>>("WebApi:Home:GetUserOrdersInPeriod", new FindUserOrdersPeriodRequestModel { Username = CurrentUser.Username, StartDate = startDate, EndDate = endDate });
+        var result = WebApiCaller.PostAsync<List<HomeOrdersModel>>("WebApi:Home:GetHomeOrdersInPeriod", new GetHomeOrdersPeriodRequestModel { Username = CurrentUser.Username, CompanyProfileId = CurrentUser.CompanyProfileId, StartDate = startDate, EndDate = endDate });
 
         return View("Index", new HomeViewModel { Orders = result, StartDate = startDate, EndDate = endDate });
       }

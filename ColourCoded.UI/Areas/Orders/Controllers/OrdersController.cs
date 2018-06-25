@@ -63,7 +63,7 @@ namespace ColourCoded.UI.Areas.Orders.Controllers
     [HttpGet]
     public JsonResult GetOrderNoSeed()
     {
-      var result = WebApiCaller.PostAsync<int>("WebApi:Orders:GetOrderNoSeed", null);
+      var result = WebApiCaller.PostAsync<int>("WebApi:Orders:GetOrderNoSeed", new GetCompanyOrderNoSeedRequestModel { CompanyProfileId = CurrentUser.CompanyProfileId });
 
       return Json(result);
     }
@@ -71,7 +71,7 @@ namespace ColourCoded.UI.Areas.Orders.Controllers
     [HttpPost]
     public JsonResult AddOrder(string orderNo)
     {
-      var result = WebApiCaller.PostAsync<int>("WebApi:Orders:AddOrder", new AddOrderRequestModel { OrderNo = orderNo, Username = CurrentUser.Username });
+      var result = WebApiCaller.PostAsync<int>("WebApi:Orders:AddOrder", new AddOrderRequestModel { OrderNo = orderNo, Username = CurrentUser.Username, CompanyProfileId = CurrentUser.CompanyProfileId });
 
       return Json(result);
     }

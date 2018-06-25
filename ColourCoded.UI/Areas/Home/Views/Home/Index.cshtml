@@ -50,7 +50,7 @@
 @if (Model.Orders.Count > 0)
 {
   <h4>Recent Orders:</h4>
-  <form id="period" method="post" action="@Url.Action("GetUserOrdersByPeriod")">
+  <form id="period" method="post" action="@Url.Action("GetHomeOrdersByPeriod")">
     <div class="spaced">
       <input id="filter" type="text" placeholder="Filter" />
     </div>
@@ -58,6 +58,7 @@
       From: <input type="date" id="startDate" name="startDate" min="2018-01-01" max="2018-12-31" />
       &nbsp;&nbsp;To: <input type="date" id="endDate" name="endDate" min="2018-01-01" max="2018-12-31" />
       &nbsp;&nbsp;<input id="search" type="button" value="Search" />
+      &nbsp;&nbsp;<a href='@Url.Action("Index", "Home", new { area="Home" })'>Reload</a>
     </div>
   </form>
   <div class="spaced">

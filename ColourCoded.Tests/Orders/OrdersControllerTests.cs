@@ -26,7 +26,7 @@ namespace ColourCoded.Tests.Orders
         TestUsername = "testuser";
         MockApiCaller = new MockApiCaller();
         MockCookieHelper = new Mock<ICookieHelper>();
-        MockCookieHelper.Setup(x => x.GetCookie<UserModel>("LoggedInUser")).Returns(new UserModel { Username = TestUsername, ApiSessionToken = Guid.NewGuid().ToString(), IsAuthenticated = true });
+        MockCookieHelper.Setup(x => x.GetCookie<UserModel>("LoggedInUser")).Returns(new UserModel { Username = TestUsername, ApiSessionToken = Guid.NewGuid().ToString(), IsAuthenticated = true, CompanyProfileId = 1 });
         Controller = new OrdersController(MockApiCaller, MockCookieHelper.Object);
       }
     }
@@ -48,12 +48,12 @@ namespace ColourCoded.Tests.Orders
     }
 
     [TestMethod]
-    public void GetOrderNoSeed_ReturnsInt()
+    public void GetOrderNoSeed_HasCompany()
     {
       // given
       var resources = new Resources();
       const int orderNoSeed = 152;
-      resources.MockApiCaller.AddMockResponse("WebApi:Orders:GetOrderNoSeed", null, orderNoSeed);
+      resources.MockApiCaller.AddMockResponse("WebApi:Orders:GetOrderNoSeed", new GetCompanyOrderNoSeedRequestModel { CompanyProfileId = 1 }, orderNoSeed);
 
       // when 
       var result = resources.Controller.GetOrderNoSeed() as JsonResult;
@@ -71,7 +71,7 @@ namespace ColourCoded.Tests.Orders
       const string orderNo = "TestQuote123";
       const string username = "testuser";
       const int orderId = 101010;
-      var requestModel = new AddOrderRequestModel { OrderNo = orderNo, Username = username };
+      var requestModel = new AddOrderRequestModel { OrderNo = orderNo, Username = username, CompanyProfileId = 1 };
 
       resources.MockApiCaller.AddMockResponse("WebApi:Orders:AddOrder", requestModel, orderId);
 
