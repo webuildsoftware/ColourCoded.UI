@@ -78,8 +78,8 @@ namespace ColourCoded.UI.Areas.Security.Controllers
         {
           Username = username,
           Password = password,
-          Browser = browserInfo,
-          Device = deviceInfo
+          Browser = null,
+          Device = null
         });
 
         if (userModel.Username != null)

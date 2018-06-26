@@ -1,0 +1,320 @@
+﻿
+@{
+  ViewData["Title"] = "OrderCustomer";
+  Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<style>
+  table thead tr td {
+    background-color: lightgray;
+    padding: 3px;
+    font-weight: bold;
+  }
+
+  table tbody tr td {
+    padding: 3px;
+  }
+
+  table i {
+    cursor: pointer;
+  }
+
+  input[type=button] {
+    width: 100px;
+  }
+
+  .validationLabel {
+    color: red;
+    width: 150px;
+    font-size: 11px;
+  }
+
+  #main div {
+    padding: 3px;
+  }
+
+  #main div span {
+    font-size: 11px;
+  }
+
+  .orderno {
+    width: 100px;
+  }
+</style>
+<h3 id="orderno" orderid></h3>
+<div id="main">
+  <fieldset>
+    <legend>Add Customer Details</legend>
+    <div>
+      <span>Available Customers</span>
+      <br />
+      <select id="existingcustomers" style="width: 175px">
+        <option value=""></option>
+        <option value="1">City of Cape Town</option>
+        <option value="2">False Bay College</option>
+        <option value="3">PresLes</option>
+      </select>
+    </div>
+    <div>
+      <span>Customer Name</span>
+      <br />
+      <input type="text" id="customername" placeholder="Enter any name" />
+    </div>
+    <div>
+      <span>Contact No</span>
+      <br />
+      <input type="text" id="customercontactno" placeholder="Enter a contact no" />
+    </div>
+    <div>
+      <span>Account No</span>
+      <br />
+      <input type="text" id="customeraccountno" placeholder="Enter accountno (optional)" />
+    </div>
+    <div>
+      <span>Mobile No</span>
+      <br />
+      <input type="text" id="customermobileno" placeholder="Enter mobile no (optional)" />
+    </div>
+    <div>
+      <span>Email</span>
+      <br />
+      <input type="text" id="customeremail" placeholder="Enter email (optional)" />
+    </div>
+  </fieldset>
+  <br />
+  @*
+      <fieldset id="panelAddress">
+      <legend>Address Details</legend>
+      <div>
+        <span>Address Type</span>
+        <br />
+        <select id="addresstype">
+          <option value="Home">Home</option>
+          <option value="Business">Business</option>
+          <option value="Delivery">Delivery</option>
+        </select>
+      </div>
+      <div style="display: inline-block">
+        <span>Line 1</span>
+        <br />
+        <input type="text" id="addressline1" placeholder="Enter unit/street no" />
+      </div>
+      <br />
+      <div style="display: inline-block; width: 200px">
+        <span>Line 2</span>
+        <br />
+        <input type="text" id="addressline2" placeholder="Enter suburb" />
+      </div>
+      <div style="display: inline-block">
+        <span>City</span>
+        <br />
+        <input type="text" id="addresscity" placeholder="Enter city" />
+      </div>
+      <br />
+      <div style="display: inline-block; width: 200px">
+        <span>Country</span>
+        <br />
+        <select id="addresscountry">
+          <option value="RSA">Republic of South Africa</option>
+        </select>
+      </div>
+      <div style="display: inline-block">
+        <span>Postal Code</span>
+        <br />
+        <input type="text" id="addresspostalcode" placeholder="Enter postal code" />
+      </div>
+      <br />
+      <div id="divaddressdetails">
+        <span>Address Details</span>
+        <table id="addressdetails">
+          <thead>
+            <tr>
+              <td>Type</td>
+              <td>Line1</td>
+              <td>Line2</td>
+              <td>City</td>
+              <td>Country</td>
+              <td>Postal</td>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </fieldset>*@
+  <fieldset id="panelContacts">
+    <legend>Add Contact People</legend>
+    <div>
+      <span>Name</span>
+      <br />
+      <input type="text" id="contactname" placeholder="Enter any name" />
+    </div>
+    <div>
+      <span>Contact No</span>
+      <br />
+      <input type="text" id="contactno" placeholder="Enter a contact no" />
+    </div>
+    <div>
+      <span>Email</span>
+      <br />
+      <input type="text" id="contactemail" placeholder="Enter email (optional)" />
+    </div>
+    <div>
+      <input id="addcontact" value="Add Contact" type="button" />
+      <label id="validaddcontact" class="validationLabel"></label>
+    </div>
+    <br />
+    <div id="divcontacts">
+      <span>Linked Contacts</span>
+      <table id="contacts">
+        <thead>
+          <tr>
+            <td>Name</td>
+            <td>ContactNo</td>
+            <td>EmailAddress</td>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <legend></legend>
+  </fieldset>
+  <div>
+    <input id="done" value="Done" type="button" />
+    <label id="validorder" class="validationLabel"></label>
+  </div>
+
+</div>
+@section Scripts{
+  <script>
+    var queryString = location.href.split("?")[1];
+    var orderId = 0;
+    var orderNo = "";
+    var order = {
+      "customerContacts": []
+    };
+
+    $(document).ready(function () {
+
+      if (queryString != undefined) {
+        // get order id from query string
+        orderId = queryString.split("&")[0].split("=")[1];
+        orderNo = queryString.split("&")[1].split("=")[1];
+
+        $("#orderno").html("Order: " + orderNo);
+        $("#orderno").attr("orderid", orderId);
+      }
+
+      $("#divcontacts").hide();
+
+      if (order.customerContacts.length !== 0) {
+        $("#divcontacts").show();
+      }
+
+    });
+
+    $("#customercontactno").keyup(function(event) {
+      var quantity = $(this).val();
+
+      if (!$.isNumeric(event.key))
+        $(this).val(quantity.replace(event.key, ""));
+
+    });
+
+    $("#customercontactno").change(function(event) {
+      if (!$.isNumeric($(this).val()))
+        $(this).val("");
+    });
+
+    $("#customermobileno").keyup(function(event) {
+      var quantity = $(this).val();
+
+      if (!$.isNumeric(event.key))
+        $(this).val(quantity.replace(event.key, ""));
+
+    });
+
+    $("#customermobileno").change(function(event) {
+      if (!$.isNumeric($(this).val()))
+        $(this).val("");
+    });
+
+    $("#contactno").keyup(function(event) {
+      var quantity = $(this).val();
+
+      if (!$.isNumeric(event.key))
+        $(this).val(quantity.replace(event.key, ""));
+
+      if (event.keyCode == 13) {
+        $("#addcontact").click();
+      }
+    });
+
+    $("#contactno").change(function(event) {
+      if (!$.isNumeric($(this).val()))
+        $(this).val("");
+    });
+
+    function validateEmail(email) {
+      var pattern = /^[a-zA-Z0-9\-_]+(\.[a-zA-Z0-9\-_]+)*@@[a-z0-9]+(\-[a-z0-9]+)*(\.[a-z0-9]+(\-[a-z0-9]+)*)*\.[a-z]{2,4}$/;
+      return pattern.test(email);
+    }
+
+    $("#customeremail").change(function(event) {
+      var emailAddress = $(this).val();
+
+      if (!validateEmail(emailAddress) && emailAddress != "") {
+        $(this).addClass("alert-danger");
+        $(this).attr("placeholder", "Enter valid email");
+      }
+    });
+
+    $("#customeremail").keyup(function (event) {
+      $(this).removeClass();
+    });
+
+    $("#contactemail").change(function(event) {
+      var emailAddress = $(this).val();
+
+      if (!validateEmail(emailAddress) && emailAddress != "") {
+        $(this).addClass("alert-danger");
+        $(this).attr("placeholder", "Enter valid email");
+      }
+    });
+
+    $("#contactemail").keyup(function (event) {
+      $(this).removeClass();
+    });
+
+    $("#existingcustomers").change(function(event) {
+      var selectedValue = $(this).val();
+
+      if (selectedValue != "") {
+        alert(selectedValue);
+        // TO DO: get the customer details from the DB and populate the below values as well as the Contacts table grid
+
+        $("#customername").attr("disabled", "disabled");
+        $("#customercontactno").attr("disabled", "disabled");
+        $("#customeraccountno").attr("disabled", "disabled");
+        $("#customermobileno").attr("disabled", "disabled");
+        $("#customeremail").attr("disabled", "disabled");
+      } else {
+        $("#customername").removeAttrattr("disabled");
+        $("#customercontactno").removeAttrattr("disabled");
+        $("#customeraccountno").removeAttrattr("disabled");
+        $("#customermobileno").removeAttrattr("disabled");
+        $("#customeremail").removeAttrattr("disabled");
+      }
+
+    });
+
+    function validContactForm() {
+
+    }
+
+    function validCustomerForm() {
+
+    }
+    
+  </script>
+}

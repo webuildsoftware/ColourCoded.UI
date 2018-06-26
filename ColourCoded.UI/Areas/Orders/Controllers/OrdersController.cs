@@ -25,7 +25,12 @@ namespace ColourCoded.UI.Areas.Orders.Controllers
       CurrentUser = CookieHelper.GetCookie<UserModel>("LoggedInUser");
     }
 
-    public ViewResult OrderDetail(int orderId)
+    public ViewResult OrderDetail()
+    {
+      return View();
+    }
+
+    public ViewResult OrderCustomer()
     {
       return View();
     }
