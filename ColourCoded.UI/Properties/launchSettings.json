@@ -3,12 +3,12 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iis": {
-      "applicationUrl": "https://www.ccinvoice.com",
+      "applicationUrl": "http://localhost/ColourCoded.UI",
       "sslPort": 0
     },
     "iisExpress": {
       "applicationUrl": "http://localhost:52452/",
-      "sslPort": 44339
+      "sslPort": 0
     }
   },
   "profiles": {

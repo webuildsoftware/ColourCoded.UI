@@ -22,22 +22,34 @@ namespace ColourCoded.UI.Shared.WebApiCaller
 
     public void ConfigureMock_RoleController_Responses()
     {
-      //"WebApi:Home:GetUserOrders"
-      //var viewModel = new List<HomeOrdersModel>
-      //    {
-      //      new HomeOrdersModel
-      //      {
-      //        CustomerName = "Test CustomerOne", OrderId = 1, OrderNo = "Moq001", DeliveryDate = DateTime.Now.AddDays(24).ToShortDateString(), Total = "R 2 999.99"
-      //      },
-      //      new HomeOrdersModel
-      //      {
-      //        CustomerName = "Test CustomerTwo", OrderId = 2, OrderNo = "Moq002", DeliveryDate = DateTime.Now.AddDays(2).ToShortDateString(), Total = "R 1 999.99"
-      //      }
-      //    };
+
+      // WebApi:Login
+      Responses.Add(new MockApiResponseModel
+      {
+        WepApiUrl = "WebApi:Authenticate:Login",
+        RequestModel = new LoginRequestModel { Username = "zunaid", Password = "222222" },
+        ResponseContent = new UserModel { Username = "zunaid", ApiSessionToken = System.Guid.NewGuid().ToString(), IsAuthenticated = true, CompanyProfileId = 0 }
+      });
+
+      //"WebApi:Home:GetHomerOrders"
+      var viewModel = new List<HomeOrdersModel>
+          {
+            new HomeOrdersModel
+            {
+              OrderId = 1, OrderNo = "Moq001", CreateDate = DateTime.Now.AddDays(24).ToShortDateString(), Total = "R 2 999.99"
+            },
+            new HomeOrdersModel
+            {
+              OrderId = 2, OrderNo = "Moq002", CreateDate = DateTime.Now.AddDays(2).ToShortDateString(), Total = "R 1 999.99"
+            }
+          };
+
+      Responses.Add(new MockApiResponseModel { WepApiUrl = "WebApi:Home:GetHomeOrders", RequestModel = new GetHomeOrdersRequestModel() { Username = "zunaid", CompanyProfileId = 0}, ResponseContent = viewModel });
+
 
       // resources.MockApiCaller.AddMockResponse("WebApi:Home:GetVatRate", null, vatRate);
-      //Responses.Add(new MockApiResponseModel { WepApiUrl = "WebApi:Orders:GetVatRate", RequestModel = null, ResponseContent = 0.15M });
-      //Responses.Add(new MockApiResponseModel { WepApiUrl = "WebApi:Orders:GetOrderNoSeed", RequestModel = null, ResponseContent = 123 });
+      Responses.Add(new MockApiResponseModel { WepApiUrl = "WebApi:Orders:GetVatRate", RequestModel = null, ResponseContent = 0.15M });
+      Responses.Add(new MockApiResponseModel { WepApiUrl = "WebApi:Orders:GetOrderNoSeed", RequestModel = null, ResponseContent = 123 });
       //Responses.Add(new MockApiResponseModel { WepApiUrl = "WebApi:Orders:GetOrderDetailLineNo", RequestModel = new GetOrderDetailLineNoRequestModel { OrderId = 123 }, ResponseContent = 1 });
       //Responses.Add(new MockApiResponseModel { WepApiUrl = "WebApi:Orders:EditOrderNo", RequestModel = new EditOrderNoRequestModel { OrderId = 123, OrderNo = "QUOTE123", Username = "zunaid" }, ResponseContent = "Success" });
 
@@ -80,40 +92,40 @@ namespace ColourCoded.UI.Shared.WebApiCaller
       //  Responses.Add(new MockApiResponseModel { WepApiUrl = "WebApi:Orders:AddOrderDetail", RequestModel = requestModel, ResponseContent = new ValidationResult() });
       //}
 
-      // WebApi:Orders:GetOrderDetail
-      //var responseModel = new OrderDetailModel
-      //{
-      //  OrderId = 123,
-      //  OrderNo = "QUOTE123",
-      //  CreateDate = DateTime.Now,
-      //  SubTotal = 222M,
-      //  VatTotal = 20M,
-      //  Total = 242M,
-      //  Discount = 0M,
-      //  OrderLineDetails = new List<OrderLineDetailModel>
-      //  {
-      //    new OrderLineDetailModel
-      //    {
-      //      OrderId = 123,
-      //      ItemDescription = "TestProduct",
-      //      UnitPrice = 111M,
-      //      Quantity = 2,
-      //      Discount = 0M,
-      //      LineTotal = 242M
-      //    },
-      //    new OrderLineDetailModel
-      //    {
-      //      OrderId = 123,
-      //      ItemDescription = "Delivery Fee",
-      //      UnitPrice = 111M,
-      //      Quantity = 21,
-      //      Discount = 0M,
-      //      LineTotal = 111M
-      //    },
-      //  }
-      //};
+     // WebApi: Orders: GetOrderDetail
+       var responseModel = new OrderDetailModel
+       {
+         OrderId = 1,
+         OrderNo = "QUOTE123",
+         CreateDate = DateTime.Now,
+         SubTotal = 222M,
+         VatTotal = 20M,
+         Total = 242M,
+         Discount = 0M,
+         OrderLineDetails = new List<OrderLineDetailModel>
+         {
+          new OrderLineDetailModel
+          {
+            OrderId = 1,
+            ItemDescription = "TestProduct",
+            UnitPrice = 111M,
+            Quantity = 2,
+            Discount = 0M,
+            LineTotal = 242M
+          },
+          new OrderLineDetailModel
+          {
+            OrderId = 1,
+            ItemDescription = "Delivery Fee",
+            UnitPrice = 111M,
+            Quantity = 21,
+            Discount = 0M,
+            LineTotal = 111M
+          },
+         }
+       };
 
-      //Responses.Add(new MockApiResponseModel { WepApiUrl = "WebApi:Orders:GetOrderDetail", RequestModel = new GetOrderDetailRequestModel { OrderId = 123 }, ResponseContent = responseModel });
+      Responses.Add(new MockApiResponseModel { WepApiUrl = "WebApi:Orders:GetOrderDetail", RequestModel = new GetOrderDetailRequestModel { OrderId = 1 }, ResponseContent = responseModel });
 
       //var orderLineDetails = new List<OrderLineDetailModel>
       //  {
@@ -192,19 +204,19 @@ namespace ColourCoded.UI.Shared.WebApiCaller
       //  ResponseContent = null 
       //});
 
-      // WebApi:Register:ValidateUser
+      //// WebApi:Register:ValidateUser
       //var responseModel = new ValidationResult();
       //Responses.Add(new MockApiResponseModel { WepApiUrl = "WebApi:Register:ValidateUser", RequestModel = new ValidateUserRequestModel { Username = "zunaid" }, ResponseContent = responseModel });
 
       //responseModel = new ValidationResult();
-      //responseModel.InValidate("","Username already exists");
+      //responseModel.InValidate("", "Username already exists");
       //Responses.Add(new MockApiResponseModel { WepApiUrl = "WebApi:Register:ValidateUser", RequestModel = new ValidateUserRequestModel { Username = "rowena" }, ResponseContent = responseModel });
 
       //responseModel = new ValidationResult();
       //Responses.Add(new MockApiResponseModel { WepApiUrl = "WebApi:Register:ValidateUser", RequestModel = new ValidateUserRequestModel { Username = "111111" }, ResponseContent = responseModel });
 
-      // WebApi:Register:ValidateEmail
-      //var responseModel = new ValidationResult();
+      ////WebApi: Register: ValidateEmail
+      //responseModel = new ValidationResult();
       //Responses.Add(new MockApiResponseModel { WepApiUrl = "WebApi:Register:ValidateEmail", RequestModel = new ValidateEmailRequestModel { EmailAddress = "zunaid@gmail.com" }, ResponseContent = responseModel });
 
       //responseModel = new ValidationResult();
@@ -215,34 +227,34 @@ namespace ColourCoded.UI.Shared.WebApiCaller
       //Responses.Add(new MockApiResponseModel { WepApiUrl = "WebApi:Register:ValidateEmail", RequestModel = new ValidateEmailRequestModel { EmailAddress = "5@gmail.com" }, ResponseContent = responseModel });
 
 
-      // WebApi:Login
-      //Responses.Add(new MockApiResponseModel
-      //{
-      //  WepApiUrl = "WebApi:Login", RequestModel = new LoginRequestModel { Username = "zunaid", Password = "1234" },
-      //  ResponseContent = new UserModel { Username = "zunaid", ApiSessionToken = System.Guid.NewGuid().ToString(), IsAuthenticated = true }
-      //});
 
       //Responses.Add(new MockApiResponseModel
       //{
-      //  WepApiUrl = "WebApi:Login", RequestModel = new LoginRequestModel { Username = "1", Password = "1" },  ResponseContent = null
+      //  WepApiUrl = "WebApi:Login",
+      //  RequestModel = new LoginRequestModel { Username = "1", Password = "1" },
+      //  ResponseContent = null
       //});
 
       //Responses.Add(new MockApiResponseModel
       //{
       //  WepApiUrl = "WebApi:Login",
       //  RequestModel = new LoginRequestModel { Username = "rowena", Password = "1234" },
-      //  ResponseContent = new UserModel { Username = "rowena", ApiSessionToken = System.Guid.NewGuid().ToString(), IsAuthenticated = false }
+      //  ResponseContent = new UserModel { Username = "rowena", ApiSessionToken = System.Guid.NewGuid().ToString(), IsAuthenticated = false, CompanyProfileId =  = 1 }
       //});
 
       //WebApi:Login:RequestCredentials
       //Responses.Add(new MockApiResponseModel
       //{
-      //  WepApiUrl = "WebApi:Login:ForgotPassword", RequestModel = new CredentialsRequestModel { EmailAddress = "zunaid@gmail.com" }, ResponseContent = true
+      //  WepApiUrl = "WebApi:Login:ForgotPassword",
+      //  RequestModel = new CredentialsRequestModel { EmailAddress = "zunaid@gmail.com" },
+      //  ResponseContent = true
       //});
 
       //Responses.Add(new MockApiResponseModel
       //{
-      //  WepApiUrl = "WebApi:Login:RequestCredentials", RequestModel = new CredentialsRequestModel { EmailAddress = "5@gmail.com" }, ResponseContent = false
+      //  WepApiUrl = "WebApi:Login:RequestCredentials",
+      //  RequestModel = new CredentialsRequestModel { EmailAddress = "5@gmail.com" },
+      //  ResponseContent = false
       //});
 
       //WebApi: Permissions: GetArtifacts
