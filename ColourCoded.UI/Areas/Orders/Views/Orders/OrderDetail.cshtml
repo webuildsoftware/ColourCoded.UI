@@ -245,12 +245,11 @@
       if (quantity.val() === "") { quantity.addClass("alert-danger"); return; }
       if (unitprice.val() === "") { unitprice.addClass("alert-danger"); return; }
 
- 
       var exists = false;
 
       $.each(order.orderdetail, function (index, lineitem) {
         // line item already exists check
-        if (lineitem.product === product.val() && lineitem.unitprice === Number(unitprice.val())) {
+        if (lineitem.product.toUpperCase() === product.val().toUpperCase() && lineitem.unitprice === Number(unitprice.val())) {
           lineitem.quantity = lineitem.quantity + Number(quantity.val());
           lineitem.linetotal = (lineitem.quantity * lineitem.unitprice) - lineitem.discount;
           exists = true;

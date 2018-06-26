@@ -109,7 +109,7 @@
 @section Scripts{ 
   <script>
     $("#edit").click(function () {
-      window.location.href = '@Url.Action("OrderDetail")' + '?orderId=' + $(this).data("orderid");
+      window.location.href = '@Url.Action("OrderDetail")' + '?orderId=' + $(this).data("orderid") + '&orderNo=' + $(this).data("orderno");
     });
 
     $("#customer").click(function () {

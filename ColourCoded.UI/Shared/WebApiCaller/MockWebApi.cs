@@ -22,7 +22,7 @@ namespace ColourCoded.UI.Shared.WebApiCaller
 
     public void ConfigureMock_RoleController_Responses()
     {
-
+      /*
       // WebApi:Login
       Responses.Add(new MockApiResponseModel
       {
@@ -50,6 +50,68 @@ namespace ColourCoded.UI.Shared.WebApiCaller
       // resources.MockApiCaller.AddMockResponse("WebApi:Home:GetVatRate", null, vatRate);
       Responses.Add(new MockApiResponseModel { WepApiUrl = "WebApi:Orders:GetVatRate", RequestModel = null, ResponseContent = 0.15M });
       Responses.Add(new MockApiResponseModel { WepApiUrl = "WebApi:Orders:GetOrderNoSeed", RequestModel = null, ResponseContent = 123 });
+     
+
+     // WebApi: Orders: GetOrderDetail
+       var responseModel = new OrderDetailModel
+       {
+         OrderId = 1,
+         OrderNo = "QUOTE123",
+         CreateDate = DateTime.Now,
+         SubTotal = 222M,
+         VatTotal = 20M,
+         Total = 242M,
+         Discount = 0M,
+         OrderLineDetails = new List<OrderLineDetailModel>
+         {
+          new OrderLineDetailModel
+          {
+            OrderId = 1,
+            ItemDescription = "TestProduct",
+            UnitPrice = 111M,
+            Quantity = 2,
+            Discount = 0M,
+            LineTotal = 242M
+          },
+          new OrderLineDetailModel
+          {
+            OrderId = 1,
+            ItemDescription = "Delivery Fee",
+            UnitPrice = 111M,
+            Quantity = 21,
+            Discount = 0M,
+            LineTotal = 111M
+          },
+         }
+       };
+
+      Responses.Add(new MockApiResponseModel { WepApiUrl = "WebApi:Orders:GetOrderDetail", RequestModel = new GetOrderDetailRequestModel { OrderId = 1 }, ResponseContent = responseModel });
+
+  */
+      //var orderLineDetails = new List<OrderLineDetailModel>
+      //  {
+      //    new OrderLineDetailModel
+      //    {
+      //      OrderId = 123,
+      //      ItemDescription = "TestProduct",
+      //      UnitPrice = 111M,
+      //      Quantity = 2,
+      //      Discount = 0M,
+      //      LineTotal = 242M
+      //    },
+      //    new OrderLineDetailModel
+      //    {
+      //      OrderId = 123,
+      //      ItemDescription = "Delivery Fee",
+      //      UnitPrice = 111M,
+      //      Quantity = 21,
+      //      Discount = 0M,
+      //      LineTotal = 111M
+      //    },
+      //  };
+
+      //Responses.Add(new MockApiResponseModel { WepApiUrl = "WebApi:Orders:GetOrderLineDetails", RequestModel = new GetOrderLineDetailsRequestModel { OrderId = 123 }, ResponseContent = orderLineDetails });
+
       //Responses.Add(new MockApiResponseModel { WepApiUrl = "WebApi:Orders:GetOrderDetailLineNo", RequestModel = new GetOrderDetailLineNoRequestModel { OrderId = 123 }, ResponseContent = 1 });
       //Responses.Add(new MockApiResponseModel { WepApiUrl = "WebApi:Orders:EditOrderNo", RequestModel = new EditOrderNoRequestModel { OrderId = 123, OrderNo = "QUOTE123", Username = "zunaid" }, ResponseContent = "Success" });
 
@@ -91,67 +153,6 @@ namespace ColourCoded.UI.Shared.WebApiCaller
 
       //  Responses.Add(new MockApiResponseModel { WepApiUrl = "WebApi:Orders:AddOrderDetail", RequestModel = requestModel, ResponseContent = new ValidationResult() });
       //}
-
-     // WebApi: Orders: GetOrderDetail
-       var responseModel = new OrderDetailModel
-       {
-         OrderId = 1,
-         OrderNo = "QUOTE123",
-         CreateDate = DateTime.Now,
-         SubTotal = 222M,
-         VatTotal = 20M,
-         Total = 242M,
-         Discount = 0M,
-         OrderLineDetails = new List<OrderLineDetailModel>
-         {
-          new OrderLineDetailModel
-          {
-            OrderId = 1,
-            ItemDescription = "TestProduct",
-            UnitPrice = 111M,
-            Quantity = 2,
-            Discount = 0M,
-            LineTotal = 242M
-          },
-          new OrderLineDetailModel
-          {
-            OrderId = 1,
-            ItemDescription = "Delivery Fee",
-            UnitPrice = 111M,
-            Quantity = 21,
-            Discount = 0M,
-            LineTotal = 111M
-          },
-         }
-       };
-
-      Responses.Add(new MockApiResponseModel { WepApiUrl = "WebApi:Orders:GetOrderDetail", RequestModel = new GetOrderDetailRequestModel { OrderId = 1 }, ResponseContent = responseModel });
-
-      //var orderLineDetails = new List<OrderLineDetailModel>
-      //  {
-      //    new OrderLineDetailModel
-      //    {
-      //      OrderId = 123,
-      //      ItemDescription = "TestProduct",
-      //      UnitPrice = 111M,
-      //      Quantity = 2,
-      //      Discount = 0M,
-      //      LineTotal = 242M
-      //    },
-      //    new OrderLineDetailModel
-      //    {
-      //      OrderId = 123,
-      //      ItemDescription = "Delivery Fee",
-      //      UnitPrice = 111M,
-      //      Quantity = 21,
-      //      Discount = 0M,
-      //      LineTotal = 111M
-      //    },
-      //  };
-
-      //Responses.Add(new MockApiResponseModel { WepApiUrl = "WebApi:Orders:GetOrderLineDetails", RequestModel = new GetOrderLineDetailsRequestModel { OrderId = 123 }, ResponseContent = orderLineDetails });
-
-
       //Responses.Add(new MockApiResponseModel { WepApiUrl = "WebApi:Home:GetUserOrders", RequestModel = new FindUserOrdersRequestModel { Username = "zunaid" }, ResponseContent = viewModel });
 
       // WebApi:Role:GetUsernames
