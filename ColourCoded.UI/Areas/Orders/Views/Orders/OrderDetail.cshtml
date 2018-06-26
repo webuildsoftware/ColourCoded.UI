@@ -170,17 +170,17 @@
 
     });
 
-    $("#ordernoprefix").keyup(function (event) {
+    $("#ordernoprefix").keyup(function(event) {
       if (event.keyCode == 13) {
         $("#done").click();
       }
-    })
+    });
 
-    $("#ordernoseed").change(function (event) {
+    $("#ordernoseed").change(function(event) {
       $("#ordernoseed").val(ordernoseed);
-    })
+    });
 
-    $("#quantity").keyup(function (event) {
+    $("#quantity").keyup(function(event) {
       var quantity = $(this).val();
 
       if (!$.isNumeric(event.key))
@@ -189,14 +189,14 @@
       if (event.keyCode == 13) {
         $("#lineitem").click();
       }
-    })
+    });
 
-    $("#quantity").change(function (event) {
+    $("#quantity").change(function(event) {
       if (!$.isNumeric($(this).val()))
         $(this).val("");
-    })
+    });
 
-    $("#unitprice").keyup(function (event) {
+    $("#unitprice").keyup(function(event) {
       var unitprice = $(this).val();
 
       if (!$.isNumeric(event.key) && event.key !== ".")
@@ -205,15 +205,15 @@
       if (event.keyCode == 13) {
         $("#lineitem").click();
       }
-    })
+    });
 
-    $("#unitprice").change(function (event) {
+    $("#unitprice").change(function(event) {
       if (!$.isNumeric($(this).val()))
         $(this).val("");
 
-    })
+    });
 
-    $("#discount").keyup(function (event) {
+    $("#discount").keyup(function(event) {
       var discount = $(this).val();
 
       if (!$.isNumeric(event.key) && event.key !== ".")
@@ -222,12 +222,12 @@
       if (event.keyCode == 13) {
         $("#lineitem").click();
       }
-    })
+    });
 
-    $("#discount").change(function (event) {
+    $("#discount").change(function(event) {
       if (!$.isNumeric($(this).val()))
         $(this).val("");
-    })
+    });
 
     $("#lineitem").click(function () {
       var product = $("#product");
