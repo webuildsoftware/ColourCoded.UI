@@ -27,12 +27,12 @@ namespace ColourCoded.UI.Areas.Orders.Controllers
 
     public ViewResult OrderDetail(int orderId)
     {
-      return View();
+      return View("OrderDetail");
     }
 
     public ViewResult OrderCustomer(int orderId, string orderNo)
     {
-      return View();
+      return View("OrderCustomer");
     }
 
     public IActionResult ConfirmOrderDetail(int orderId)
@@ -115,6 +115,22 @@ namespace ColourCoded.UI.Areas.Orders.Controllers
       var validationResult = WebApiCaller.PostAsync<ValidationResult>("WebApi:Orders:AddOrderDetail", requestModel);
 
       return Json(validationResult);
+    }
+
+    [HttpPost]
+    public JsonResult GetOrderCustomers()
+    {
+      var result = WebApiCaller.PostAsync<List<CustomerModel>>("WebApi:Orders:GetOrderCustomers", new GetOrderCustomersRequestModel { CompanyProfileId = CurrentUser.CompanyProfileId, Username = CurrentUser.Username});
+
+      return Json(result);
+    }
+
+    [HttpPost]
+    public JsonResult GetCustomerContacts(int customerId)
+    {
+      var result = WebApiCaller.PostAsync<List<ContactModel>>("WebApi:Orders:GetCustomerContacts", new GetCustomerContactsRequestModel() { CustomerId = customerId });
+
+      return Json(result);
     }
   }
 }

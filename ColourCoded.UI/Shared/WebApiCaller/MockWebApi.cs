@@ -22,13 +22,132 @@ namespace ColourCoded.UI.Shared.WebApiCaller
 
     public void ConfigureMock_RoleController_Responses()
     {
+      // WebApi:Orders:GetCustomerContacts
+      var responseModel3 = new List<ContactModel>
+      {
+        new ContactModel
+        {
+          CustomerId = 1,
+          ContactId = 1,
+          ContactName = "Rustum Gabier",
+          ContactNo = "0217548899",
+          EmailAddress = "rustum@capetown.gov.za",
+          CreateUser ="zunaid",
+          CreateDate = DateTime.Now
+        },
+        new ContactModel
+        {
+          CustomerId = 1,
+          ContactId = 2,
+          ContactName = "Mobb Deep",
+          ContactNo = "0825554444",
+          EmailAddress = "mobbdeep@capetown.gov.za",
+          CreateUser ="zunaid",
+          CreateDate = DateTime.Now
+        },
+        new ContactModel
+        {
+          CustomerId = 1,
+          ContactId = 3,
+          ContactName = "Elton Pappy",
+          ContactNo = "0726985223",
+          EmailAddress = "elton@capetown.gov.za",
+          CreateUser ="zunaid",
+          CreateDate = DateTime.Now
+        }
+      };
+
+      Responses.Add(new MockApiResponseModel { WepApiUrl = "WebApi:Orders:GetCustomerContacts", RequestModel = new GetCustomerContactsRequestModel { CustomerId = 1 }, ResponseContent = responseModel3 });
+
+      responseModel3 = new List<ContactModel>
+      {
+        new ContactModel
+        {
+          CustomerId = 2,
+          ContactId = 4,
+          ContactName = "Chocalate",
+          ContactNo = "0217548899",
+          EmailAddress = "Chocalate@capetown.gov.za",
+          CreateUser ="zunaid",
+          CreateDate = DateTime.Now
+        },
+        new ContactModel
+        {
+          CustomerId = 2,
+          ContactId = 5,
+          ContactName = "Taster",
+          ContactNo = "0825554444",
+          EmailAddress = "Taster@capetown.gov.za",
+          CreateUser ="zunaid",
+          CreateDate = DateTime.Now
+        },
+        new ContactModel
+        {
+          CustomerId = 2,
+          ContactId = 6,
+          ContactName = "Swedend",
+          ContactNo = "0726985223",
+          EmailAddress = "Swedend@capetown.gov.za",
+          CreateUser ="zunaid",
+          CreateDate = DateTime.Now
+        }
+      };
+
+      Responses.Add(new MockApiResponseModel { WepApiUrl = "WebApi:Orders:GetCustomerContacts", RequestModel = new GetCustomerContactsRequestModel { CustomerId = 2 }, ResponseContent = responseModel3 });
+
+      // WebApi:Orders:GetOrderCustomers
+      var responseModel2 = new List<CustomerModel>
+      {
+        new CustomerModel
+        {
+          CompanyProfileId = 1,
+          CustomerId = 1,
+          CustomerName = "City of Cape Town",
+          CustomerDetails = "Ravensmead Centre c/o Jan Smuts and Gilleger rd",
+          AccountNo = "Moq1",
+          ContactNo = "0217548899",
+          MobileNo = "0214458888",
+          EmailAddress = "someemail@capetown.gov.za",
+          CreateUser ="zunaid",
+          CreateDate = DateTime.Now
+        },
+        new CustomerModel
+        {
+          CompanyProfileId = 1,
+          CustomerId = 2,
+          CustomerName = "The Juggernauts",
+          CustomerDetails = "Fantastic Four",
+          AccountNo = "Moq2",
+          ContactNo = "0213966655",
+          MobileNo = "0214458888",
+          EmailAddress = "test@capetown.gov.za",
+          CreateUser ="zunaid",
+          CreateDate = DateTime.Now
+        },
+        new CustomerModel
+        {
+          CompanyProfileId = 1,
+          CustomerId = 2,
+          CustomerName = "Water Inc.",
+          CustomerDetails = "Cravenby and Newlands",
+          AccountNo = "Moq3",
+          ContactNo = "0214458888",
+          MobileNo = "0725584589",
+          EmailAddress = "mo@capetown.gov.za",
+          CreateUser ="zunaid",
+          CreateDate = DateTime.Now
+        }
+      };
+
+      Responses.Add(new MockApiResponseModel { WepApiUrl = "WebApi:Orders:GetOrderCustomers", RequestModel = new GetOrderCustomersRequestModel() { Username = "zunaid", CompanyProfileId = 1 }, ResponseContent = responseModel2 });
+
       /*
       // WebApi:Login
       Responses.Add(new MockApiResponseModel
       {
         WepApiUrl = "WebApi:Authenticate:Login",
         RequestModel = new LoginRequestModel { Username = "zunaid", Password = "222222" },
-        ResponseContent = new UserModel { Username = "zunaid", ApiSessionToken = System.Guid.NewGuid().ToString(), IsAuthenticated = true, CompanyProfileId = 0 }
+        ResponseContent = new UserModel { Username = "zunaid", ApiSessionToken = System.Guid.NewGuid().ToString(), IsAuthenticated = true, CompanyProfileId = 1 }
       });
 
       //"WebApi:Home:GetHomerOrders"
@@ -44,7 +163,7 @@ namespace ColourCoded.UI.Shared.WebApiCaller
             }
           };
 
-      Responses.Add(new MockApiResponseModel { WepApiUrl = "WebApi:Home:GetHomeOrders", RequestModel = new GetHomeOrdersRequestModel() { Username = "zunaid", CompanyProfileId = 0}, ResponseContent = viewModel });
+      Responses.Add(new MockApiResponseModel { WepApiUrl = "WebApi:Home:GetHomeOrders", RequestModel = new GetHomeOrdersRequestModel() { Username = "zunaid", CompanyProfileId = 1}, ResponseContent = viewModel });
 
 
       // resources.MockApiCaller.AddMockResponse("WebApi:Home:GetVatRate", null, vatRate);

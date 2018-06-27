@@ -56,10 +56,7 @@
         <span>Available Customers</span>
         <br />
         <select id="existingcustomers" style="width: 175px">
-          <option value=""></option>
-          <option value="1">City of Cape Town</option>
-          <option value="2">False Bay College</option>
-          <option value="3">PresLes</option>
+          <option value=''></option>
         </select>
       </div>
       <div>
@@ -102,10 +99,7 @@
         <span>Available Contacts</span>
         <br />
         <select id="existingcontacts" style="width: 175px">
-          <option value=""></option>
-          <option value="1">Belinda</option>
-          <option value="2">John Williams</option>
-          <option value="3">Valencia</option>
+          <option value=''></option>
         </select>
       </div>
       <div>
@@ -215,10 +209,111 @@
     var order = {
       "customerContacts": [],
       "addContacts": [],
-      "customers": [],
+      "customers": []
     };
 
     $(document).ready(function () {
+
+      $.ajax({
+        url: '@Url.Action("GetOrderCustomers")',
+        type: "POST",
+        success: function (customerlist) {
+
+          $.each(customerlist, function (index, customer) {
+
+            order.customers.push(
+              {
+                "customerid": customer.customerId, "customername": customer.customerName,
+                "customerdetails": customer.customerDetails, "contactno": customer.contactNo,
+                "accountno": customer.accountNo, "mobileno": customer.mobileNo, "emailaddress": customer.emailAddress
+              });
+
+            $("#existingcustomers").append("<option value='" + customer.customerId + "' index='" + (index) +"'>" + customer.customerName + "</option>");
+          });
+        },
+        error: function (xhr, options, error) {
+          alert("OOPS! The was an error processing your request - " + jQuery.parseJSON(xhr.responseText).message);
+        }
+      });
+
+      $("#existingcustomers").change(function () {
+        var customerId = $("#existingcustomers").val();
+
+        $("#customername").val("");
+        $("#customerdetails").val("");
+        $("#customercontactno").val("");
+        $("#customeraccountno").val("");
+        $("#customermobileno").val("");
+        $("#customeremail").val("");
+        $("#contactname").val("");
+        $("#contactno").val("");
+        $("#contactemail").val("");
+        $("#existingcontacts").html("");
+        $("#existingcontacts").append("<option value=''></option>");
+        $("#divcontacts").hide(); removeContact();
+
+        if (customerId != "") {
+          $.ajax({
+            url: '@Url.Action("GetCustomerContacts")',
+            data: { customerId: customerId },
+            type: "POST",
+            success: function (customercontactslist) {
+
+              order.customerContacts = [];
+              $("#existingcontacts").html("");
+              $("#existingcontacts").append("<option value=''></option>");
+
+              // loop through contacts and append to the contacts drop down list
+              $.each(customercontactslist, function (index, contact) {
+
+                order.customerContacts.push(
+                  {
+                    "contactid": contact.contactId, "contactname": contact.contactName, "contactno": contact.contactNo, "emailaddress": contact.emailAddress
+                  });
+
+                $("#existingcontacts").append("<option value='" + contact.contactId + "' index='" + (index) + "'>" + contact.contactName + "</option>");
+              });
+
+              // append the customer details to the customer details panel
+              var index = $('option:selected', $("#existingcustomers")).attr('index');
+
+              $("#customername").val(order.customers[index].customername);
+              $("#customerdetails").val(order.customers[index].customerdetails);
+              $("#customercontactno").val(order.customers[index].contactno);
+              $("#customeraccountno").val(order.customers[index].accountno);
+              $("#customermobileno").val(order.customers[index].mobileno);
+              $("#customeremail").val(order.customers[index].emailaddress);
+              $("#contactname").val("");
+              $("#contactno").val("");
+              $("#contactemail").val("");
+
+            },
+            error: function (xhr, options, error) {
+              alert("OOPS! The was an error processing your request - " + jQuery.parseJSON(xhr.responseText).message);
+            }
+          });
+        }
+        
+      });
+
+      $("#existingcontacts").change(function () {
+        // append the contact details to the contact details panel
+        var index = $('option:selected', $("#existingcontacts")).attr('index');
+
+        $("#contactname").val(order.customerContacts[index].contactname);
+        $("#contactno").val(order.customerContacts[index].contactno);
+        $("#contactemail").val(order.customerContacts[index].emailaddress);
+
+        $("#divcontacts").show();
+        var grid = $("#contacts tbody").html("");
+        grid.append("<tr>");
+        grid.append("<td>" + order.customerContacts[index].contactname + "</td>");
+        grid.append("<td align='center'>" + order.customerContacts[index].contactno + "</td>");
+        grid.append("<td>" + order.customerContacts[index].emailaddress + "</td>");
+        grid.append("<td><i class='glyphicon glyphicon-trash' onclick='removeContact()'></i></td>");
+        grid.append("</tr>");
+      });
+       
       $("#customerdetails").html("");
 
       if (queryString != undefined) {
@@ -316,12 +411,14 @@
         $("#customeraccountno").attr("disabled", "disabled");
         $("#customermobileno").attr("disabled", "disabled");
         $("#customeremail").attr("disabled", "disabled");
+        $("#customerdetails").attr("disabled", "disabled");
       } else {
         $("#customername").removeAttr("disabled");
         $("#customercontactno").removeAttr("disabled");
         $("#customeraccountno").removeAttr("disabled");
         $("#customermobileno").removeAttr("disabled");
         $("#customeremail").removeAttr("disabled");
+        $("#customerdetails").removeAttr("disabled");
       }
 
     });
@@ -368,7 +465,7 @@
       order.addContacts.splice(0, 1);
       order.addContacts.push(
         {
-          "contactname": contactname, "contactno": contactno, "contactemail": contactemail,
+          "contactname": contactname, "contactno": contactno, "contactemail": contactemail
         });
 
       $("#divcontacts").show();

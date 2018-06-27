@@ -8,6 +8,7 @@ using ColourCoded.UI.Shared;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using Serilog.Enrichers;
 
 namespace ColourCoded.Tests.Orders
 {
@@ -17,6 +18,7 @@ namespace ColourCoded.Tests.Orders
     private class Resources
     {
       public string TestUsername { get; set; }
+      public int CompanyProfileId { get; set; }
       public OrdersController Controller;
       public MockApiCaller MockApiCaller;
       public Mock<ICookieHelper> MockCookieHelper;
@@ -24,9 +26,10 @@ namespace ColourCoded.Tests.Orders
       public Resources()
       {
         TestUsername = "testuser";
+        CompanyProfileId = 1;
         MockApiCaller = new MockApiCaller();
         MockCookieHelper = new Mock<ICookieHelper>();
-        MockCookieHelper.Setup(x => x.GetCookie<UserModel>("LoggedInUser")).Returns(new UserModel { Username = TestUsername, ApiSessionToken = Guid.NewGuid().ToString(), IsAuthenticated = true, CompanyProfileId = 1 });
+        MockCookieHelper.Setup(x => x.GetCookie<UserModel>("LoggedInUser")).Returns(new UserModel { Username = TestUsername, ApiSessionToken = Guid.NewGuid().ToString(), IsAuthenticated = true, CompanyProfileId = CompanyProfileId });
         Controller = new OrdersController(MockApiCaller, MockCookieHelper.Object);
       }
     }
@@ -320,6 +323,170 @@ namespace ColourCoded.Tests.Orders
       Assert.AreEqual(responseModel.OrderLineDetails[0].OrderId, model.OrderLineDetails[0].OrderId);
       Assert.AreEqual(responseModel.OrderLineDetails[0].LineTotal, model.OrderLineDetails[0].LineTotal);
     }
+
+    [TestMethod]
+    public void LoadOrderDetail()
+    {
+      // given
+      var resources = new Resources();
+      const int orderId = 123;
+      const string orderNo = "TEST123";
+
+      // when
+      var result = resources.Controller.OrderDetail(orderId);
+
+      // then
+      Assert.IsNotNull(result);
+      Assert.AreEqual("OrderDetail", result.ViewName);
+    }
+
+    #region Order Customers Edit/Add/View
+
+    [TestMethod]
+    public void LoadOrderCustomers()
+    {
+      // given
+      var resources = new Resources();
+      const int orderId = 123;
+      const string orderNo = "TEST123";
+      
+      // when
+      var result = resources.Controller.OrderCustomer(orderId, orderNo);
+
+      // then
+      Assert.IsNotNull(result);
+      Assert.AreEqual("OrderCustomer", result.ViewName);
+    }
+
+    [TestMethod]
+    public void GetOrderCustomers_ReturnsCustomerModel()
+    {
+      // given
+      var resources = new Resources();
+      var requestModel = new GetOrderCustomersRequestModel { CompanyProfileId = resources.CompanyProfileId, Username = resources.TestUsername };
+      var responseModel = new List<CustomerModel>
+      {
+        new CustomerModel
+        {
+          CompanyProfileId = resources.CompanyProfileId,
+          CustomerId = 1,
+          CustomerName = "City of Cape Town",
+          CreateUser = resources.TestUsername,
+          CreateDate = DateTime.Now
+        },
+        new CustomerModel
+        {
+          CompanyProfileId = resources.CompanyProfileId,
+          CustomerId = 2,
+          CustomerName = "The Juggernauts",
+          CreateUser = resources.TestUsername,
+          CreateDate = DateTime.Now
+        },
+        new CustomerModel
+        {
+          CompanyProfileId = resources.CompanyProfileId,
+          CustomerId = 2,
+          CustomerName = "Water Inc.",
+          CreateUser = resources.TestUsername,
+          CreateDate = DateTime.Now
+        }
+      };
+
+      resources.MockApiCaller.AddMockResponse("WebApi:Orders:GetOrderCustomers", requestModel, responseModel);
+
+      // when 
+      var result = resources.Controller.GetOrderCustomers() as JsonResult;
+
+      // then
+      Assert.IsNotNull(result);
+      var model = (List<CustomerModel>) result.Value;
+      Assert.IsNotNull(model);
+      Assert.AreEqual(3, model.Count);
+
+      Assert.AreEqual(responseModel[0].CompanyProfileId, model[0].CompanyProfileId);
+      Assert.AreEqual(responseModel[0].CustomerName, model[0].CustomerName);
+      Assert.AreEqual(responseModel[0].CustomerId, model[0].CustomerId);
+      Assert.AreEqual(responseModel[0].CreateDate, model[0].CreateDate);
+      Assert.AreEqual(responseModel[0].CreateUser, model[0].CreateUser);
+
+      Assert.AreEqual(responseModel[1].CompanyProfileId, model[1].CompanyProfileId);
+      Assert.AreEqual(responseModel[1].CustomerName, model[1].CustomerName);
+      Assert.AreEqual(responseModel[1].CustomerId, model[1].CustomerId);
+      Assert.AreEqual(responseModel[1].CreateDate, model[1].CreateDate);
+      Assert.AreEqual(responseModel[1].CreateUser, model[1].CreateUser);
+
+      Assert.AreEqual(responseModel[2].CompanyProfileId, model[2].CompanyProfileId);
+      Assert.AreEqual(responseModel[2].CustomerName, model[2].CustomerName);
+      Assert.AreEqual(responseModel[2].CustomerId, model[2].CustomerId);
+      Assert.AreEqual(responseModel[2].CreateDate, model[2].CreateDate);
+      Assert.AreEqual(responseModel[2].CreateUser, model[2].CreateUser);
+    }
+
+    [TestMethod]
+    public void GetCustomerContacts_ReturnsContactModel()
+    {
+      // given
+      var resources = new Resources();
+      const int customerId = 1;
+      var requestModel = new GetCustomerContactsRequestModel { CustomerId = customerId };
+      var responseModel = new List<ContactModel>
+      {
+        new ContactModel
+        {
+          CustomerId = customerId,
+          ContactId = 1,
+          ContactName = "Rustum Gabier",
+          CreateUser = resources.TestUsername,
+          CreateDate = DateTime.Now
+        },
+        new ContactModel
+        {
+          CustomerId = customerId,
+          ContactId = 2,
+          ContactName = "Mobb Deep",
+          CreateUser = resources.TestUsername,
+          CreateDate = DateTime.Now
+        },
+        new ContactModel
+        {
+          CustomerId = customerId,
+          ContactId = 3,
+          ContactName = "Elton Pappy",
+          CreateUser = resources.TestUsername,
+          CreateDate = DateTime.Now
+        }
+      };
+
+      resources.MockApiCaller.AddMockResponse("WebApi:Orders:GetCustomerContacts", requestModel, responseModel);
+
+      // when 
+      var result = resources.Controller.GetCustomerContacts(customerId) as JsonResult;
+
+      // then
+      Assert.IsNotNull(result);
+      var model = (List<ContactModel>)result.Value;
+      Assert.IsNotNull(model);
+      Assert.AreEqual(3, model.Count);
+
+      Assert.AreEqual(responseModel[0].CustomerId, model[0].CustomerId);
+      Assert.AreEqual(responseModel[0].ContactId, model[0].ContactId);
+      Assert.AreEqual(responseModel[0].ContactName, model[0].ContactName);
+      Assert.AreEqual(responseModel[0].CreateDate, model[0].CreateDate);
+      Assert.AreEqual(responseModel[0].CreateUser, model[0].CreateUser);
+
+      Assert.AreEqual(responseModel[1].CustomerId, model[1].CustomerId);
+      Assert.AreEqual(responseModel[1].ContactId, model[1].ContactId);
+      Assert.AreEqual(responseModel[1].ContactName, model[1].ContactName);
+      Assert.AreEqual(responseModel[1].CreateDate, model[1].CreateDate);
+      Assert.AreEqual(responseModel[1].CreateUser, model[1].CreateUser);
+
+      Assert.AreEqual(responseModel[2].CustomerId, model[2].CustomerId);
+      Assert.AreEqual(responseModel[2].ContactId, model[2].ContactId);
+      Assert.AreEqual(responseModel[2].ContactName, model[2].ContactName);
+      Assert.AreEqual(responseModel[2].CreateDate, model[2].CreateDate);
+      Assert.AreEqual(responseModel[2].CreateUser, model[2].CreateUser);
+    }
+    #endregion
 
   }
 }
