@@ -404,7 +404,7 @@
                 success: function (validResult) {
                   // if success: route to confirmation screen
                   if (validResult.isValid) {
-                    window.location.href = '@Url.Action("ConfirmOrderDetail")' + '?orderId=' + orderId;
+                    window.location.href = '@Url.Action("ConfirmOrderCustomer")' + '?orderId=' + orderId;
                   }
                   else {
                     $("#validorder").html("Error occured: " + validResult.messages[0].message);

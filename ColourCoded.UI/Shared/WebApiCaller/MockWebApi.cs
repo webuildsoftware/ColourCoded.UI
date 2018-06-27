@@ -1,12 +1,8 @@
 ﻿using System.Collections.Generic;
-using ColourCoded.UI.Areas.Security.Models.Login.RequestModels;
-using ColourCoded.UI.Areas.Security.Models.Login;
-using ColourCoded.UI.Areas.Security.Models.Permissions;
-using ColourCoded.UI.Areas.Security.Models.Permissions.RequestModels;
-using ColourCoded.UI.Areas.Home.Models;
 using System;
-using ColourCoded.UI.Areas.Orders.Models;
 using ColourCoded.UI.Areas.Orders.Models.RequestModels;
+using ColourCoded.UI.Areas.Orders.Models.ResponseModels;
+using ColourCoded.UI.Areas.Orders.Models.InputModels;
 
 namespace ColourCoded.UI.Shared.WebApiCaller
 {
@@ -22,6 +18,45 @@ namespace ColourCoded.UI.Shared.WebApiCaller
 
     public void ConfigureMock_RoleController_Responses()
     {
+      // WebApi:Orders:AddOrderCustomer
+      var inputModel = new AddOrderCustomerRequestModel
+      {
+        OrderId = 245,
+        CustomerId = 0,
+        CustomerName = "1",
+        CustomerDetails = "1",
+        CustomerContactNo = "1",
+        CustomerMobileNo = "1",
+        CustomerAccountNo = "1",
+        CustomerEmailAddress = "1@gmail.com",
+        ContactId = 0,
+        ContactAdded = false
+      };
+      var responseModel4 = new OrderCustomerModel { OrderId = 245, CustomerId = 1, ContactId = 1 };
+
+      Responses.Add(new MockApiResponseModel { WepApiUrl = "WebApi:Orders:AddOrderCustomer", RequestModel = inputModel, ResponseContent = responseModel4 });
+
+      inputModel = new AddOrderCustomerRequestModel
+      {
+        OrderId = 245,
+        CustomerId = 0,
+        CustomerName = "1",
+        CustomerDetails = "1",
+        CustomerContactNo = "1",
+        CustomerMobileNo = "1",
+        CustomerAccountNo = "1",
+        CustomerEmailAddress = "1@gmail.com",
+        ContactId = 0,
+        ContactAdded = true,
+        ContactEmailAddress = "1@gmail.com",
+        ContactName = "1",
+        ContactNo = "1"
+      };
+      responseModel4 = new OrderCustomerModel { OrderId = 245, CustomerId = 1, ContactId = 1 };
+
+      Responses.Add(new MockApiResponseModel { WepApiUrl = "WebApi:Orders:AddOrderCustomer", RequestModel = inputModel, ResponseContent = responseModel4 });
+
+
       // WebApi:Orders:GetCustomerContacts
       var responseModel3 = new List<ContactModel>
       {

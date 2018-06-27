@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using ColourCoded.UI.Areas.Orders.Models;
+using ColourCoded.UI.Areas.Orders.Models.ResponseModels;
+using ColourCoded.UI.Areas.Orders.Models.InputModels;
 using ColourCoded.UI.Areas.Orders.Models.RequestModels;
 using ColourCoded.UI.Areas.Security.Models.Login;
 using ColourCoded.UI.Shared;
@@ -42,6 +43,18 @@ namespace ColourCoded.UI.Areas.Orders.Controllers
         var result = WebApiCaller.PostAsync<OrderDetailModel>("WebApi:Orders:GetOrderDetail", new GetOrderDetailRequestModel { OrderId = orderId });
 
         return View("ConfirmOrderDetail", result);
+      }
+      catch (Exception ex)
+      {
+        return RedirectToAction("Error", "Home", new { area = "Home", IsError = "True", ex.Message, BaseMessage = ex.GetBaseException().Message });
+      }
+    }
+
+    public IActionResult ConfirmOrderCustomer(OrderCustomerModel model)
+    {
+      try
+      {
+        return View("ConfirmCustomerOrder", model);
       }
       catch (Exception ex)
       {
@@ -129,6 +142,14 @@ namespace ColourCoded.UI.Areas.Orders.Controllers
     public JsonResult GetCustomerContacts(int customerId)
     {
       var result = WebApiCaller.PostAsync<List<ContactModel>>("WebApi:Orders:GetCustomerContacts", new GetCustomerContactsRequestModel() { CustomerId = customerId });
+
+      return Json(result);
+    }
+
+    [HttpPost]
+    public JsonResult AddCustomerOrder(AddOrderCustomerRequestModel inputModel)
+    {
+      var result = WebApiCaller.PostAsync<OrderCustomerModel>("WebApi:Orders:AddOrderCustomer", inputModel);
 
       return Json(result);
     }

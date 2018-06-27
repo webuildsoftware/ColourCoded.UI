@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using ColourCoded.UI.Areas.Orders.Controllers;
 using ColourCoded.UI.Areas.Orders.Models.RequestModels;
-using ColourCoded.UI.Areas.Orders.Models;
+using ColourCoded.UI.Areas.Orders.Models.InputModels;
+using ColourCoded.UI.Areas.Orders.Models.ResponseModels;
 using ColourCoded.UI.Areas.Security.Models.Login;
 using ColourCoded.UI.Shared;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using Serilog.Enrichers;
 
 namespace ColourCoded.Tests.Orders
 {
@@ -359,7 +359,7 @@ namespace ColourCoded.Tests.Orders
     }
 
     [TestMethod]
-    public void GetOrderCustomers_ReturnsCustomerModel()
+    public void GetUser_Company_Customers_ReturnsCustomerModel()
     {
       // given
       var resources = new Resources();
@@ -485,6 +485,72 @@ namespace ColourCoded.Tests.Orders
       Assert.AreEqual(responseModel[2].ContactName, model[2].ContactName);
       Assert.AreEqual(responseModel[2].CreateDate, model[2].CreateDate);
       Assert.AreEqual(responseModel[2].CreateUser, model[2].CreateUser);
+    }
+
+    [TestMethod]
+    public void AddNewCustomer_NoContact_Success_ReturnsValidationResult()
+    {
+      // given
+      var resources = new Resources();
+      var inputModel = new AddOrderCustomerRequestModel
+      {
+        CustomerId = 0,
+        CustomerName = "New Customer",
+        CustomerDetails = "Testing a customer details text area.",
+        CustomerContactNo = "0214478512",
+        CustomerMobileNo = "0847110055",
+        CustomerAccountNo = "DR3243",
+        CustomerEmailAddress = "someemail@gmail.com",
+        ContactId = 0
+      };
+      var responseModel = new OrderCustomerModel { CustomerId = 1, ContactId = 1 };
+
+      resources.MockApiCaller.AddMockResponse("WebApi:Orders:AddOrderCustomer", inputModel, responseModel);
+
+      // when
+      var result = resources.Controller.AddCustomerOrder(inputModel) as JsonResult;
+
+      // then
+      Assert.IsNotNull(result);
+      var model = (OrderCustomerModel)result.Value;
+      Assert.AreEqual(responseModel.CustomerId, model.CustomerId);
+      Assert.AreEqual(responseModel.ContactId, model.ContactId);
+    }
+
+    [TestMethod]
+    public void AddNewCustomer_NewContact_Success_ReturnsValidationResult()
+    {
+      // given
+      var resources = new Resources();
+      var inputModel = new AddOrderCustomerRequestModel
+      {
+        OrderId = 1,
+        CustomerId = 0,
+        CustomerName = "New Customer",
+        CustomerDetails = "Testing a customer details text area.",
+        CustomerContactNo = "0214478512",
+        CustomerMobileNo = "0847110055",
+        CustomerAccountNo = "DR3243",
+        CustomerEmailAddress = "someemail@gmail.com",
+        ContactId = 0,
+        ContactName = "ContactName",
+        ContactAdded = true,
+        ContactEmailAddress = "",
+        ContactNo ="0219983333"
+      };
+      var responseModel = new OrderCustomerModel { OrderId = 1, CustomerId = 1, ContactId = 1 };
+
+      resources.MockApiCaller.AddMockResponse("WebApi:Orders:AddOrderCustomer", inputModel, responseModel);
+
+      // when
+      var result = resources.Controller.AddCustomerOrder(inputModel) as JsonResult;
+
+      // then
+      Assert.IsNotNull(result);
+      var model = (OrderCustomerModel)result.Value;
+      Assert.AreEqual(responseModel.CustomerId, model.CustomerId);
+      Assert.AreEqual(responseModel.ContactId, model.ContactId);
+      Assert.AreEqual(responseModel.OrderId, model.OrderId);
     }
     #endregion
 

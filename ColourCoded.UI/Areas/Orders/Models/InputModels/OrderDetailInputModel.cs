@@ -1,4 +1,4 @@
-﻿namespace ColourCoded.UI.Areas.Orders.Models
+﻿namespace ColourCoded.UI.Areas.Orders.Models.InputModels
 {
   public class OrderDetailInputModel
   {
