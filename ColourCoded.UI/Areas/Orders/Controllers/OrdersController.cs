@@ -148,7 +148,7 @@ namespace ColourCoded.UI.Areas.Orders.Controllers
     [HttpPost]
     public JsonResult GetCustomerContacts(int customerId)
     {
-      var result = WebApiCaller.PostAsync<List<ContactModel>>("WebApi:Orders:GetCustomerContacts", new GetCustomerContactsRequestModel() { CustomerId = customerId });
+      var result = WebApiCaller.PostAsync<List<ContactModel>>("WebApi:Orders:GetCustomerContacts", new GetCustomerContactsRequestModel { CustomerId = customerId });
 
       return Json(result);
     }

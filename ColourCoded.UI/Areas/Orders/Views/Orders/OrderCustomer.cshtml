@@ -305,7 +305,7 @@
     $("#existingcustomers").change(function () {
         var customerId = $(this).val();
 
-        if (customerId != "") {
+        if (customerId != "0") {
 
           $.ajax({
             url: '@Url.Action("GetCustomerContacts")',
