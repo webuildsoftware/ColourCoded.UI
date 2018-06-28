@@ -37,50 +37,49 @@ namespace ColourCoded.UI.Shared.WebApiCaller
         ContactEmailAddress = "someemail@gmail.com",
         CustomerId = 1,
         ContactId = 1,
-        OrderId = 1,
+        OrderId = 245,
         OrderNo = "MOQ001",
         OrderCreateDate = DateTime.Now
       };
 
       
-      Responses.Add(new MockApiResponseModel { WepApiUrl = "WebApi:Orders:GetOrderCustomerDetail", RequestModel = new GetOrderCustomerDetailRequestModel { OrderId = 1 }, ResponseContent = responseModel5 });
+      Responses.Add(new MockApiResponseModel { WepApiUrl = "WebApi:Orders:GetOrderCustomerDetails", RequestModel = new GetOrderCustomerDetailRequestModel { OrderId = 245 }, ResponseContent = responseModel5 });
 
 
       // WebApi:Orders:AddOrderCustomer
       var inputModel = new AddOrderCustomerRequestModel
       {
-        OrderId = 1,
+        OrderId = 245,
         CustomerId = 0,
         CustomerName = "1",
         CustomerDetails = "1",
         CustomerContactNo = "1",
         CustomerMobileNo = "1",
         CustomerAccountNo = "1",
-        CustomerEmailAddress = "1@gmail.com",
         ContactId = 0,
         ContactAdded = false
       };
-      var responseModel4 = new OrderCustomerModel { OrderId = 1, CustomerId = 1, ContactId = 1};
+      var responseModel4 = new OrderCustomerModel { OrderId = 245, CustomerId = 1, ContactId = 1};
 
       Responses.Add(new MockApiResponseModel { WepApiUrl = "WebApi:Orders:AddOrderCustomer", RequestModel = inputModel, ResponseContent = responseModel4 });
 
       inputModel = new AddOrderCustomerRequestModel
       {
-        OrderId = 1,
+        OrderId = 245,
         CustomerId = 0,
         CustomerName = "1",
         CustomerDetails = "1",
         CustomerContactNo = "1",
         CustomerMobileNo = "1",
         CustomerAccountNo = "1",
-        CustomerEmailAddress = "1@gmail.com",
+        CustomerEmailAddress = "",
         ContactId = 0,
         ContactAdded = true,
-        ContactEmailAddress = "1@gmail.com",
+        ContactEmailAddress = "",
         ContactName = "1",
         ContactNo = "1"
       };
-      responseModel4 = new OrderCustomerModel { OrderId = 1, CustomerId = 1, ContactId = 1 };
+      responseModel4 = new OrderCustomerModel { OrderId = 245, CustomerId = 1, ContactId = 1 };
 
       Responses.Add(new MockApiResponseModel { WepApiUrl = "WebApi:Orders:AddOrderCustomer", RequestModel = inputModel, ResponseContent = responseModel4 });
 

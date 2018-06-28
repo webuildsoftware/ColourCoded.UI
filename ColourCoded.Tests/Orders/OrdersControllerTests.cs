@@ -576,7 +576,7 @@ namespace ColourCoded.Tests.Orders
 
       };
 
-      resources.MockApiCaller.AddMockResponse("WebApi:Orders:GetOrderCustomerDetail", requestModel, responseModel);
+      resources.MockApiCaller.AddMockResponse("WebApi:Orders:GetOrderCustomerDetails", requestModel, responseModel);
 
       // when
       var result = resources.Controller.ConfirmOrderCustomer(new OrderCustomerModel {OrderId = orderId}) as ViewResult;
@@ -596,6 +596,57 @@ namespace ColourCoded.Tests.Orders
       Assert.AreEqual(responseModel.ContactName, model.ContactName);
       Assert.AreEqual(responseModel.ContactNo, model.ContactNo);
       Assert.AreEqual(responseModel.ContactEmailAddress, model.ContactEmailAddress);
+    }
+
+    [TestMethod]
+    public void GetOrderCustomerDetails()
+    {
+      // given
+      var resources = new Resources();
+      const int orderId = 123;
+      var responsemodel = new OrderCustomerDetailModel
+      {
+        CustomerName = "Test Costumer",
+        CustomerDetails = "This is some long customer description",
+        CustomerContactNo = "0214472215",
+        CustomerAccountNo = "DC1122",
+        CustomerMobileNo = "0728543333",
+        CustomerEmailAddress = "someemail@gmail.com",
+        ContactAdded = true,
+        ContactName = "Contraption",
+        ContactNo = "0214472215",
+        ContactEmailAddress = "someemail@gmail.com",
+        CustomerId = 1,
+        ContactId = 1,
+        OrderId = 245,
+        OrderNo = "MOQ001",
+        OrderCreateDate = DateTime.Now
+      };
+      var requestmodel = new GetOrderCustomerDetailRequestModel { OrderId = orderId };
+
+      resources.MockApiCaller.AddMockResponse("WebApi:Orders:GetOrderCustomerDetails", requestmodel, responsemodel);
+
+      // when
+      var result = resources.Controller.GetOrderCustomerDetails(orderId) as JsonResult;
+
+      // then
+      Assert.IsNotNull(result);
+      var model = (OrderCustomerDetailModel)result.Value;
+      Assert.AreEqual(responsemodel.OrderId, model.OrderId);
+      Assert.AreEqual(responsemodel.OrderNo, model.OrderNo);
+      Assert.AreEqual(responsemodel.OrderCreateDate, model.OrderCreateDate);
+      Assert.AreEqual(responsemodel.CustomerName, model.CustomerName);
+      Assert.AreEqual(responsemodel.CustomerId, model.CustomerId);
+      Assert.AreEqual(responsemodel.CustomerMobileNo, model.CustomerMobileNo);
+      Assert.AreEqual(responsemodel.CustomerEmailAddress, model.CustomerEmailAddress);
+      Assert.AreEqual(responsemodel.CustomerDetails, model.CustomerDetails);
+      Assert.AreEqual(responsemodel.CustomerContactNo, model.CustomerContactNo);
+      Assert.AreEqual(responsemodel.CustomerAccountNo, model.CustomerAccountNo);
+      Assert.AreEqual(responsemodel.ContactId, model.ContactId);
+      Assert.AreEqual(responsemodel.ContactName, model.ContactName);
+      Assert.AreEqual(responsemodel.ContactNo, model.ContactNo);
+      Assert.AreEqual(responsemodel.ContactEmailAddress, model.ContactEmailAddress);
+      Assert.AreEqual(responsemodel.ContactAdded, model.ContactAdded);
     }
     #endregion
 

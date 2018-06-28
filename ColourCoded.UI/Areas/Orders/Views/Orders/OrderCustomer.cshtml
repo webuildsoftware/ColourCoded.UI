@@ -21,7 +21,7 @@
   }
 
   input[type=button] {
-    width: 100px;
+    width: 110px;
   }
 
   .validationLabel {
@@ -118,11 +118,7 @@
         <input type="text" id="contactemail" placeholder="Enter email (optional)" />
       </div>
       <div style="padding-top:10px">
-        <form id="formaddcustomer" method="post" action="@Url.Action("AddCustomerOrder")">
-          <input id="addcontact" value="Add Contact" type="button" />&nbsp;
-          <input id="done" value="Done" type="button" />&nbsp;
-          <label id="validbuttons" class="validationLabel"></label>
-        </form>
+        <input id="done" value="Complete" type="button" />
       </div>
       <br />
       <div id="divcontacts">
@@ -208,14 +204,15 @@
     var queryString = location.href.split("?")[1];
     var orderId = 0;
     var orderNo = "";
+    var contactAdded = true;
     var order = {
       "customerContacts": [],
-      "addContacts": [],
       "customers": []
     };
 
     $(document).ready(function () {
 
+      // get the customers belonging to the company profile and/or user
       $.ajax({
         url: '@Url.Action("GetOrderCustomers")',
         type: "POST",
@@ -238,28 +235,67 @@
         }
       });
 
+      // check to see if the change customer details button was clicked
       if (queryString != undefined) {
 
         // get order id from query string
         orderId = queryString.split("&")[0].split("=")[1];
         orderNo = queryString.split("&")[1].split("=")[1];
+        var newCustomer = queryString.split("&")[2].split("=")[1];
 
         $("#orderno").html("Order: " + orderNo);
         $("#orderno").attr("orderid", orderId);
 
-        $.ajax({
-          url: '@Url.Action("GetOrderCustomerDetails")',
-          data: { orderId : orderId},
-          type: 'POST',
-          success: function (customerorderdetails) {
-            alert(JSON.stringify(customerorderdetails));
-            $("#customername").val(customerorderdetails.customerName);
-          },
-          error: function (xhr, options, error) {
-            alert("OOPS! The was an error processing your request - " + jQuery.parseJSON(xhr.responseText).message);
-          }
-        });
+        if (newCustomer == "false") {
 
+          // get the order customer detail information and populate the customer and contact panels
+          $.ajax({
+            url: '@Url.Action("GetOrderCustomerDetails")',
+            data: { orderId: orderId },
+            type: 'POST',
+            success: function (customerorderdetails) {
+              // populate the customer form inputs
+              $("#existingcustomers").val(customerorderdetails.customerId);
+              $("#customername").val(customerorderdetails.customerName);
+              $("#customerdetails").val(customerorderdetails.customerDetails);
+              $("#customercontactno").val(customerorderdetails.customerContactNo);
+              $("#customeremail").val(customerorderdetails.customerEmailAddress);
+              $("#customeraccountno").val(customerorderdetails.customerAccountNo);
+              $("#customermobileno").val(customerorderdetails.customerMobileNo);
+              // populate the contact form inputs
+              $("#contactname").val(customerorderdetails.contactName);
+              $("#contactno").val(customerorderdetails.contactNo);
+              $("#contactemail").val(customerorderdetails.contactEmailAddress);
+
+              // get the contacts belonging to the selected customerid and bind to the dropdownlist
+              $.ajax({
+                url: '@Url.Action("GetCustomerContacts")',
+                data: { customerId: customerorderdetails.customerId},
+                type: "POST",
+                success: function (contacts) {
+
+                  $.each(contacts, function (index, contact) {
+                    // loop through contacts and append to the contacts drop down list
+                    order.customerContacts.push(
+                      {
+                        "contactid": contact.contactId, "contactname": contact.contactName, "contactno": contact.contactNo, "emailaddress": contact.emailAddress
+                      });
+
+                    $("#existingcontacts").append("<option value='" + contact.contactId + "' index='" + (index) + "'>" + contact.contactName + "</option>");
+                  });
+
+                  $("#existingcontacts").val(customerorderdetails.contactId);
+                },
+                error: function (xhr, options, error) {
+                  alert("OOPS! The was an error processing your request - " + jQuery.parseJSON(xhr.responseText).message);
+                }
+              });
+            },
+            error: function (xhr, options, error) {
+              alert("OOPS! The was an error processing your request - " + jQuery.parseJSON(xhr.responseText).message);
+            }
+          });
+        }
       }
 
       $("#customerdetails").html("");
@@ -270,13 +306,6 @@
         var customerId = $(this).val();
 
         if (customerId != "") {
-
-          $("#customername").attr("disabled", "disabled");
-          $("#customercontactno").attr("disabled", "disabled");
-          $("#customeraccountno").attr("disabled", "disabled");
-          $("#customermobileno").attr("disabled", "disabled");
-          $("#customeremail").attr("disabled", "disabled");
-          $("#customerdetails").attr("disabled", "disabled");
 
           $.ajax({
             url: '@Url.Action("GetCustomerContacts")',
@@ -336,12 +365,7 @@
           $("#contactname").val(order.customerContacts[index].contactname);
           $("#contactno").val(order.customerContacts[index].contactno);
           $("#contactemail").val(order.customerContacts[index].emailaddress);
-
-          // disable the form inputs
-          $("#contactname").attr("disabled", "disabled");
-          $("#contactno").attr("disabled", "disabled");
-          $("#contactemail").attr("disabled", "disabled");
-          $("#addcontact").attr("disabled", "disabled");
+          contactAdded = true;
         }
         
       });
@@ -383,7 +407,7 @@
       if (!$.isNumeric(event.key))
         $(this).val(quantity.replace(event.key, ""));
 
-      if (event.keyCode == 13) { $("#addcontact").click(); }
+      if (event.keyCode == 13) { $("#done").click(); }
     });
 
     $("#contactno").change(function (event) {
@@ -418,57 +442,11 @@
 
     $("#contactemail").keypress(function (event) {
       $(this).removeClass();
-      if (event.keyCode == 13) { $("#addcontact").click(); }
-    });
-
-    $("#addcontact").click(function () {
-      $("#validbuttons").html("");
-
-      var contactname = $("#contactname").val();
-      var contactno = $("#contactno").val();
-      var contactemail = $("#contactemail").val();
-
-      if (!validContactForm()) return;
-
-      var exists = false;
-      $.each(order.customerContacts, function (index, contact) {
-
-        if (contact.contactname.toUpperCase() === contactname.toUpperCase()) {
-          $("#validbuttons").html("Please select " + contactname + " from the available contacts");
-          exists = true;
-          return;
-        }
-
-      });
-      if (exists) return;
-
-      order.addContacts.splice(0, 1);
-      order.addContacts.push(
-        {
-          "contactname": contactname, "contactno": contactno, "contactemail": contactemail
-        });
-
-      $("#divcontacts").show();
-      var grid = $("#contacts tbody").html("");
-      grid.append("<tr>");
-      grid.append("<td>" + contactname + "</td>");
-      grid.append("<td align='center'>" + contactno + "</td>");
-      grid.append("<td>" + contactemail + "</td>");
-      grid.append("<td><i class='glyphicon glyphicon-trash' onclick='removeContact()'></i></td>");
-      grid.append("</tr>");
-
-      $("#contactname").val("");
-      $("#contactno").val("");
-      $("#contactemail").val("");
-      $("#contactname").focus();
-
+      if (event.keyCode == 13) { $("#done").click(); }
     });
 
     $("#done").click(function () {
-      $("#validbuttons").html("");
-
-      if (!validCustomerForm()) return;
-
+      // get the customer panel details
       var customerid = $("#existingcustomers").val();
       var customername = $("#customername").val();
       var customerdetails = $("#customerdetails").val();
@@ -476,63 +454,36 @@
       var customeremail = $("#customeremail").val();
       var customeraccountno = $("#customeraccountno").val();
       var customermobileno = $("#customermobileno").val();
+      // get the contact panel details
+      var contactid = $("#existingcontacts").val();
+      var contactname = $("#contactname").val();
+      var contactno = $("#contactno").val();
+      var contactemail = $("#contactemail").val();
 
-      // validation check to see if the customer name being added already exists in the dropdown
-      var exists = false;
-      $.each(order.customers, function (index, customer) {
+      if (!validCustomerForm()) return;
 
-        if (customer.customername.toUpperCase() === customername.toUpperCase()) {
-          $("#validbuttons").html("Please select " + customername + " from the available customers");
-          exists = true;
-          return;
+      if (!validContactForm()) {
+        if (confirm("No contact person has been added. Continue with only the customer details?")) {
+          contactAdded = false;
         }
+        else { return; }
+      }
 
+      $.ajax({
+        url: '@Url.Action("AddCustomerOrder")',
+        type: "POST",
+        data: {
+          CustomerId: customerid, CustomerName: customername, CustomerDetails: customerdetails, CustomerContactNo: customercontactno,
+          CustomerMobileNo: customermobileno, CustomerAccountNo: customeraccountno, CustomerEmailAddress: customeremail, OrderId: orderId,
+          ContactId: contactid, ContactName: contactname, ContactEmailAddress: contactemail, ContactNo: contactno, ContactAdded: contactAdded
+        },
+        success: function (data) {
+          window.location.href = '@Url.Action("ConfirmOrderCustomer")' + '?orderId=' + data.orderId + '&customerId=' + data.customerId + '&contactId=' + data.contactId;
+        },
+        error: function (xhr, options, error) {
+          alert("OOPS! The was an error processing your request - " + jQuery.parseJSON(xhr.responseText).message);
+        }
       });
-      if (exists) return;
-
-      if (order.addContacts.length == 0) {
-        // No contact is added only customer details
-        if (confirm('No linked contact is added to the order. Continue with only the customer details?')) {
-
-          $.ajax({
-            url: '@Url.Action("AddCustomerOrder")',
-            type: "POST",
-            data: {
-              CustomerId: customerid, CustomerName: customername, CustomerDetails: customerdetails, CustomerContactNo: customercontactno,
-              CustomerMobileNo: customermobileno, CustomerAccountNo: customeraccountno, CustomerEmailAddress: customeremail, OrderId: orderId
-            },
-            success: function (data) {
-              window.location.href = '@Url.Action("ConfirmOrderCustomer")' + '?orderId=' + data.orderId + '&customerId=' + data.customerId + '&contactId=' + data.contactId;
-            },
-            error: function (xhr, options, error) {
-              alert("OOPS! The was an error processing your request - " + jQuery.parseJSON(xhr.responseText).message);
-            }
-          });
-
-        }
-
-      } // End no contact added
-      else {
-         // Start: a contact has been added 
-
-         $.ajax({
-            url: '@Url.Action("AddCustomerOrder")',
-            type: "POST",
-            data: {
-              CustomerId: customerid, CustomerName: customername, CustomerDetails: customerdetails, CustomerContactNo: customercontactno,
-              CustomerMobileNo: customermobileno, CustomerAccountNo: customeraccountno, CustomerEmailAddress: customeremail, OrderId: orderId,
-              ContactAdded: true, ContactId: $("#existingcontacts").val(), ContactName: order.addContacts[0].contactname,
-              ContactEmailAddress: order.addContacts[0].contactemail, ContactNo: order.addContacts[0].contactno
-            },
-            success: function (data) {
-              window.location.href = '@Url.Action("ConfirmOrderCustomer")' + '?orderId=' + data.orderId + '&customerId=' + data.customerId + '&contactId=' + data.contactId;
-            },
-            error: function (xhr, options, error) {
-              alert("OOPS! The was an error processing your request - " + jQuery.parseJSON(xhr.responseText).message);
-            }
-          });
-
-      } // End contact has been added
 
     });
 
@@ -573,10 +524,6 @@
     }
 
     function refreshContactsPanel() {
-      $("#contactname").removeAttr("disabled");
-      $("#contactno").removeAttr("disabled");
-      $("#contactemail").removeAttr("disabled");
-      $("#addcontact").removeAttr("disabled");
       $("#contactname").val("");
       $("#contactno").val("");
       $("#contactemail").val("");

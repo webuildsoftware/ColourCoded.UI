@@ -36,6 +36,11 @@ namespace ColourCoded.UI.Areas.Orders.Controllers
       return View("OrderCustomer");
     }
 
+    public JsonResult GetOrderCustomerDetails(int orderId)
+    {
+      return Json(WebApiCaller.PostAsync<OrderCustomerDetailModel>("WebApi:Orders:GetOrderCustomerDetails", new GetOrderCustomerDetailRequestModel { OrderId = orderId }));
+    }
+
     public IActionResult ConfirmOrderDetail(int orderId)
     {
       try
@@ -54,7 +59,7 @@ namespace ColourCoded.UI.Areas.Orders.Controllers
     {
       try
       {
-        var result = WebApiCaller.PostAsync<OrderCustomerDetailModel>("WebApi:Orders:GetOrderCustomerDetail", new GetOrderCustomerDetailRequestModel { OrderId = model.OrderId });
+        var result = WebApiCaller.PostAsync<OrderCustomerDetailModel>("WebApi:Orders:GetOrderCustomerDetails", new GetOrderCustomerDetailRequestModel { OrderId = model.OrderId });
 
         return View("ConfirmOrderCustomer", result);
       }
@@ -155,5 +160,6 @@ namespace ColourCoded.UI.Areas.Orders.Controllers
 
       return Json(result);
     }
+
   }
 }

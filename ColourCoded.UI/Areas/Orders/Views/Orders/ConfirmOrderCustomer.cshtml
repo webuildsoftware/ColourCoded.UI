@@ -133,11 +133,11 @@
 @section Scripts{
   <script>
     $("#edit").click(function () {
-      window.location.href = '@Url.Action("OrderCustomer")' + '?orderId=' + $(this).data("orderid") + '&orderNo=' + $(this).data("orderno");
+      window.location.href = '@Url.Action("OrderCustomer")' + '?orderId=' + $(this).data("orderid") + '&orderNo=' + $(this).data("orderno") + "&new=false";
     });
 
     $("#address").click(function () {
-      window.location.href = '@Url.Action("OrderAddress")' + '?orderId=' + $(this).data("orderid") + '&orderNo=' + $(this).data("orderno");
+      window.location.href = '@Url.Action("OrderAddress")' + '?orderId=' + $(this).data("orderid") + '&orderNo=' + $(this).data("orderno") + "&new=true";
     });
 
 
