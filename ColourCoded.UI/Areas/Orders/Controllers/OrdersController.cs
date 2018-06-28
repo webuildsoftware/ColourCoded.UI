@@ -54,7 +54,9 @@ namespace ColourCoded.UI.Areas.Orders.Controllers
     {
       try
       {
-        return View("ConfirmCustomerOrder", model);
+        var result = WebApiCaller.PostAsync<OrderCustomerDetailModel>("WebApi:Orders:GetOrderCustomerDetail", new GetOrderCustomerDetailRequestModel { OrderId = model.OrderId });
+
+        return View("ConfirmOrderCustomer", result);
       }
       catch (Exception ex)
       {

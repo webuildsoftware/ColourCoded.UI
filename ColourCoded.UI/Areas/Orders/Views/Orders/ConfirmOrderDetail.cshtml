@@ -24,7 +24,7 @@
   }
 
   input[type=button] {
-    width: 130px;
+    width: 100px;
   }
 
   #main div {
@@ -99,7 +99,7 @@
   </div>
   <div>
     <br />
-    <input id="edit" value="Edit Order Details" type="button" data-orderid="@Model.OrderId" data-orderno="@Model.OrderNo" />
+    <input id="edit" value="Change" type="button" data-orderid="@Model.OrderId" data-orderno="@Model.OrderNo" />
     <input id="customer" value="Add Customer" type="button"  data-orderid="@Model.OrderId" data-orderno="@Model.OrderNo" />
     <input id="accept" value="Accept Order" type="button"  data-orderid="@Model.OrderId" data-orderno="@Model.OrderNo" />
     <label id="validorder" class="validationLabel"></label>
@@ -109,7 +109,7 @@
 @section Scripts{ 
   <script>
     $("#edit").click(function () {
-      window.location.href = '@Url.Action("OrderDetail")' + '?orderId=' + $(this).data("orderid") + '&orderNo=' + $(this).data("orderno");
+      window.location.href = '@Url.Action("OrderDetail")' + '?orderId=' + $(this).data("orderid") + '&orderNo=' + $(this).data("orderno") + "&change=true";
     });
 
     $("#customer").click(function () {

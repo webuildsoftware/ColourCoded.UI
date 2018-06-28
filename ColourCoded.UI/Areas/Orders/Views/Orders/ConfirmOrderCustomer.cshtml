@@ -1,0 +1,145 @@
+﻿@model ColourCoded.UI.Areas.Orders.Models.ResponseModels.OrderCustomerDetailModel
+
+@{
+  ViewData["Title"] = "ConfirmOrderCustomer";
+  Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<style>
+
+  input[type=button] {
+    width: 100px;
+  }
+
+  #main div {
+    padding: 3px;
+    font-size: 12px;
+  }
+
+  #divcustomerdetails {
+    font-weight: bold;
+  }
+
+  #divcontacts {
+    font-weight: bold;
+  }
+</style>
+<br/>
+<div id="main">
+  <div>
+    <fieldset>
+      <legend>Customer Details</legend>
+    </fieldset>
+  </div>
+  <div style="display: inline-block; width: 150px;">
+    <div orderId="@Model.OrderId">
+      <span>Quote No</span>
+    </div>
+    <div>
+      <span>Create Date</span>
+    </div>
+    <div>
+      <span>Customer Name</span>
+    </div>
+    <div>
+      <span>Customer Details</span>
+    </div>
+    <div>
+      <span>Contact No</span>
+    </div>
+    <div>
+      <span>Account No</span>
+    </div>
+    <div>
+      <span>Mobile No</span>
+    </div>
+    <div>
+      <span>Email Address</span>
+    </div>
+  </div>
+  <div id="divcustomerdetails" style="display: inline-block">
+    <div>
+      <span id="orderno">@Model.OrderNo</span>
+    </div>
+    <div>
+      <span id="createdate">@Model.OrderCreateDate.ToLongDateString()</span>
+    </div>
+    <div>
+      <span id="customername">@Model.CustomerName</span>
+    </div>
+    <div>
+      <span id="customerdetails">@Model.CustomerDetails</span>
+    </div>
+    <div>
+      <span id="customercontactno">@Model.CustomerContactNo</span>
+    </div>
+    <div>
+      <span id="customeraccountno">@Model.CustomerAccountNo</span>
+    </div>
+    <div>
+      <span id="customermobileno">@Model.CustomerMobileNo</span>
+    </div>
+    <div>
+      <span id="customeremail">@Model.CustomerEmailAddress</span>
+    </div>
+  </div>
+
+  @if (Model.ContactAdded)
+  {
+    <br /> <br />
+    <div>
+      <fieldset>
+        <legend>Contact Person</legend>
+      </fieldset>
+    </div>
+    <div style="display: inline-block; width: 150px;">
+      <div>
+        <span>Name</span>
+      </div>
+      <div>
+        <span>Contact No</span>
+      </div>
+      <div>
+        <span>Email Address</span>
+      </div>
+    </div>
+    <div id="divcontacts" style="display: inline-block">
+      <div>
+        <span id="contactname">@Model.ContactName</span>
+      </div>
+      <div>
+        <span id="contactno">@Model.ContactNo</span>
+      </div>
+      <div>
+        <span id="contactemail">@Model.ContactEmailAddress</span>
+      </div>
+    </div>
+    <br /> <br />
+  }
+  <div>
+    <fieldset>
+      <legend></legend>
+    </fieldset>
+  </div>
+  <div>
+    <input id="edit" value="Change" type="button" data-orderid="@Model.OrderId" data-orderno="@Model.OrderNo" />
+    <input id="address" value="Add Address " type="button" data-orderid="@Model.OrderId" data-orderno="@Model.OrderNo" />
+    <input id="accept" value="Accept Order" type="button" data-orderid="@Model.OrderId" data-orderno="@Model.OrderNo" />
+    <label id="validorder" class="validationLabel"></label>
+  </div>
+</div>
+
+@section Scripts{
+  <script>
+    $("#edit").click(function () {
+      window.location.href = '@Url.Action("OrderCustomer")' + '?orderId=' + $(this).data("orderid") + '&orderNo=' + $(this).data("orderno");
+    });
+
+    $("#address").click(function () {
+      window.location.href = '@Url.Action("OrderAddress")' + '?orderId=' + $(this).data("orderid") + '&orderNo=' + $(this).data("orderno");
+    });
+
+
+  </script>
+}

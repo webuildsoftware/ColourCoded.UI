@@ -552,6 +552,51 @@ namespace ColourCoded.Tests.Orders
       Assert.AreEqual(responseModel.ContactId, model.ContactId);
       Assert.AreEqual(responseModel.OrderId, model.OrderId);
     }
+
+    [TestMethod]
+    public void ConfirmOrderCustomer_Load()
+    {
+      // given
+      var resources = new Resources();
+      var orderId = 1234;
+      var requestModel = new GetOrderCustomerDetailRequestModel { OrderId = orderId };
+
+      var responseModel = new OrderCustomerDetailModel
+      {
+        CustomerName = "Test Costume",
+        CustomerDetails = "This is some long customer description",
+        CustomerContactNo = "0214472215",
+        CustomerAccountNo = "DC1122",
+        CustomerMobileNo = "0728543333",
+        CustomerEmailAddress = "someemail@gmail.com",
+        ContactAdded = false,
+        ContactName = "Contraption",
+        ContactNo = "0214472215",
+        ContactEmailAddress = "someemail@gmail.com",
+
+      };
+
+      resources.MockApiCaller.AddMockResponse("WebApi:Orders:GetOrderCustomerDetail", requestModel, responseModel);
+
+      // when
+      var result = resources.Controller.ConfirmOrderCustomer(new OrderCustomerModel {OrderId = orderId}) as ViewResult;
+
+      // then
+      Assert.IsNotNull(result);
+      Assert.AreEqual("ConfirmOrderCustomer", result.ViewName);
+
+      var model = (OrderCustomerDetailModel)result.Model;
+      Assert.AreEqual(responseModel.CustomerName, model.CustomerName);
+      Assert.AreEqual(responseModel.CustomerDetails, model.CustomerDetails);
+      Assert.AreEqual(responseModel.CustomerContactNo, model.CustomerContactNo);
+      Assert.AreEqual(responseModel.CustomerAccountNo, model.CustomerAccountNo);
+      Assert.AreEqual(responseModel.CustomerMobileNo, model.CustomerMobileNo);
+      Assert.AreEqual(responseModel.CustomerEmailAddress, model.CustomerEmailAddress);
+      Assert.AreEqual(responseModel.ContactAdded, model.ContactAdded);
+      Assert.AreEqual(responseModel.ContactName, model.ContactName);
+      Assert.AreEqual(responseModel.ContactNo, model.ContactNo);
+      Assert.AreEqual(responseModel.ContactEmailAddress, model.ContactEmailAddress);
+    }
     #endregion
 
   }

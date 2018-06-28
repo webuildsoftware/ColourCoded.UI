@@ -43,7 +43,7 @@
   }
 
   textarea {
-    width: 175px;
+    width: 180px;
     height: 70px;
   }
 </style>
@@ -238,7 +238,35 @@
         }
       });
 
-      $("#existingcustomers").change(function () {
+      if (queryString != undefined) {
+
+        // get order id from query string
+        orderId = queryString.split("&")[0].split("=")[1];
+        orderNo = queryString.split("&")[1].split("=")[1];
+
+        $("#orderno").html("Order: " + orderNo);
+        $("#orderno").attr("orderid", orderId);
+
+        $.ajax({
+          url: '@Url.Action("GetOrderCustomerDetails")',
+          data: { orderId : orderId},
+          type: 'POST',
+          success: function (customerorderdetails) {
+            alert(JSON.stringify(customerorderdetails));
+            $("#customername").val(customerorderdetails.customerName);
+          },
+          error: function (xhr, options, error) {
+            alert("OOPS! The was an error processing your request - " + jQuery.parseJSON(xhr.responseText).message);
+          }
+        });
+
+      }
+
+      $("#customerdetails").html("");
+      $("#divcontacts").hide();
+    });
+
+    $("#existingcustomers").change(function () {
         var customerId = $(this).val();
 
         if (customerId != "") {
@@ -317,19 +345,6 @@
         }
         
       });
-
-      if (queryString != undefined) {
-        // get order id from query string
-        orderId = queryString.split("&")[0].split("=")[1];
-        orderNo = queryString.split("&")[1].split("=")[1];
-
-        $("#orderno").html("Order: " + orderNo);
-        $("#orderno").attr("orderid", orderId);
-      }
-
-      $("#customerdetails").html("");
-      $("#divcontacts").hide();
-    });
 
     $("#customercontactno").keypress(function (event) {
       var quantity = $(this).val();

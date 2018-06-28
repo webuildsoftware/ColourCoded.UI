@@ -1,8 +1,11 @@
 ﻿using System.Collections.Generic;
 using System;
+using ColourCoded.UI.Areas.Home.Models;
 using ColourCoded.UI.Areas.Orders.Models.RequestModels;
 using ColourCoded.UI.Areas.Orders.Models.ResponseModels;
 using ColourCoded.UI.Areas.Orders.Models.InputModels;
+using ColourCoded.UI.Areas.Security.Models.Login;
+using ColourCoded.UI.Areas.Security.Models.Login.RequestModels;
 
 namespace ColourCoded.UI.Shared.WebApiCaller
 {
@@ -18,10 +21,35 @@ namespace ColourCoded.UI.Shared.WebApiCaller
 
     public void ConfigureMock_RoleController_Responses()
     {
+      // WebApi:Orders:GetOrderCustomerDetail
+
+      var responseModel5 = new OrderCustomerDetailModel
+      {
+        CustomerName = "Test Costume",
+        CustomerDetails = "This is some long customer description",
+        CustomerContactNo = "0214472215",
+        CustomerAccountNo = "DC1122",
+        CustomerMobileNo = "0728543333",
+        CustomerEmailAddress = "someemail@gmail.com",
+        ContactAdded = true,
+        ContactName = "Contraption",
+        ContactNo = "0214472215",
+        ContactEmailAddress = "someemail@gmail.com",
+        CustomerId = 1,
+        ContactId = 1,
+        OrderId = 1,
+        OrderNo = "MOQ001",
+        OrderCreateDate = DateTime.Now
+      };
+
+      
+      Responses.Add(new MockApiResponseModel { WepApiUrl = "WebApi:Orders:GetOrderCustomerDetail", RequestModel = new GetOrderCustomerDetailRequestModel { OrderId = 1 }, ResponseContent = responseModel5 });
+
+
       // WebApi:Orders:AddOrderCustomer
       var inputModel = new AddOrderCustomerRequestModel
       {
-        OrderId = 245,
+        OrderId = 1,
         CustomerId = 0,
         CustomerName = "1",
         CustomerDetails = "1",
@@ -32,13 +60,13 @@ namespace ColourCoded.UI.Shared.WebApiCaller
         ContactId = 0,
         ContactAdded = false
       };
-      var responseModel4 = new OrderCustomerModel { OrderId = 245, CustomerId = 1, ContactId = 1 };
+      var responseModel4 = new OrderCustomerModel { OrderId = 1, CustomerId = 1, ContactId = 1};
 
       Responses.Add(new MockApiResponseModel { WepApiUrl = "WebApi:Orders:AddOrderCustomer", RequestModel = inputModel, ResponseContent = responseModel4 });
 
       inputModel = new AddOrderCustomerRequestModel
       {
-        OrderId = 245,
+        OrderId = 1,
         CustomerId = 0,
         CustomerName = "1",
         CustomerDetails = "1",
@@ -52,7 +80,7 @@ namespace ColourCoded.UI.Shared.WebApiCaller
         ContactName = "1",
         ContactNo = "1"
       };
-      responseModel4 = new OrderCustomerModel { OrderId = 245, CustomerId = 1, ContactId = 1 };
+      responseModel4 = new OrderCustomerModel { OrderId = 1, CustomerId = 1, ContactId = 1 };
 
       Responses.Add(new MockApiResponseModel { WepApiUrl = "WebApi:Orders:AddOrderCustomer", RequestModel = inputModel, ResponseContent = responseModel4 });
 
@@ -240,8 +268,7 @@ namespace ColourCoded.UI.Shared.WebApiCaller
        };
 
       Responses.Add(new MockApiResponseModel { WepApiUrl = "WebApi:Orders:GetOrderDetail", RequestModel = new GetOrderDetailRequestModel { OrderId = 1 }, ResponseContent = responseModel });
-
-  */
+      */
       //var orderLineDetails = new List<OrderLineDetailModel>
       //  {
       //    new OrderLineDetailModel

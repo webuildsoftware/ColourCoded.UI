@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace ColourCoded.UI.Areas.Orders.Models.RequestModels
+namespace ColourCoded.UI.Areas.Orders.Models.ResponseModels
 {
   public class ContactModel
   {
