@@ -62,7 +62,7 @@
       <div>
         <span>Customer Name</span>
         <br />
-        <input type="text" id="customername" placeholder="Enter a short name" maxlength="10" />
+        <input type="text" id="customername" placeholder="Enter a short name" />
       </div>
       <div>
         <span>Customer Details</span>
@@ -217,7 +217,6 @@
         url: '@Url.Action("GetOrderCustomers")',
         type: "POST",
         success: function (customerlist) {
-
           $.each(customerlist, function (index, customer) {
 
             order.customers.push(
@@ -229,6 +228,11 @@
 
             $("#existingcustomers").append("<option value='" + customer.customerId + "' index='" + (index) +"'>" + customer.customerName + "</option>");
           });
+
+          // handle the timing bug 
+          var customerId = $("#existingcustomers").data("customerid");
+          if (customerId > 0) { $("#existingcustomers").val(customerId); }
+
         },
         error: function (xhr, options, error) {
           alert("OOPS! The was an error processing your request - " + jQuery.parseJSON(xhr.responseText).message);
@@ -254,8 +258,9 @@
             data: { orderId: orderId },
             type: 'POST',
             success: function (customerorderdetails) {
-              // populate the customer form inputs
+              // populate the customer form inputs`
               $("#existingcustomers").val(customerorderdetails.customerId);
+              $("#existingcustomers").data("customerid", customerorderdetails.customerId);
               $("#customername").val(customerorderdetails.customerName);
               $("#customerdetails").val(customerorderdetails.customerDetails);
               $("#customercontactno").val(customerorderdetails.customerContactNo);
@@ -267,29 +272,32 @@
               $("#contactno").val(customerorderdetails.contactNo);
               $("#contactemail").val(customerorderdetails.contactEmailAddress);
 
-              // get the contacts belonging to the selected customerid and bind to the dropdownlist
-              $.ajax({
-                url: '@Url.Action("GetCustomerContacts")',
-                data: { customerId: customerorderdetails.customerId},
-                type: "POST",
-                success: function (contacts) {
+              // get the contacts belonging to the selected customerid, if any
+              if (customerorderdetails.contactId != 0) {
+                $.ajax({
+                  url: '@Url.Action("GetCustomerContacts")',
+                  data: { customerId: customerorderdetails.customerId },
+                  type: "POST",
+                  success: function (contacts) {
 
-                  $.each(contacts, function (index, contact) {
-                    // loop through contacts and append to the contacts drop down list
-                    order.customerContacts.push(
-                      {
-                        "contactid": contact.contactId, "contactname": contact.contactName, "contactno": contact.contactNo, "emailaddress": contact.emailAddress
-                      });
+                    $.each(contacts, function (index, contact) {
+                      // loop through contacts and append to the contacts drop down list
+                      order.customerContacts.push(
+                        {
+                          "contactid": contact.contactId, "contactname": contact.contactName, "contactno": contact.contactNo, "emailaddress": contact.emailAddress
+                        });
 
-                    $("#existingcontacts").append("<option value='" + contact.contactId + "' index='" + (index) + "'>" + contact.contactName + "</option>");
-                  });
+                      $("#existingcontacts").append("<option value='" + contact.contactId + "' index='" + (index) + "'>" + contact.contactName + "</option>");
+                    });
 
-                  $("#existingcontacts").val(customerorderdetails.contactId);
-                },
-                error: function (xhr, options, error) {
-                  alert("OOPS! The was an error processing your request - " + jQuery.parseJSON(xhr.responseText).message);
-                }
-              });
+                    $("#existingcontacts").val(customerorderdetails.contactId);
+                  },
+                  error: function (xhr, options, error) {
+                    alert("OOPS! The was an error processing your request - " + jQuery.parseJSON(xhr.responseText).message);
+                  }
+                });
+              } // end: get the contacts belonging to the selected customerid, if any
+              
             },
             error: function (xhr, options, error) {
               alert("OOPS! The was an error processing your request - " + jQuery.parseJSON(xhr.responseText).message);
@@ -348,7 +356,11 @@
           });
         }
         else {
-          location.reload();
+          $("input[type=text]").val("");
+          $("textarea").val("");
+          $("#existingcontacts").html("");
+          $("#existingcontacts").append("<option value='0'>new contact</option>");
+          order.customerContacts = [];
         }
 
       });

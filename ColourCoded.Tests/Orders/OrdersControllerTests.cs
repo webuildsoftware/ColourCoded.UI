@@ -503,7 +503,7 @@ namespace ColourCoded.Tests.Orders
         CustomerEmailAddress = "someemail@gmail.com",
         ContactId = 0
       };
-      var responseModel = new OrderCustomerModel { CustomerId = 1, ContactId = 1 };
+      var responseModel = new AddCustomerOrderModel { CustomerId = 1, ContactId = 1 };
 
       resources.MockApiCaller.AddMockResponse("WebApi:Orders:AddOrderCustomer", inputModel, responseModel);
 
@@ -512,7 +512,7 @@ namespace ColourCoded.Tests.Orders
 
       // then
       Assert.IsNotNull(result);
-      var model = (OrderCustomerModel)result.Value;
+      var model = (AddCustomerOrderModel)result.Value;
       Assert.AreEqual(responseModel.CustomerId, model.CustomerId);
       Assert.AreEqual(responseModel.ContactId, model.ContactId);
     }
@@ -538,7 +538,7 @@ namespace ColourCoded.Tests.Orders
         ContactEmailAddress = "",
         ContactNo ="0219983333"
       };
-      var responseModel = new OrderCustomerModel { OrderId = 1, CustomerId = 1, ContactId = 1 };
+      var responseModel = new AddCustomerOrderModel { OrderId = 1, CustomerId = 1, ContactId = 1 };
 
       resources.MockApiCaller.AddMockResponse("WebApi:Orders:AddOrderCustomer", inputModel, responseModel);
 
@@ -547,7 +547,7 @@ namespace ColourCoded.Tests.Orders
 
       // then
       Assert.IsNotNull(result);
-      var model = (OrderCustomerModel)result.Value;
+      var model = (AddCustomerOrderModel)result.Value;
       Assert.AreEqual(responseModel.CustomerId, model.CustomerId);
       Assert.AreEqual(responseModel.ContactId, model.ContactId);
       Assert.AreEqual(responseModel.OrderId, model.OrderId);
@@ -573,13 +573,12 @@ namespace ColourCoded.Tests.Orders
         ContactName = "Contraption",
         ContactNo = "0214472215",
         ContactEmailAddress = "someemail@gmail.com",
-
       };
 
       resources.MockApiCaller.AddMockResponse("WebApi:Orders:GetOrderCustomerDetails", requestModel, responseModel);
 
       // when
-      var result = resources.Controller.ConfirmOrderCustomer(new OrderCustomerModel {OrderId = orderId}) as ViewResult;
+      var result = resources.Controller.ConfirmOrderCustomer(new AddCustomerOrderModel { OrderId = orderId}) as ViewResult;
 
       // then
       Assert.IsNotNull(result);

@@ -2,7 +2,7 @@
 
 namespace ColourCoded.UI.Areas.Orders.Models.ResponseModels
 {
-  public class OrderCustomerModel
+  public class AddCustomerOrderModel
   {
     public int CustomerId { get; set; }
     public int ContactId { get; set; }

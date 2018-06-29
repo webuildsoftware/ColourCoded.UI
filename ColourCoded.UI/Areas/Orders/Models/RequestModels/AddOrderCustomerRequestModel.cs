@@ -17,5 +17,7 @@ namespace ColourCoded.UI.Areas.Orders.Models.InputModels
     public string ContactName { get; set; }
     public string ContactEmailAddress { get; set; }
     public string ContactNo { get; set; }
+    public string Username { get; set; }
+    public int CompanyProfileId { get; set; }
   }
 }

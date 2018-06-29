@@ -55,7 +55,7 @@ namespace ColourCoded.UI.Areas.Orders.Controllers
       }
     }
 
-    public IActionResult ConfirmOrderCustomer(OrderCustomerModel model)
+    public IActionResult ConfirmOrderCustomer(AddCustomerOrderModel model)
     {
       try
       {
@@ -156,7 +156,10 @@ namespace ColourCoded.UI.Areas.Orders.Controllers
     [HttpPost]
     public JsonResult AddCustomerOrder(AddOrderCustomerRequestModel inputModel)
     {
-      var result = WebApiCaller.PostAsync<OrderCustomerModel>("WebApi:Orders:AddOrderCustomer", inputModel);
+      inputModel.CompanyProfileId = CurrentUser.CompanyProfileId;
+      inputModel.Username = CurrentUser.Username;
+
+      var result = WebApiCaller.PostAsync<AddCustomerOrderModel>("WebApi:Orders:AddOrderCustomer", inputModel);
 
       return Json(result);
     }

@@ -23,65 +23,65 @@ namespace ColourCoded.UI.Shared.WebApiCaller
     {
       // WebApi:Orders:GetOrderCustomerDetail
 
-      var responseModel5 = new OrderCustomerDetailModel
-      {
-        CustomerName = "Test Costume",
-        CustomerDetails = "This is some long customer description",
-        CustomerContactNo = "0214472215",
-        CustomerAccountNo = "DC1122",
-        CustomerMobileNo = "0728543333",
-        CustomerEmailAddress = "someemail@gmail.com",
-        ContactAdded = true,
-        ContactName = "Contraption",
-        ContactNo = "0214472215",
-        ContactEmailAddress = "someemail@gmail.com",
-        CustomerId = 1,
-        ContactId = 1,
-        OrderId = 245,
-        OrderNo = "MOQ001",
-        OrderCreateDate = DateTime.Now
-      };
+      //var responseModel5 = new OrderCustomerDetailModel
+      //{
+      //  CustomerName = "Test Costume",
+      //  CustomerDetails = "This is some long customer description",
+      //  CustomerContactNo = "0214472215",
+      //  CustomerAccountNo = "DC1122",
+      //  CustomerMobileNo = "0728543333",
+      //  CustomerEmailAddress = "someemail@gmail.com",
+      //  ContactAdded = true,
+      //  ContactName = "Contraption",
+      //  ContactNo = "0214472215",
+      //  ContactEmailAddress = "someemail@gmail.com",
+      //  CustomerId = 1,
+      //  ContactId = 1,
+      //  OrderId = 245,
+      //  OrderNo = "MOQ001",
+      //  OrderCreateDate = DateTime.Now
+      //};
 
       
-      Responses.Add(new MockApiResponseModel { WepApiUrl = "WebApi:Orders:GetOrderCustomerDetails", RequestModel = new GetOrderCustomerDetailRequestModel { OrderId = 245 }, ResponseContent = responseModel5 });
+      //Responses.Add(new MockApiResponseModel { WepApiUrl = "WebApi:Orders:GetOrderCustomerDetails", RequestModel = new GetOrderCustomerDetailRequestModel { OrderId = 245 }, ResponseContent = responseModel5 });
 
 
-      // WebApi:Orders:AddOrderCustomer
-      var inputModel = new AddOrderCustomerRequestModel
-      {
-        OrderId = 245,
-        CustomerId = 0,
-        CustomerName = "1",
-        CustomerDetails = "1",
-        CustomerContactNo = "1",
-        CustomerMobileNo = "1",
-        CustomerAccountNo = "1",
-        ContactId = 0,
-        ContactAdded = false
-      };
-      var responseModel4 = new OrderCustomerModel { OrderId = 245, CustomerId = 1, ContactId = 1};
+      //WebApi: Orders: AddOrderCustomer
+      // var inputModel = new AddOrderCustomerRequestModel
+      // {
+      //   OrderId = 245,
+      //   CustomerId = 0,
+      //   CustomerName = "1",
+      //   CustomerDetails = "1",
+      //   CustomerContactNo = "1",
+      //   CustomerMobileNo = "1",
+      //   CustomerAccountNo = "1",
+      //   ContactId = 0,
+      //   ContactAdded = false
+      // };
+      //var responseModel4 = new AddCustomerOrderModel { OrderId = 245, CustomerId = 1, ContactId = 1 };
 
-      Responses.Add(new MockApiResponseModel { WepApiUrl = "WebApi:Orders:AddOrderCustomer", RequestModel = inputModel, ResponseContent = responseModel4 });
+      //Responses.Add(new MockApiResponseModel { WepApiUrl = "WebApi:Orders:AddOrderCustomer", RequestModel = inputModel, ResponseContent = responseModel4 });
 
-      inputModel = new AddOrderCustomerRequestModel
-      {
-        OrderId = 245,
-        CustomerId = 0,
-        CustomerName = "1",
-        CustomerDetails = "1",
-        CustomerContactNo = "1",
-        CustomerMobileNo = "1",
-        CustomerAccountNo = "1",
-        CustomerEmailAddress = "",
-        ContactId = 0,
-        ContactAdded = true,
-        ContactEmailAddress = "",
-        ContactName = "1",
-        ContactNo = "1"
-      };
-      responseModel4 = new OrderCustomerModel { OrderId = 245, CustomerId = 1, ContactId = 1 };
+      //inputModel = new AddOrderCustomerRequestModel
+      //{
+      //  OrderId = 245,
+      //  CustomerId = 0,
+      //  CustomerName = "1",
+      //  CustomerDetails = "1",
+      //  CustomerContactNo = "1",
+      //  CustomerMobileNo = "1",
+      //  CustomerAccountNo = "1",
+      //  CustomerEmailAddress = "",
+      //  ContactId = 0,
+      //  ContactAdded = true,
+      //  ContactEmailAddress = "",
+      //  ContactName = "1",
+      //  ContactNo = "1"
+      //};
+      //responseModel4 = new AddCustomerOrderModel { OrderId = 245, CustomerId = 1, ContactId = 1 };
 
-      Responses.Add(new MockApiResponseModel { WepApiUrl = "WebApi:Orders:AddOrderCustomer", RequestModel = inputModel, ResponseContent = responseModel4 });
+      //Responses.Add(new MockApiResponseModel { WepApiUrl = "WebApi:Orders:AddOrderCustomer", RequestModel = inputModel, ResponseContent = responseModel4 });
 
 
       //// WebApi:Orders:GetCustomerContacts
