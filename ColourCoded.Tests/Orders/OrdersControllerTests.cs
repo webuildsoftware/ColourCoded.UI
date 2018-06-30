@@ -9,6 +9,7 @@ using ColourCoded.UI.Shared;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using System.Linq;
 
 namespace ColourCoded.Tests.Orders
 {
@@ -646,6 +647,81 @@ namespace ColourCoded.Tests.Orders
       Assert.AreEqual(responsemodel.ContactNo, model.ContactNo);
       Assert.AreEqual(responsemodel.ContactEmailAddress, model.ContactEmailAddress);
       Assert.AreEqual(responsemodel.ContactAdded, model.ContactAdded);
+    }
+    #endregion
+
+    #region Address Details 
+    [TestMethod]
+    public void GetCustomerAddresses()
+    {
+      // Given
+      var resources = new Resources();
+      var customerId = 1;
+      var requestModel = new GetCustomerAddressesRequestModel { CustomerId = customerId };
+      var responseModel = new List<AddressDetailsModel>
+      {
+        new AddressDetailsModel
+        {
+          AddressDetailId = 1,
+          AddressLine1 = "24 Victoria Street",
+          AddressLine2= "Muizenberg",
+          City = "Cape Town",
+          PostalCode = "7786",
+          Country = "RSA",
+          CreateUser = resources.TestUsername,
+          CreateDate = DateTime.Now
+        },
+        new AddressDetailsModel
+        {
+          AddressDetailId = 1,
+          AddressLine1 = "24 John Street",
+          AddressLine2= "Pelican Park",
+          City = "Cape Town",
+          PostalCode = "7786",
+          Country = "RSA",
+          CreateUser = resources.TestUsername,
+          CreateDate = DateTime.Now
+        },
+        new AddressDetailsModel
+        {
+          AddressDetailId = 1,
+          AddressLine1 = "City Of Cape Town",
+          AddressLine2= "Adderley Street",
+          City = "Cape Town",
+          PostalCode = "7800",
+          Country = "RSA",
+          CreateUser = resources.TestUsername,
+          CreateDate = DateTime.Now
+        },
+      };
+      resources.MockApiCaller.AddMockResponse("WebApi:Orders:GetCustomerAddresses", requestModel, responseModel);
+
+      // When 
+      var result = resources.Controller.GetCustomerAddresses(customerId) as JsonResult;
+
+      // Then
+      Assert.IsNotNull(result);
+      var model = (List<AddressDetailsModel>)result.Value;
+      Assert.IsNotNull(model);
+      Assert.AreEqual(3, model.Count);
+
+      Assert.IsTrue(model.Any(o => o.AddressLine1 == responseModel[0].AddressLine1));
+      Assert.IsTrue(model.Any(o => o.AddressLine2 == responseModel[0].AddressLine2));
+      Assert.IsTrue(model.Any(o => o.City == responseModel[0].City));
+      Assert.IsTrue(model.Any(o => o.Country == responseModel[0].Country));
+      Assert.IsTrue(model.Any(o => o.PostalCode == responseModel[0].PostalCode));
+
+      Assert.IsTrue(model.Any(o => o.AddressLine1 == responseModel[1].AddressLine1));
+      Assert.IsTrue(model.Any(o => o.AddressLine2 == responseModel[1].AddressLine2));
+      Assert.IsTrue(model.Any(o => o.City == responseModel[1].City));
+      Assert.IsTrue(model.Any(o => o.Country == responseModel[1].Country));
+      Assert.IsTrue(model.Any(o => o.PostalCode == responseModel[1].PostalCode));
+
+      Assert.IsTrue(model.Any(o => o.AddressLine1 == responseModel[2].AddressLine1));
+      Assert.IsTrue(model.Any(o => o.AddressLine2 == responseModel[2].AddressLine2));
+      Assert.IsTrue(model.Any(o => o.City == responseModel[2].City));
+      Assert.IsTrue(model.Any(o => o.Country == responseModel[2].Country));
+      Assert.IsTrue(model.Any(o => o.PostalCode == responseModel[2].PostalCode));
     }
     #endregion
 

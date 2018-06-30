@@ -41,6 +41,11 @@ namespace ColourCoded.UI.Areas.Orders.Controllers
       return Json(WebApiCaller.PostAsync<OrderCustomerDetailModel>("WebApi:Orders:GetOrderCustomerDetails", new GetOrderCustomerDetailRequestModel { OrderId = orderId }));
     }
 
+    public ViewResult AddressDetail()
+    {
+      return View("AddressDetail");
+    }
+
     public IActionResult ConfirmOrderDetail(int orderId)
     {
       try
@@ -69,10 +74,18 @@ namespace ColourCoded.UI.Areas.Orders.Controllers
       }
     }
 
-    [HttpGet] // edit mode usage
+    [HttpGet] 
     public JsonResult GetOrderLineDetails(int orderId)
     {
       var result = WebApiCaller.PostAsync<List<OrderLineDetailModel>>("WebApi:Orders:GetOrderLineDetails", new GetOrderLineDetailsRequestModel { OrderId = orderId });
+
+      return Json(result);
+    }
+
+    [HttpGet]
+    public JsonResult GetCustomerAddresses(int customerId)
+    {
+      var result = WebApiCaller.PostAsync<List<AddressDetailsModel>>("WebApi:Orders:GetCustomerAddresses", new GetCustomerAddressesRequestModel { CustomerId = customerId });
 
       return Json(result);
     }
@@ -163,6 +176,5 @@ namespace ColourCoded.UI.Areas.Orders.Controllers
 
       return Json(result);
     }
-
   }
 }

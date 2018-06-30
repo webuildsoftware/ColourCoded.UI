@@ -124,7 +124,7 @@
   </div>
   <div>
     <input id="edit" value="Change" type="button" data-orderid="@Model.OrderId" data-orderno="@Model.OrderNo" />
-    <input id="address" value="Add Address" type="button" data-orderid="@Model.OrderId" data-orderno="@Model.OrderNo" />
+    <input id="address" value="Add Address" type="button" data-orderid="@Model.OrderId" data-orderno="@Model.OrderNo" data-customerid="@Model.CustomerId" />
     <input id="accept" value="Accept Order" type="button" data-orderid="@Model.OrderId" data-orderno="@Model.OrderNo" />
     <label id="validorder" class="validationLabel"></label>
   </div>
@@ -137,7 +137,7 @@
     });
 
     $("#address").click(function () {
-      window.location.href = '@Url.Action("OrderAddress")' + '?orderId=' + $(this).data("orderid") + '&orderNo=' + $(this).data("orderno") + "&new=true";
+      window.location.href = '@Url.Action("AddressDetail")' + '?orderId=' + $(this).data("orderid") + '&orderNo=' + $(this).data("orderno") + "&customerid=" + $(this).data("customerid");
     });
 
 

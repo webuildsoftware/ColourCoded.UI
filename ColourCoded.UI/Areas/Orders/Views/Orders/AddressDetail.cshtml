@@ -1,0 +1,165 @@
+﻿
+@{
+  ViewData["Title"] = "AddressDetail";
+  Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<style>
+  table thead tr td {
+    background-color: lightgray;
+    padding: 3px;
+    font-weight: bold;
+  }
+
+  table tbody tr td {
+    padding: 3px;
+  }
+
+  table thead tr td:nth-child(1) {
+    background-color: lightgray;
+    width: 150px;
+  }
+  table thead tr td:nth-child(2) {
+    background-color: lightgray;
+    width: 120px;
+  }
+
+  table i {
+    cursor: pointer;
+  }
+  
+  table {
+    font-size: 12px;
+  }
+
+  input[type=button] {
+    width: 100px;
+  }
+
+  .validationLabel {
+    color: red;
+    width: 150px;
+    font-size: 11px;
+  }
+
+  #main div {
+    padding: 3px;
+  }
+
+  #main div span {
+    font-size: 11px;
+  }
+
+  .orderno {
+    width: 100px;
+  }
+</style>
+<h3 id="orderno" orderid>Address Details</h3>
+<div id="main">
+  <div>
+    <span>Address Type</span>
+    <br />
+    <select id="addresstype" style="width: 175px">
+      <option value="delivery">Delivery</option>
+      <option value="home">Home</option>
+      <option value="work">Work</option>
+    </select>
+  </div>
+  <div>
+    <span>Address Line 1</span>
+    <br />
+    <input type="text" id="addressline1" placeholder="Enter street name/unit no" />
+  </div>
+  <div>
+    <span>Address Line 2</span>
+    <br />
+    <input type="text" id="addressline2" placeholder="Enter suburb" />
+  </div>
+  <div>
+    <span>City</span>
+    <br />
+    <input type="text" id="city" placeholder="Enter city" />
+  </div>
+  <div>
+    <span>Country</span>
+    <br />
+    <select id="country" style="width: 175px">
+      <option value="RSA">South Africa</option>
+    </select>
+  </div>
+  <div>
+    <span>Postal Code</span>
+    <br />
+    <input type="text" id="postalcode" placeholder="Enter postal code" />
+  </div>
+  <div>
+    <input id="done" value="Done" type="button" />
+  </div>
+  <div>
+    <br />
+    <table id="addressdetails">
+      <thead>
+        <tr>
+          <td>Line 1</td>
+          <td>Line 2</td>
+          <td>City</td>
+          <td>Country</td>
+          <td>Code</td>
+          <td></td>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</div>
+
+@section Scripts{ 
+  <script>
+    var queryString = location.href.split("?")[1];
+    var orderId = 0;
+    var customerId = 0
+    var orderNo = "";
+
+    $(document).ready(function () {
+
+      if (queryString != undefined) {
+
+        // get order and customer id's from query string
+        orderId = queryString.split("&")[0].split("=")[1];
+        orderNo = queryString.split("&")[1].split("=")[1];
+        customerId = queryString.split("&")[2].split("=")[1];
+        $("#orderno").html("Delivery Address &nbsp;-&nbsp; " + orderNo);
+
+        // load the customer addresses 
+        $.ajax({
+          url: '@Url.Action("GetCustomerAddresses")' + '?customerId=' + customerId,
+          type: 'GET',
+          success: function (addresslist) {
+
+            $.each(addresslist, function (index, linedetail) {
+
+              $("#addressdetails tbody").append("<tr data-addresslineone='" + linedetail.addressLine1 + "' data-addresslinetwo='" + linedetail.addressLine2
+                + "' data-city='" + linedetail.city + "' data-country='" + linedetail.country + "' data-postalcode='" + linedetail.postalCode
+                + "' addressline='" + linedetail.addressLine1.toUpperCase() + linedetail.addressLine2.toUpperCase() + linedetail.city.toUpperCase() + linedetail.country.toUpperCase() + "'>"
+                + "<td>" + linedetail.addressLine1 + "</td>"
+                + "<td>" + linedetail.addressLine2 + "</td>"
+                + "<td>" + linedetail.city + "</td>"
+                + "<td>" + linedetail.country + "</td>"
+                + "<td>" + linedetail.postalCode + "</td>"
+                + "<td><i class='glyphicon glyphicon-trash' onclick='removeAddress(" + index + ")'></i></td></tr>");
+
+            });
+
+          },
+          error: function (xhr, options, error) {
+            alert("OOPS! The was an error processing your request - " + jQuery.parseJSON(xhr.responseText).message);
+          }
+        });
+      }
+
+    });
+
+  </script>
+  
+}

@@ -21,6 +21,49 @@ namespace ColourCoded.UI.Shared.WebApiCaller
 
     public void ConfigureMock_RoleController_Responses()
     {
+      // WebApi:Orders:GetCustomerAddresses
+
+      var responseModel = new List<AddressDetailsModel>
+      {
+        new AddressDetailsModel
+        {
+          AddressDetailId = 1,
+          AddressLine1 = "24 Victoria Street",
+          AddressLine2= "Muizenberg",
+          City = "Cape Town",
+          PostalCode = "7786",
+          Country = "South Africa",
+          CreateUser = "zunaid",
+          CreateDate = DateTime.Now
+        },
+        new AddressDetailsModel
+        {
+          AddressDetailId = 1,
+          AddressLine1 = "24 John Street",
+          AddressLine2= "Pelican Park",
+          City = "Cape Town",
+          PostalCode = "7786",
+          Country = "South Africa",
+          CreateUser = "zunaid",
+          CreateDate = DateTime.Now
+        },
+        new AddressDetailsModel
+        {
+          AddressDetailId = 1,
+          AddressLine1 = "City Of Cape Town",
+          AddressLine2= "Adderley Street",
+          City = "Cape Town",
+          PostalCode = "7800",
+          Country = "South Africa",
+          CreateUser = "zunaid",
+          CreateDate = DateTime.Now
+        },
+      };
+
+      //resources.MockApiCaller.AddMockResponse("WebApi:Orders:GetCustomerAddresses", requestModel, responseModel);
+      Responses.Add(new MockApiResponseModel { WepApiUrl = "WebApi:Orders:GetCustomerAddresses", RequestModel = new GetCustomerAddressesRequestModel { CustomerId = 1 }, ResponseContent = responseModel });
+
+
       // WebApi:Orders:GetOrderCustomerDetail
 
       //var responseModel5 = new OrderCustomerDetailModel
@@ -42,7 +85,7 @@ namespace ColourCoded.UI.Shared.WebApiCaller
       //  OrderCreateDate = DateTime.Now
       //};
 
-      
+
       //Responses.Add(new MockApiResponseModel { WepApiUrl = "WebApi:Orders:GetOrderCustomerDetails", RequestModel = new GetOrderCustomerDetailRequestModel { OrderId = 245 }, ResponseContent = responseModel5 });
 
 
