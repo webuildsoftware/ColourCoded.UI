@@ -74,6 +74,19 @@ namespace ColourCoded.UI.Areas.Orders.Controllers
       }
     }
 
+    public IActionResult ConfirmCustomerAddress(int orderId)
+    {
+      return View("ConfirmCustomerAddress");
+    }
+
+    [HttpGet]
+    public JsonResult ConfirmCustomerOrderAddress(int orderId, int customerId)
+    {
+      var result = WebApiCaller.PostAsync<AddressDetailsModel>("WebApi:Orders:GetCustomerOrderAddress", new GetOrderAddressRequestModel { OrderId = orderId, CustomerId = customerId });
+
+      return Json(result);
+    }
+
     [HttpGet] 
     public JsonResult GetOrderLineDetails(int orderId)
     {
@@ -175,6 +188,25 @@ namespace ColourCoded.UI.Areas.Orders.Controllers
       var result = WebApiCaller.PostAsync<AddCustomerOrderModel>("WebApi:Orders:AddOrderCustomer", inputModel);
 
       return Json(result);
+    }
+
+    [HttpPost]
+    public JsonResult RemoveCustomerOrderAddress(int addressDetailId, int customerId)
+    {
+      return Json(WebApiCaller.PostAsync<string>("WebApi:Orders:RemoveCustomerOrderAddress", new RemoveCustomerAddressRequestModel
+      {
+        AddressDetailId = addressDetailId,
+        CustomerId = customerId,
+        Username = CurrentUser.Username
+      }));
+    }
+
+    [HttpPost]
+    public JsonResult AddCustomerOrderAddress(AddCustomerOrderAddressRequestModel requestModel)
+    {
+      requestModel.Username = CurrentUser.Username;
+
+      return Json(WebApiCaller.PostAsync<string>("WebApi:Orders:AddCustomerOrderAddress", requestModel));
     }
   }
 }

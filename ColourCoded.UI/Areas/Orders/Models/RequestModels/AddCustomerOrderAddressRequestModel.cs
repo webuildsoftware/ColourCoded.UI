@@ -1,8 +1,6 @@
-﻿using System;
-
-namespace ColourCoded.UI.Areas.Orders.Models.ResponseModels
+﻿namespace ColourCoded.UI.Areas.Orders.Models.RequestModels
 {
-  public class AddressDetailsModel
+  public class AddCustomerOrderAddressRequestModel
   {
     public int AddressDetailId { get; set; }
     public string AddressType { get; set; }
@@ -11,7 +9,8 @@ namespace ColourCoded.UI.Areas.Orders.Models.ResponseModels
     public string City { get; set; }
     public string PostalCode { get; set; }
     public string Country { get; set; }
-    public string CreateUser { get; set; }
-    public DateTime CreateDate { get; set; }
+    public string Username { get; set; }
+    public int CustomerId { get; set; }
+    public int OrderId { get; set; }
   }
 }

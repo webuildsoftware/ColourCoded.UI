@@ -1,0 +1,109 @@
+﻿
+@{
+  ViewData["Title"] = "ConfirmCustomerAddress";
+  Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<style>
+
+  input[type=button] {
+    width: 100px;
+  }
+
+  #main div {
+    padding: 3px;
+    font-size: 12px;
+  }
+
+  #divaddressdetails{
+    font-weight: bold;
+  }
+
+</style>
+<h3 id="orderno">Confirm Address Details</h3>
+<div id="main">
+  <div style="display: inline-block; width: 120px;">
+    <div orderId="">
+      Address Type
+    </div>
+    <div>
+      Address Line 1
+    </div>
+    <div>
+      Address Line 2
+    </div>
+    <div>
+      City
+    </div>
+    <div>
+      Country
+    </div>
+    <div>
+      Postal Code
+    </div>
+  </div>
+  <div id="divaddressdetails" style="display: inline-block">
+    <div id="addresstype">
+    </div>
+    <div id="addressline1">
+    </div>
+    <div id="addressline2">
+    </div>
+    <div id="city">
+    </div>
+    <div id="country">
+    </div>
+    <div id="postalcode">
+    </div>
+  </div>
+  <div>
+    <br />
+    <input id="edit" value="Change" type="button" data-customerid="" />
+    <input id="accept" value="Accept Order" type="button" />
+  </div>
+</div>
+
+@section Scripts{
+  <script>
+    var queryString = location.href.split("?")[1];
+    var orderId = 0;
+    var customerId = 0
+    var orderNo = "";
+
+    $("#edit").click(function () {
+      window.location.href = '@Url.Action("AddressDetail")' + '?orderId=' + orderId + '&orderNo=' + orderNo + '&customerId=' + customerId;
+    });
+
+    $("#accept").click(function () {
+
+    });
+
+    $(document).ready(function () {
+
+      orderId = queryString.split("&")[0].split("=")[1];
+      orderNo = queryString.split("&")[1].split("=")[1];
+      customerId = queryString.split("&")[2].split("=")[1];
+
+       // load the order addresses 
+      $.ajax({
+        url: '@Url.Action("ConfirmCustomerOrderAddress")' + '?orderId=' + orderId + '&customerId=' + customerId ,
+        type: 'GET',
+        success: function (data) {
+
+          $("#addresstype").html(data.addressType + " Address");
+          $("#addressline1").html(data.addressLine1);
+          $("#addressline2").html(data.addressLine2);
+          $("#city").html(data.city);
+          $("#country").html(data.country);
+          $("#postalcode").html(data.postalCode);
+        },
+        error: function (xhr, options, error) {
+          alert("OOPS! The was an error processing your request - " + jQuery.parseJSON(xhr.responseText).message);
+        }
+      });
+    });
+
+
+  </script>
+}

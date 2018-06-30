@@ -14,13 +14,14 @@
 
   table tbody tr td {
     padding: 3px;
+    cursor: pointer;
   }
 
-  table thead tr td:nth-child(1) {
+  table thead tr td:nth-child(2) {
     background-color: lightgray;
     width: 150px;
   }
-  table thead tr td:nth-child(2) {
+  table thead tr td:nth-child(3) {
     background-color: lightgray;
     width: 120px;
   }
@@ -55,15 +56,15 @@
     width: 100px;
   }
 </style>
-<h3 id="orderno" orderid>Address Details</h3>
+<h3 id="orderno">Order Address Details</h3>
 <div id="main">
   <div>
     <span>Address Type</span>
     <br />
     <select id="addresstype" style="width: 175px">
-      <option value="delivery">Delivery</option>
-      <option value="home">Home</option>
-      <option value="work">Work</option>
+      <option value="Delivery">Delivery</option>
+      <option value="Home">Home</option>
+      <option value="Work">Work</option>
     </select>
   </div>
   <div>
@@ -85,7 +86,7 @@
     <span>Country</span>
     <br />
     <select id="country" style="width: 175px">
-      <option value="RSA">South Africa</option>
+      <option value="South Africa">South Africa</option>
     </select>
   </div>
   <div>
@@ -95,12 +96,14 @@
   </div>
   <div>
     <input id="done" value="Done" type="button" />
+    <input type="hidden" id="addressdetailid" value="0"/>
   </div>
   <div>
     <br />
     <table id="addressdetails">
       <thead>
         <tr>
+          <td>AddressType</td>
           <td>Line 1</td>
           <td>Line 2</td>
           <td>City</td>
@@ -109,7 +112,8 @@
           <td></td>
         </tr>
       </thead>
-      <tbody></tbody>
+      <tbody>
+      </tbody>
     </table>
   </div>
 </div>
@@ -129,25 +133,24 @@
         orderId = queryString.split("&")[0].split("=")[1];
         orderNo = queryString.split("&")[1].split("=")[1];
         customerId = queryString.split("&")[2].split("=")[1];
-        $("#orderno").html("Delivery Address &nbsp;-&nbsp; " + orderNo);
 
         // load the customer addresses 
         $.ajax({
           url: '@Url.Action("GetCustomerAddresses")' + '?customerId=' + customerId,
           type: 'GET',
           success: function (addresslist) {
-
+            $("#addressdetails tbody").html("");
             $.each(addresslist, function (index, linedetail) {
 
-              $("#addressdetails tbody").append("<tr data-addresslineone='" + linedetail.addressLine1 + "' data-addresslinetwo='" + linedetail.addressLine2
-                + "' data-city='" + linedetail.city + "' data-country='" + linedetail.country + "' data-postalcode='" + linedetail.postalCode
-                + "' addressline='" + linedetail.addressLine1.toUpperCase() + linedetail.addressLine2.toUpperCase() + linedetail.city.toUpperCase() + linedetail.country.toUpperCase() + "'>"
+              $("#addressdetails tbody").append("<tr data-addresslineone='" + linedetail.addressLine1 + "' data-addresslinetwo='" + linedetail.addressLine2 + "' data-addressdetailid='" + linedetail.addressDetailId
+                + "' data-city='" + linedetail.city + "' data-country='" + linedetail.country + "' data-postalcode='" + linedetail.postalCode + "' data-addresstype='" + linedetail.addressType + "'>"
+                + "<td>" + linedetail.addressType + "</td>"
                 + "<td>" + linedetail.addressLine1 + "</td>"
                 + "<td>" + linedetail.addressLine2 + "</td>"
                 + "<td>" + linedetail.city + "</td>"
                 + "<td>" + linedetail.country + "</td>"
                 + "<td>" + linedetail.postalCode + "</td>"
-                + "<td><i class='glyphicon glyphicon-trash' onclick='removeAddress(" + index + ")'></i></td></tr>");
+                + "<td><i class='glyphicon glyphicon-trash' onclick='removeAddress(" + linedetail.addressDetailId + ")'></i></td></tr>");
 
             });
 
@@ -160,6 +163,91 @@
 
     });
 
+    function removeAddress(addressdetailid) {
+
+      $.ajax({
+        url: '@Url.Action("RemoveCustomerOrderAddress")',
+        data: { AddressDetailId: addressdetailid, customerId: customerId },
+        type: 'POST',
+        success: function () {
+          location.reload();
+        },
+        error: function (xhr, options, error) {
+          alert("OOPS! The was an error processing your request - " + jQuery.parseJSON(xhr.responseText).message);
+        }
+      });
+    }
+
+    $(document).on("click", "#addressdetails tbody tr", function (e) {
+      var addresslineone = $(this).data("addresslineone");
+      var addresslinetwo = $(this).data("addresslinetwo");
+      var city = $(this).data("city");
+      var country = $(this).data("country");
+      var postalcode = $(this).data("postalcode");
+      var addressType = $(this).data("addresstype");
+      var addressid = $(this).data("addressdetailid");
+
+      $("#addresstype").val(addressType);
+      $("#addressline1").val(addresslineone);
+      $("#addressline2").val(addresslinetwo);
+      $("#city").val(city);
+      $("#country").val(country);
+      $("#postalcode").val(postalcode);
+      $("#addressdetailid").val(addressid);
+    });
+
+    $("#done").click(function () {
+      if (isValidForm()) {
+
+        var addressType = $("#addresstype").val();
+        var addresslineone = $("#addressline1").val();
+        var addresslinetwo = $("#addressline2").val();
+        var city = $("#city").val();
+        var country = $("#country").val();
+        var postalcode = $("#postalcode").val();
+        var addressdetailid = $("#addressdetailid").val();
+        
+        $.ajax({
+          url: '@Url.Action("AddCustomerOrderAddress")',
+          data: {
+            AddressDetailId: addressdetailid, AddressType: addressType, AddressLine1: addresslineone,
+            AddressLine2: addresslinetwo, City: city, Country: country, PostalCode: postalcode,
+            CustomerId: customerId, orderId: orderId
+          },
+          type: 'POST',
+          success: function () {
+            window.location.href = '@Url.Action("ConfirmCustomerAddress")' + '?orderId=' + orderId + '&orderNo=' + orderNo + '&customerId=' + customerId + '&addressDetailId=' + addressdetailid;
+          },
+          error: function (xhr, options, error) {
+            alert("OOPS! The was an error processing your request - " + jQuery.parseJSON(xhr.responseText).message);
+          }
+        });
+
+      }
+
+    });
+
+    $("#addressline1").keypress(function (event) { $(this).removeClass(); });
+    $("#city").keypress(function (event) { $(this).removeClass(); });
+    $("#postalcode").keypress(function (event) { $(this).removeClass(); });
+
+    function isValidForm() {
+      var valid = true;
+
+      var addresslineone = $("#addressline1").val();
+      var city = $("#city").val();
+      var postalcode = $("#postalcode").val();
+
+      $("#addressline1").removeClass();
+      $("#city").removeClass();
+      $("#postalcode").removeClass();
+
+      if (addresslineone == "") { $("#addressline1").addClass("alert-danger"); valid = false; }
+      if (city == "") { $("#city").addClass("alert-danger"); valid = false; }
+      if (postalcode == "") { $("#postalcode").addClass("alert-danger"); valid = false; }
+
+      return valid;
+    }
   </script>
   
 }

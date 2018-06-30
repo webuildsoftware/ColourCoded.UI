@@ -21,47 +21,111 @@ namespace ColourCoded.UI.Shared.WebApiCaller
 
     public void ConfigureMock_RoleController_Responses()
     {
+      // WebApi:Orders:GetCustomerOrderAddress
+
+      //var responseModel2 = new AddressDetailsModel
+      //{
+      //  AddressDetailId = 1,
+      //  AddressType = "Work",
+      //  AddressLine1 = "24 Victoria Street",
+      //  AddressLine2 = "Muizenberg",
+      //  City = "Cape Town",
+      //  PostalCode = "7786",
+      //  Country = "South Africa"
+      //};
+
+      //Responses.Add(new MockApiResponseModel { WepApiUrl = "WebApi:Orders:GetCustomerOrderAddress", RequestModel = new GetCustomerOrderAddressRequestModel { OrderId = 977 }, ResponseContent = responseModel2 });
+
+
       // WebApi:Orders:GetCustomerAddresses
 
-      var responseModel = new List<AddressDetailsModel>
-      {
-        new AddressDetailsModel
-        {
-          AddressDetailId = 1,
-          AddressLine1 = "24 Victoria Street",
-          AddressLine2= "Muizenberg",
-          City = "Cape Town",
-          PostalCode = "7786",
-          Country = "South Africa",
-          CreateUser = "zunaid",
-          CreateDate = DateTime.Now
-        },
-        new AddressDetailsModel
-        {
-          AddressDetailId = 1,
-          AddressLine1 = "24 John Street",
-          AddressLine2= "Pelican Park",
-          City = "Cape Town",
-          PostalCode = "7786",
-          Country = "South Africa",
-          CreateUser = "zunaid",
-          CreateDate = DateTime.Now
-        },
-        new AddressDetailsModel
-        {
-          AddressDetailId = 1,
-          AddressLine1 = "City Of Cape Town",
-          AddressLine2= "Adderley Street",
-          City = "Cape Town",
-          PostalCode = "7800",
-          Country = "South Africa",
-          CreateUser = "zunaid",
-          CreateDate = DateTime.Now
-        },
-      };
+      //var responseModel = new List<AddressDetailsModel>
+      //{
+      //  new AddressDetailsModel
+      //  {
+      //    AddressDetailId = 1,
+      //    AddressType = "Work",
+      //    AddressLine1 = "24 Victoria Street",
+      //    AddressLine2= "Muizenberg",
+      //    City = "Cape Town",
+      //    PostalCode = "7786",
+      //    Country = "South Africa",
+      //    CreateUser = "zunaid",
+      //    CreateDate = DateTime.Now
+      //  },
+      //  new AddressDetailsModel
+      //  {
+      //    AddressDetailId = 2,
+      //    AddressType = "Home",
+      //    AddressLine1 = "24 John Street",
+      //    AddressLine2= "Pelican Park",
+      //    City = "Cape Town",
+      //    PostalCode = "7786",
+      //    Country = "South Africa",
+      //    CreateUser = "zunaid",
+      //    CreateDate = DateTime.Now
+      //  },
+      //  new AddressDetailsModel
+      //  {
+      //    AddressDetailId = 3,
+      //    AddressType = "Delivery",
+      //    AddressLine1 = "City Of Cape Town",
+      //    AddressLine2= "Adderley Street",
+      //    City = "Cape Town",
+      //    PostalCode = "7800",
+      //    Country = "South Africa",
+      //    CreateUser = "zunaid",
+      //    CreateDate = DateTime.Now
+      //  },
+      //};
 
-      //resources.MockApiCaller.AddMockResponse("WebApi:Orders:GetCustomerAddresses", requestModel, responseModel);
-      Responses.Add(new MockApiResponseModel { WepApiUrl = "WebApi:Orders:GetCustomerAddresses", RequestModel = new GetCustomerAddressesRequestModel { CustomerId = 1 }, ResponseContent = responseModel });
+      ////resources.MockApiCaller.AddMockResponse("WebApi:Orders:GetCustomerAddresses", requestModel, responseModel);
+      //Responses.Add(new MockApiResponseModel { WepApiUrl = "WebApi:Orders:GetCustomerAddresses", RequestModel = new GetCustomerAddressesRequestModel { CustomerId = 1 }, ResponseContent = responseModel });
+
+      //Responses.Add(new MockApiResponseModel { WepApiUrl = "WebApi:Orders:RemoveCustomerAddress", RequestModel = new RemoveCustomerAddressRequestModel { AddressDetailId = 1 }, ResponseContent = "Success" });
+      //Responses.Add(new MockApiResponseModel { WepApiUrl = "WebApi:Orders:RemoveCustomerAddress", RequestModel = new RemoveCustomerAddressRequestModel { AddressDetailId = 2 }, ResponseContent = "Success" });
+      //Responses.Add(new MockApiResponseModel { WepApiUrl = "WebApi:Orders:RemoveCustomerAddress", RequestModel = new RemoveCustomerAddressRequestModel { AddressDetailId = 3 }, ResponseContent = "Success" });
+
+      //// "WebApi:Orders:AddCustomerAddress"
+
+      //var requestModel = new AddCustomerOrderAddressRequestModel
+      //{
+      //  AddressDetailId = 3,
+      //  AddressType = "Delivery",
+      //  AddressLine1 = "City Of Cape Town",
+      //  AddressLine2 = "Adderley Street",
+      //  City = "Cape Town",
+      //  PostalCode = "7800",
+      //  Country = "South Africa",
+      //};
+
+      //Responses.Add(new MockApiResponseModel { WepApiUrl = "WebApi:Orders:AddCustomerAddress", RequestModel = requestModel, ResponseContent = "Success" });
+
+      //requestModel = new AddCustomerOrderAddressRequestModel
+      //{
+      //  AddressDetailId = 2,
+      //  AddressType = "Home",
+      //  AddressLine1 = "24 John Street",
+      //  AddressLine2 = "Pelican Park",
+      //  City = "Cape Town",
+      //  PostalCode = "7786",
+      //  Country = "South Africa",
+      //};
+
+      //Responses.Add(new MockApiResponseModel { WepApiUrl = "WebApi:Orders:AddCustomerAddress", RequestModel = requestModel, ResponseContent = "Success" });
+
+      //requestModel = new AddCustomerOrderAddressRequestModel
+      //{
+      //  AddressDetailId = 1,
+      //  AddressType = "Work",
+      //  AddressLine1 = "24 Victoria Street",
+      //  AddressLine2 = "Muizenberg",
+      //  City = "Cape Town",
+      //  PostalCode = "7786",
+      //  Country = "South Africa",
+      //};
+
+      //Responses.Add(new MockApiResponseModel { WepApiUrl = "WebApi:Orders:AddCustomerAddress", RequestModel = requestModel, ResponseContent = "Success" });
 
 
       // WebApi:Orders:GetOrderCustomerDetail

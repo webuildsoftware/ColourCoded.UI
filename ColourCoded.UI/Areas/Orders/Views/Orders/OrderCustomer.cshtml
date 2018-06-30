@@ -47,11 +47,11 @@
     height: 70px;
   }
 </style>
-<h3 id="orderno" orderid></h3>
+<h3 id="orderno" orderid>Add Customer Details</h3>
 <div id="main">
   <div id="left" style="display: inline-block; width:300px">
     <fieldset>
-      <legend>Customer Details</legend>
+      <legend>Customer</legend>
       <div>
         <span>Available Customers</span>
         <br />
@@ -94,7 +94,7 @@
   </div>
   <div id="right" style="display: inline-block; position:absolute">
     <fieldset id="panelContacts">
-      <legend>Customer Contacts</legend>
+      <legend>Contact Person</legend>
       <div>
         <span>Available Contacts</span>
         <br />
@@ -247,7 +247,6 @@
         orderNo = queryString.split("&")[1].split("=")[1];
         var newCustomer = queryString.split("&")[2].split("=")[1];
 
-        $("#orderno").html("Order: " + orderNo);
         $("#orderno").attr("orderid", orderId);
 
         if (newCustomer == "false") {

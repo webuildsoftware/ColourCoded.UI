@@ -663,6 +663,7 @@ namespace ColourCoded.Tests.Orders
         new AddressDetailsModel
         {
           AddressDetailId = 1,
+          AddressType = "Work",
           AddressLine1 = "24 Victoria Street",
           AddressLine2= "Muizenberg",
           City = "Cape Town",
@@ -674,6 +675,7 @@ namespace ColourCoded.Tests.Orders
         new AddressDetailsModel
         {
           AddressDetailId = 1,
+          AddressType = "Delivery",
           AddressLine1 = "24 John Street",
           AddressLine2= "Pelican Park",
           City = "Cape Town",
@@ -685,6 +687,7 @@ namespace ColourCoded.Tests.Orders
         new AddressDetailsModel
         {
           AddressDetailId = 1,
+          AddressType = "Home",
           AddressLine1 = "City Of Cape Town",
           AddressLine2= "Adderley Street",
           City = "Cape Town",
@@ -722,6 +725,119 @@ namespace ColourCoded.Tests.Orders
       Assert.IsTrue(model.Any(o => o.City == responseModel[2].City));
       Assert.IsTrue(model.Any(o => o.Country == responseModel[2].Country));
       Assert.IsTrue(model.Any(o => o.PostalCode == responseModel[2].PostalCode));
+    }
+
+    [TestMethod]
+    public void RemoveCustomerAddress()
+    {
+      // Given
+      var resources = new Resources();
+      var addressDetailId = 1;
+      var customerId = 1;
+      var requestModel = new RemoveCustomerAddressRequestModel { AddressDetailId = addressDetailId, CustomerId = customerId, Username = resources.TestUsername };
+      
+      resources.MockApiCaller.AddMockResponse("WebApi:Orders:RemoveCustomerOrderAddress", requestModel, "Success");
+
+      // When 
+      var result = resources.Controller.RemoveCustomerOrderAddress(addressDetailId, customerId) as JsonResult;
+
+      // Then
+      Assert.IsNotNull(result);
+      var model = result.Value.ToString();
+      Assert.AreEqual("Success", model);
+    }
+
+    [TestMethod]
+    public void AddNewCustomerAddress()
+    {
+      // Given
+      var resources = new Resources();
+      var addressDetailId = 0;
+      var requestModel = new AddCustomerOrderAddressRequestModel
+      {
+        AddressDetailId = addressDetailId,
+        AddressType = "Delivery",
+        AddressLine1 = "25 Anzio Crescent",
+        AddressLine2 = "Strandfontein",
+        City = "Cape Town",
+        Country = "South Africa",
+        PostalCode = "7788"
+      };
+
+      resources.MockApiCaller.AddMockResponse("WebApi:Orders:AddCustomerOrderAddress", requestModel, "Success");
+
+      // When 
+      var result = resources.Controller.AddCustomerOrderAddress(requestModel) as JsonResult;
+
+      // Then
+      Assert.IsNotNull(result);
+      var model = result.Value.ToString();
+      Assert.AreEqual("Success", model);
+    }
+
+    [TestMethod]
+    public void AddExistingCustomerAddress()
+    {
+      // Given
+      var resources = new Resources();
+      var addressDetailId = 21;
+      var requestModel = new AddCustomerOrderAddressRequestModel
+      {
+        AddressDetailId = addressDetailId,
+        AddressType = "Delivery",
+        AddressLine1 = "25 Anzio Crescent",
+        AddressLine2 = "Strandfontein",
+        City = "Cape Town",
+        Country = "South Africa",
+        PostalCode = "7788"
+      };
+
+      resources.MockApiCaller.AddMockResponse("WebApi:Orders:AddCustomerOrderAddress", requestModel, "Success");
+
+      // When 
+      var result = resources.Controller.AddCustomerOrderAddress(requestModel) as JsonResult;
+
+      // Then
+      Assert.IsNotNull(result);
+      var model = result.Value.ToString();
+      Assert.AreEqual("Success", model);
+    }
+
+    [TestMethod]
+    public void GetCustomerOrderAddress()
+    {
+      // Given
+      var resources = new Resources();
+      var orderId = 123;
+      var requestModel = new GetOrderAddressRequestModel { OrderId = orderId, CustomerId = 1};
+      var responseModel = new AddressDetailsModel
+      {
+        AddressDetailId = 1,
+        AddressType = "Work",
+        AddressLine1 = "24 Victoria Street",
+        AddressLine2 = "Muizenberg",
+        City = "Cape Town",
+        PostalCode = "7786",
+        Country = "South Africa",
+        CreateUser = resources.TestUsername,
+        CreateDate = DateTime.Now
+      };
+
+      resources.MockApiCaller.AddMockResponse("WebApi:Orders:GetCustomerOrderAddress", requestModel, responseModel);
+
+      // When 
+      var result = resources.Controller.ConfirmCustomerOrderAddress(orderId, 1) as JsonResult;
+
+      // Then
+      Assert.IsNotNull(result);
+      var model = (AddressDetailsModel)result.Value;
+      Assert.IsNotNull(model);
+      Assert.AreEqual(responseModel.AddressDetailId, model.AddressDetailId);
+      Assert.AreEqual(responseModel.AddressLine1, model.AddressLine1);
+      Assert.AreEqual(responseModel.AddressLine2, model.AddressLine2);
+      Assert.AreEqual(responseModel.City, model.City);
+      Assert.AreEqual(responseModel.Country, model.Country);
+      Assert.AreEqual(responseModel.PostalCode, model.PostalCode);
     }
     #endregion
 
