@@ -1,0 +1,78 @@
+﻿
+@{
+  ViewData["Title"] = "OrderQuotation";
+  Layout = null;
+}
+
+<style>
+  #pagecontent {
+    width: 870px;
+    height:1000px;
+  }
+
+  table tr td {
+    border: solid 1px;
+  }
+
+  #rowOne tr:first-child {
+    height: 250px;
+  }
+
+  #rowTwo tr:first-child {
+    height: 150px;
+  }
+
+  #rowThree tr:first-child {
+    height: 700px;
+  }
+
+  #rowFour tr:first-child {
+    height: 150px;
+  }
+
+</style>
+
+@*width 595 pixels x 842 length*@
+<div id="pagecontent">
+  <table width="100%" style="border:solid 1px;">
+    <tr>
+      <td>
+        <table id="rowOne" width="100%">
+          <tr>
+            <td width="50%">Company Profile information</td>
+            <td width="50%">Order summary</td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <table id="rowTwo" width="100%">
+          <tr>
+            <td width="50%">Customer information</td>
+            <td width="50%">Delivery address</td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <table id="rowThree"  width="100%">
+          <tr>
+            <td width="100%">Order Details</td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <table id="rowFour"  width="100%">
+          <tr>
+            <td width="60%">Banking Details</td>
+            <td width="40%">Order totals</td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</div>

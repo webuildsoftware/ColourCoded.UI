@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Globalization;
+using Rotativa.AspNetCore;
 
 namespace ColourCoded.UI
 {
@@ -73,6 +74,8 @@ namespace ColourCoded.UI
            name: "default",
            template: "{area}/{controller}/{action=Index}/{id?}");
       });
+
+      RotativaConfiguration.Setup(env);
     }
   }
 }

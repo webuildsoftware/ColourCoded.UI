@@ -100,9 +100,9 @@
   <div>
     <br />
     <input id="edit" value="Change" type="button" data-orderid="@Model.OrderId" data-orderno="@Model.OrderNo" />
-    <input id="customer" value="Add Customer" type="button"  data-orderid="@Model.OrderId" data-orderno="@Model.OrderNo" />
-    <input id="accept" value="Accept Order" type="button"  data-orderid="@Model.OrderId" data-orderno="@Model.OrderNo" />
-    <label id="validorder" class="validationLabel"></label>
+    <input id="next" value="Next" type="button" data-orderid="@Model.OrderId" data-orderno="@Model.OrderNo" />
+    <input id="accept" value="Accept Order" type="button" data-orderid="@Model.OrderId"/>
+    <input id="cancel" value="Cancel" type="button" />
   </div>
 </div>
 
@@ -112,10 +112,30 @@
       window.location.href = '@Url.Action("OrderDetail")' + '?orderId=' + $(this).data("orderid") + '&orderNo=' + $(this).data("orderno");
     });
 
-    $("#customer").click(function () {
-      window.location.href = '@Url.Action("OrderCustomer")' + '?orderId=' + $(this).data("orderid") + '&orderNo=' + $(this).data("orderno") + "&new=true";
+    $("#next").click(function () {
+      window.location.href = '@Url.Action("ConfirmOrderCustomer")' + '?orderId=' + $(this).data("orderid") + '&orderNo=' + $(this).data("orderno");
     });
 
+    $("#cancel").click(function () {
+      location.href = '@Url.Action("Index", "Home", new { area = "Home" })';
+    });
+
+    $("#accept").click(function () {
+      if (confirm("Are you sure?")) {
+        $.ajax({
+          url: '@Url.Action("AcceptOrder")',
+          type: "POST",
+          data: { orderId: $(this).data("orderid") },
+          success: function () {
+            // send home with a orderId in the request string to download
+            location.href = '@Url.Action("Index", "Home", new { area = "Home" })' + '?orderId=' + $(this).data("orderid");
+          },
+          error: function (xhr, options, error) {
+            alert("OOPS! The was an error processing your request - " + jQuery.parseJSON(xhr.responseText).message);
+          }
+        });
+      }
+    });
 
   </script>
 }

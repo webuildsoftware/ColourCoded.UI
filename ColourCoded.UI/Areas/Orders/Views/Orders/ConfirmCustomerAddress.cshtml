@@ -13,7 +13,6 @@
 
   #main div {
     padding: 3px;
-    font-size: 12px;
   }
 
   #divaddressdetails{
@@ -24,7 +23,10 @@
 <h3 id="orderno">Confirm Address Details</h3>
 <div id="main">
   <div style="display: inline-block; width: 120px;">
-    <div orderId="">
+    <div>
+      Customer Name
+    </div>
+    <div>
       Address Type
     </div>
     <div>
@@ -44,6 +46,8 @@
     </div>
   </div>
   <div id="divaddressdetails" style="display: inline-block">
+    <div id="customername">
+    </div>
     <div id="addresstype">
     </div>
     <div id="addressline1">
@@ -61,6 +65,7 @@
     <br />
     <input id="edit" value="Change" type="button" data-customerid="" />
     <input id="accept" value="Accept Order" type="button" />
+    <input id="cancel" value="Cancel" type="button" />
   </div>
 </div>
 
@@ -76,7 +81,20 @@
     });
 
     $("#accept").click(function () {
-
+      if (confirm("Are you sure?")) {
+        $.ajax({
+          url: '@Url.Action("AcceptOrder")',
+          type: "POST",
+          data: { orderId: orderId },
+          success: function () {
+            // send home with a orderId in the request string to download
+            location.href = '@Url.Action("Index", "Home", new { area = "Home" })' + '?orderId=' + orderId;
+          },
+          error: function (xhr, options, error) {
+            alert("OOPS! The was an error processing your request - " + jQuery.parseJSON(xhr.responseText).message);
+          }
+        });
+      }
     });
 
     $(document).ready(function () {
@@ -90,7 +108,8 @@
         url: '@Url.Action("ConfirmCustomerOrderAddress")' + '?orderId=' + orderId + '&customerId=' + customerId ,
         type: 'GET',
         success: function (data) {
-
+          
+          $("#customername").html(data.customerName);
           $("#addresstype").html(data.addressType + " Address");
           $("#addressline1").html(data.addressLine1);
           $("#addressline2").html(data.addressLine2);
@@ -104,6 +123,8 @@
       });
     });
 
-
+    $("#cancel").click(function () {
+      location.href = '@Url.Action("Index", "Home", new { area = "Home" })'
+    });
   </script>
 }

@@ -59,13 +59,15 @@ namespace ColourCoded.Tests.Home
         {
           OrderId = 1,
           OrderNo = "Moq001",
-          Total = "R 2 999.99"
+          Total = "R 2 999.99",
+          Status = "Accepted"
         },
         new HomeOrdersModel
         {
           OrderId = 1,
           OrderNo = "Moq001",
-          Total = "R 2 999.99"
+          Total = "R 2 999.99",
+          Status = "N/A"
         },
       };
 
@@ -95,7 +97,8 @@ namespace ColourCoded.Tests.Home
         {
           OrderId = 1,
           OrderNo = "Moq001",
-          Total = "R 2 999.99"
+          Total = "R 2 999.99",
+          Status = "Status"
         }
       };
 

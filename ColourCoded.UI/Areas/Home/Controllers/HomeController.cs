@@ -6,6 +6,7 @@ using ColourCoded.UI.Shared.WebApiCaller;
 using ColourCoded.UI.Areas.Security.Models.Login;
 using System;
 using System.Collections.Generic;
+using Rotativa.AspNetCore;
 
 namespace ColourCoded.UI.Areas.Home.Controllers
 {
@@ -52,6 +53,12 @@ namespace ColourCoded.UI.Areas.Home.Controllers
       {
         return RedirectToAction("Error", new GlobalErrorModel(Ex.Message, Ex.StackTrace, Ex.GetBaseException().Message));
       }
+    }
+
+    [Authorize]
+    public IActionResult DownloadOrder(int orderId)
+    {
+      return new ViewAsPdf("OrderQuotation");
     }
 
     public ViewResult Error(GlobalErrorModel webApiErrorModel)

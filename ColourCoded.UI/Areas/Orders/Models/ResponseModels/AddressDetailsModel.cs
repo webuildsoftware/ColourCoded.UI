@@ -4,6 +4,7 @@ namespace ColourCoded.UI.Areas.Orders.Models.ResponseModels
 {
   public class AddressDetailsModel
   {
+    public string CustomerName { get; set; }
     public int AddressDetailId { get; set; }
     public string AddressType { get; set; }
     public string AddressLine1 { get; set; }

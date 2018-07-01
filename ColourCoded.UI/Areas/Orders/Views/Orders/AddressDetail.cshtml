@@ -96,7 +96,8 @@
   </div>
   <div>
     <input id="done" value="Done" type="button" />
-    <input type="hidden" id="addressdetailid" value="0"/>
+    <input id="cancel" value="Cancel" type="button" />
+    <input type="hidden" id="addressdetailid" value="0" />
   </div>
   <div>
     <br />
@@ -126,7 +127,7 @@
     var orderNo = "";
 
     $(document).ready(function () {
-
+      $("#addressdetails").hide();
       if (queryString != undefined) {
 
         // get order and customer id's from query string
@@ -139,9 +140,10 @@
           url: '@Url.Action("GetCustomerAddresses")' + '?customerId=' + customerId,
           type: 'GET',
           success: function (addresslist) {
+           
             $("#addressdetails tbody").html("");
             $.each(addresslist, function (index, linedetail) {
-
+              $("#addressdetails").show();
               $("#addressdetails tbody").append("<tr data-addresslineone='" + linedetail.addressLine1 + "' data-addresslinetwo='" + linedetail.addressLine2 + "' data-addressdetailid='" + linedetail.addressDetailId
                 + "' data-city='" + linedetail.city + "' data-country='" + linedetail.country + "' data-postalcode='" + linedetail.postalCode + "' data-addresstype='" + linedetail.addressType + "'>"
                 + "<td>" + linedetail.addressType + "</td>"
@@ -248,6 +250,10 @@
 
       return valid;
     }
+
+    $("#cancel").click(function () {
+      location.href = '@Url.Action("Index", "Home", new { area = "Home" })'
+    });
   </script>
   
 }

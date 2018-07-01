@@ -21,7 +21,7 @@
   }
 
   input[type=button] {
-    width: 110px;
+    width: 80px;
   }
 
   .validationLabel {
@@ -118,86 +118,13 @@
         <input type="text" id="contactemail" placeholder="Enter email (optional)" />
       </div>
       <div style="padding-top:10px">
-        <input id="done" value="Complete" type="button" />
-      </div>
-      <br />
-      <div id="divcontacts">
-        <span>Added Contact</span>
-        <table id="contacts">
-          <thead>
-            <tr>
-              <td>Name</td>
-              <td>ContactNo</td>
-              <td>EmailAddress</td>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
+        <input id="done" value="Done" type="button" />
+        <input id="cancel" value="Cancel" type="button" />
       </div>
       <legend></legend>
     </fieldset>
   </div>
 
-  @*
-
-      <fieldset id="panelAddress">
-      <legend>Address Details</legend>
-      <div>
-        <span>Address Type</span>
-        <br />
-        <select id="addresstype">
-          <option value="Home">Home</option>
-          <option value="Business">Business</option>
-          <option value="Delivery">Delivery</option>
-        </select>
-      </div>
-      <div style="display: inline-block">
-        <span>Line 1</span>
-        <br />
-        <input type="text" id="addressline1" placeholder="Enter unit/street no" />
-      </div>
-      <br />
-      <div style="display: inline-block; width: 200px">
-        <span>Line 2</span>
-        <br />
-        <input type="text" id="addressline2" placeholder="Enter suburb" />
-      </div>
-      <div style="display: inline-block">
-        <span>City</span>
-        <br />
-        <input type="text" id="addresscity" placeholder="Enter city" />
-      </div>
-      <br />
-      <div style="display: inline-block; width: 200px">
-        <span>Country</span>
-        <br />
-        <select id="addresscountry">
-          <option value="RSA">Republic of South Africa</option>
-        </select>
-      </div>
-      <div style="display: inline-block">
-        <span>Postal Code</span>
-        <br />
-        <input type="text" id="addresspostalcode" placeholder="Enter postal code" />
-      </div>
-      <br />
-      <div id="divaddressdetails">
-        <span>Address Details</span>
-        <table id="addressdetails">
-          <thead>
-            <tr>
-              <td>Type</td>
-              <td>Line1</td>
-              <td>Line2</td>
-              <td>City</td>
-              <td>Country</td>
-              <td>Postal</td>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
-      </div>
-    </fieldset>*@
 </div>
 @section Scripts{
   <script>
@@ -229,10 +156,7 @@
             $("#existingcustomers").append("<option value='" + customer.customerId + "' index='" + (index) +"'>" + customer.customerName + "</option>");
           });
 
-          // handle the timing bug 
-          var customerId = $("#existingcustomers").data("customerid");
-          if (customerId > 0) { $("#existingcustomers").val(customerId); }
-
+          $("#customerdetails").html("");
         },
         error: function (xhr, options, error) {
           alert("OOPS! The was an error processing your request - " + jQuery.parseJSON(xhr.responseText).message);
@@ -245,68 +169,8 @@
         // get order id from query string
         orderId = queryString.split("&")[0].split("=")[1];
         orderNo = queryString.split("&")[1].split("=")[1];
-        var newCustomer = queryString.split("&")[2].split("=")[1];
-
-        $("#orderno").attr("orderid", orderId);
-
-        if (newCustomer == "false") {
-
-          // get the order customer detail information and populate the customer and contact panels
-          $.ajax({
-            url: '@Url.Action("GetOrderCustomerDetails")',
-            data: { orderId: orderId },
-            type: 'POST',
-            success: function (customerorderdetails) {
-              // populate the customer form inputs`
-              $("#existingcustomers").val(customerorderdetails.customerId);
-              $("#existingcustomers").data("customerid", customerorderdetails.customerId);
-              $("#customername").val(customerorderdetails.customerName);
-              $("#customerdetails").val(customerorderdetails.customerDetails);
-              $("#customercontactno").val(customerorderdetails.customerContactNo);
-              $("#customeremail").val(customerorderdetails.customerEmailAddress);
-              $("#customeraccountno").val(customerorderdetails.customerAccountNo);
-              $("#customermobileno").val(customerorderdetails.customerMobileNo);
-              // populate the contact form inputs
-              $("#contactname").val(customerorderdetails.contactName);
-              $("#contactno").val(customerorderdetails.contactNo);
-              $("#contactemail").val(customerorderdetails.contactEmailAddress);
-
-              // get the contacts belonging to the selected customerid, if any
-              if (customerorderdetails.contactId != 0) {
-                $.ajax({
-                  url: '@Url.Action("GetCustomerContacts")',
-                  data: { customerId: customerorderdetails.customerId },
-                  type: "POST",
-                  success: function (contacts) {
-
-                    $.each(contacts, function (index, contact) {
-                      // loop through contacts and append to the contacts drop down list
-                      order.customerContacts.push(
-                        {
-                          "contactid": contact.contactId, "contactname": contact.contactName, "contactno": contact.contactNo, "emailaddress": contact.emailAddress
-                        });
-
-                      $("#existingcontacts").append("<option value='" + contact.contactId + "' index='" + (index) + "'>" + contact.contactName + "</option>");
-                    });
-
-                    $("#existingcontacts").val(customerorderdetails.contactId);
-                  },
-                  error: function (xhr, options, error) {
-                    alert("OOPS! The was an error processing your request - " + jQuery.parseJSON(xhr.responseText).message);
-                  }
-                });
-              } // end: get the contacts belonging to the selected customerid, if any
-              
-            },
-            error: function (xhr, options, error) {
-              alert("OOPS! The was an error processing your request - " + jQuery.parseJSON(xhr.responseText).message);
-            }
-          });
-        }
       }
 
-      $("#customerdetails").html("");
-      $("#divcontacts").hide();
     });
 
     $("#existingcustomers").change(function () {
@@ -379,7 +243,11 @@
           contactAdded = true;
         }
         
-      });
+    });
+
+    $("#cancel").click(function () {
+      location.href = '@Url.Action("Index", "Home", new { area = "Home" })'
+    });
 
     $("#customercontactno").keypress(function (event) {
       var quantity = $(this).val();

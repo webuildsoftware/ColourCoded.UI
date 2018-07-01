@@ -326,38 +326,23 @@ namespace ColourCoded.Tests.Orders
     }
 
     [TestMethod]
-    public void LoadOrderDetail()
+    public void AcceptOrder_Success()
     {
       // given
       var resources = new Resources();
-      const int orderId = 123;
-      const string orderNo = "TEST123";
+      var orderId = 1234;
+      var requestModel = new AcceptOrderRequestModel { OrderId = orderId, Username = resources.TestUsername };
+      resources.MockApiCaller.AddMockResponse("WebApi:Orders:AcceptOrder", requestModel, "Success");
 
       // when
-      var result = resources.Controller.OrderDetail(orderId);
+      var result = resources.Controller.AcceptOrder(orderId) as JsonResult;
 
       // then
       Assert.IsNotNull(result);
-      Assert.AreEqual("OrderDetail", result.ViewName);
+      Assert.AreEqual("Success", result.Value.ToString());
     }
 
     #region Order Customers Edit/Add/View
-
-    [TestMethod]
-    public void LoadOrderCustomers()
-    {
-      // given
-      var resources = new Resources();
-      const int orderId = 123;
-      const string orderNo = "TEST123";
-      
-      // when
-      var result = resources.Controller.OrderCustomer(orderId, orderNo);
-
-      // then
-      Assert.IsNotNull(result);
-      Assert.AreEqual("OrderCustomer", result.ViewName);
-    }
 
     [TestMethod]
     public void GetUser_Company_Customers_ReturnsCustomerModel()
@@ -564,6 +549,7 @@ namespace ColourCoded.Tests.Orders
 
       var responseModel = new OrderCustomerDetailModel
       {
+        OrderId = orderId,
         CustomerName = "Test Costume",
         CustomerDetails = "This is some long customer description",
         CustomerContactNo = "0214472215",

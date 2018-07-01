@@ -91,6 +91,7 @@
     <input type="text" id="ordernoprefix" class="orderno" placeholder="Enter prefix" />
     <input type="text" id="ordernoseed" class="orderno" onkeypress="return false;" />&nbsp;&nbsp;
     <input id="done" value="Done" type="button" />
+    <input id="cancel" value="Cancel" type="button" />
     <label id="validorder" class="validationLabel"></label>
   </div>
 </div>
@@ -124,7 +125,7 @@
         type: 'GET',
         success: function (data) {
           ordernoseed = data;
-          $("#ordernoseed").val("QUOTE" +ordernoseed);
+          $("#ordernoseed").val(ordernoseed);
         },
         error: function (xhr, options, error) {
           alert("OOPS! The was an error processing your request - " + jQuery.parseJSON(xhr.responseText).message);
@@ -424,6 +425,10 @@
         }
 
       }
+    });
+
+    $("#cancel").click(function () {
+      location.href = '@Url.Action("Index", "Home", new { area = "Home" })'
     });
   </script>
 }

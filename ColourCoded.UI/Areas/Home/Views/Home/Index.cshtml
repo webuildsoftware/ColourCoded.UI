@@ -8,16 +8,19 @@
 <style>
   table thead tr td {
     background-color: lightgray;
-    width: 100px;
+  }
+
+  table tr td {
+    padding: 2px;
   }
 
   table thead tr td:first-child {
-    background-color: lightgray;
     width: 150px;
   }
 
-  table {
-    padding:3px;
+  table tr td:last-child {
+    width: 25px;
+    cursor: pointer;
   }
 
   input[type=button] {
@@ -33,61 +36,102 @@
   .spaced {
     padding: 3px;
   }
+
+  #search tr td:first-child {
+    width: 50px;
+  }
 </style>
 
-<h3>Home</h3>
-<br />
-<h4>Create a Quote in 5 easy steps:</h4>
-<br />
+<h3>Create a Quote in 3 easy steps</h3>
 <ol>
   <li>Add Order Detail</li>
   <li>Add Customer Detail [Optional]</li>
   <li>Add Delivery Address Detail [Optional]</li>
-  <li>Add Company Detail [Optional]</li>
-  <li><a href='@Url.Action("OrderDetail", "Orders", new { area = "Orders" })'>Create Quote Now...</a></li>
 </ol>
+<input value="Create Quote Now" id="quote" type="button" style="width: 150px" /> &nbsp;&nbsp;
+<input id="find" type="button" value="Find Order" />
+<br />
+<br />
+<form id="period" method="post" action="@Url.Action("GetHomeOrdersByPeriod")">
+  <table id="search">
+    <tr>
+      <td>From:</td>
+      <td><input type="date" id="startDate" name="startDate" min="2018-01-01" max="2018-12-31" /></td>
+    </tr>
+    <tr>
+      <td>To:</td>
+      <td><input type="date" id="endDate" name="endDate" min="2018-01-01" max="2018-12-31" /></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td><input id="search" type="button" value="Search" /><input id="refresh" type="button" value="Refresh" /></td>
+    </tr>
+  </table>
+</form>
 @if (Model.Orders.Count > 0)
 {
+
+<div id="recentorders">
   <h4>Recent Orders:</h4>
-  <form id="period" method="post" action="@Url.Action("GetHomeOrdersByPeriod")">
-    <div class="spaced">
-      <input id="filter" type="text" placeholder="Filter" />
-    </div>
-    <div class="spaced">
-      From: <input type="date" id="startDate" name="startDate" min="2018-01-01" max="2018-12-31" />
-      &nbsp;&nbsp;To: <input type="date" id="endDate" name="endDate" min="2018-01-01" max="2018-12-31" />
-      &nbsp;&nbsp;<input id="search" type="button" value="Search" />
-      &nbsp;&nbsp;<a href='@Url.Action("Index", "Home", new { area="Home" })'>Reload</a>
-    </div>
-  </form>
-  <div class="spaced">
-    <table id="orders">
-      <thead>
-        <tr>
-          <td>OrderNo</td>
-          <td>CreateDate</td>
-          <td>Total</td>
-        </tr>
-      </thead>
-      <tbody>
-        @foreach (var order in Model.Orders)
-        {
+  <input id="filter" type="text" placeholder="Filter" style="width:100px" /><br /><br />
+  <table id="orders">
+    <thead>
+      <tr>
+        <td>OrderNo</td>
+        <td>CreateDate</td>
+        <td>Total</td>
+        <td>Status</td>
+        <td></td>
+      </tr>
+    </thead>
+    <tbody>
+      @foreach (var order in Model.Orders)
+      {
         <tr orderno="@order.OrderNo.ToUpper()">
           <td data-orderId="@order.OrderId"><a href='@Url.Action("ConfirmOrderDetail", "Orders", new { area="Orders" })?orderId=@order.OrderId'>@order.OrderNo</a></td>
           <td>@order.CreateDate</td>
-          <td>@order.Total</td>
+          <td style="text-align: right">@order.Total</td>
+          <td style="text-align: center">@order.Status</td>
+          <td style="text-align: center;">
+            @if (order.Status.ToUpper() == "ACCEPTED")
+            {
+              <i class="glyphicon glyphicon-download-alt" title="Download PDF" orderId="@order.OrderId">
+
+              </i>
+            }
+          </td>
         </tr>
-        }
-      </tbody>
-    </table>
-    <br />
-  </div>
+      }
+    </tbody>
+  </table>
+  <br />
+</div>
 
 }
 
 @section Scripts
   {
-  <script>
+<script>
+
+    $(document).ready(function () {
+      $("#search tr td").addClass("spaced");
+      $("#period").hide();
+    });
+
+    $("#find").click(function () {
+      $("#period").show();
+      $("#recentorders").hide();
+    });
+
+
+    $("#quote").click(function () {
+      location.href = '@Url.Action("OrderDetail", "Orders", new { area = "Orders" })'
+    });
+
+
+    $("#refresh").click(function () {
+      location.href = '@Url.Action("Index", "Home", new { area = "Home" })'
+    });
 
     $("#filter").keyup(function () {
       var filter = $("#filter").val().toUpperCase();
@@ -114,6 +158,11 @@
           $('#period').submit();
         }
       }
-    });
-  </script>
+  });
+
+  $("i").click(function () {
+    var orderId = $(this).attr("orderid");
+    location.href = '@Url.Action("DownloadOrder")';
+  });
+</script>
 }

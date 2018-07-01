@@ -70,7 +70,7 @@ namespace ColourCoded.UI.Shared
     public void SetCookie(string key, string value)
     {
       var option = new CookieOptions();
-      option.Expires = DateTime.Now.AddMinutes(Convert.ToInt32(Configuration["Cookie.ExpireTime"]));
+      option.Expires = DateTime.Now.AddMinutes(Convert.ToInt32(Configuration["CookieExpireTimeSpan"]));
 
       HttpContext.HttpContext.Response.Cookies.Append(key, value, option);
     }
