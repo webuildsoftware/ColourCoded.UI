@@ -40,8 +40,8 @@
   #search tr td:first-child {
     width: 50px;
   }
-</style>
 
+</style>
 <h3>Create a Quote in 3 easy steps</h3>
 <ol>
   <li>Add Order Detail</li>
@@ -95,7 +95,7 @@
           <td style="text-align: center;">
             @if (order.Status.ToUpper() == "ACCEPTED")
             {
-              <i class="glyphicon glyphicon-download-alt" title="Download PDF" orderId="@order.OrderId">
+              <i class="glyphicon glyphicon-download-alt" title="Download PDF" orderId="@order.OrderId" orderno="@order.OrderNo">
 
               </i>
             }
@@ -162,7 +162,8 @@
 
   $("i").click(function () {
     var orderId = $(this).attr("orderid");
-    location.href = '@Url.Action("DownloadOrder")';
+    var orderNo = $(this).attr("orderno");
+    location.href = '@Url.Action("DownloadOrder")' + '?orderId=' + orderId + '&orderNo=' + orderNo;
   });
 </script>
 }

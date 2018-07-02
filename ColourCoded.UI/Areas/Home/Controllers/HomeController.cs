@@ -55,9 +55,9 @@ namespace ColourCoded.UI.Areas.Home.Controllers
       }
     }
 
-    [Authorize]
-    public IActionResult DownloadOrder(int orderId)
+    public IActionResult DownloadOrder(int orderId, string orderNo)
     {
+      string filename = orderNo + ".pdf";
       return new ViewAsPdf("OrderQuotation");
     }
 

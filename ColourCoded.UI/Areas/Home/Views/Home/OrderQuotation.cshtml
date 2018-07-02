@@ -5,154 +5,53 @@
 }
 
 <style>
-  #pagecontent {
-    width: 870px;
-    height:1000px;
-  }
-
-  .solid-border {
+  #main {
+    top:40px;
+    width: 880px;
+    height: 1000px;
     border: 1px solid;
   }
 
-  #rowOne tr:first-child {
+  #footer {
+    width: 880px;
+    height: 200px;
+    border: 1px solid;
+  }
+
+  #companyprofile {
+    position: absolute;
+    left: 20px;
+    top: 10px;
     height: 250px;
+    width: 400px;
+    display: inline-block;
+    border: 1px solid;
+    padding-left: 20px;
+    font-family: Arial, Helvetica, sans-serif;
   }
 
-  #rowTwo tr:first-child {
-    height: 150px;
+  #ordersummary {
+    height: 250px;
+    width: 430px;
+    display: inline-block;
   }
-
-  #rowThree tr:first-child {
-    height: 700px;
-  }
-
-  #rowFour tr:first-child {
-    height: 150px;
-  }
-
-  #companyprofile tr:first-child {
-    height: 100px;
-  }
-
-  #ordersummary tr:first-child {
-    height: 50px;
-  }
-
 </style>
 
 @*width 595 pixels x 842 length*@
-<div id="pagecontent">
-  <table width="100%">
-    <tr>
-      <td>
-        <table id="rowOne" width="100%">
-          <tr>
-            <td class="solid-border" width="50%">
-              <table id="companyprofile" width="100%">
-                <tr>
-                  <td width="10%"></td>
-                  <td width="80%" style="text-align: center">Picture</td>
-                  <td width="10%"></td>
-                </tr>
-                <tr>
-                  <td width="10%"></td>
-                  <td width="80%">CompanyName</td>
-                  <td width="10%"></td>
-                </tr>
-                <tr>
-                  <td width="10%"></td>
-                  <td width="80%">CompanyContactNo</td>
-                  <td width="10%"></td>
-                </tr>
-                <tr> 
-                  <td width="10%"></td>
-                  <td width="80%">CompanyRegistrationNo</td>
-                  <td width="10%"></td>
-                </tr>
-                <tr>
-                  <td width="10%"></td>
-                  <td width="80%">CompanyEmail</td>
-                  <td width="10%"></td>
-                </tr>
-                <tr> 
-                  <td width="10%"></td>
-                  <td width="80%">CompanyAddress</td>
-                  <td width="10%"></td>
-                </tr>
-              </table>
-            </td>
-            <td  class="solid-border" width="50%">
-              <table id="ordersummary" width="100%">
-                <tr>
-                  <td width="5%"></td>
-                  <td width="45%" style="text-align: center">OrderNo</td>
-                  <td width="45%" style="text-align: center">CreateDate</td>
-                  <td width="5%"></td>
-                </tr>
-                <tr>
-                  <td width="5%"></td>
-                  <td width="45%" style="text-align: center">OrderNo</td>
-                  <td width="45%" style="text-align: center">CreateDate</td>
-                  <td width="5%"></td>
-                </tr>
-                <tr>
-                  <td width="5%"></td>
-                  <td width="45%" style="text-align: center">OrderNo</td>
-                  <td width="45%" style="text-align: center">CreateDate</td>
-                  <td width="5%"></td>
-                </tr>
-                <tr>
-                  <td width="5%"></td>
-                  <td width="45%" style="text-align: center">OrderNo</td>
-                  <td width="45%" style="text-align: center">CreateDate</td>
-                  <td width="5%"></td>
-                </tr>
-                <tr>
-                  <td width="5%"></td>
-                  <td width="45%" style="text-align: center">OrderNo</td>
-                  <td width="45%" style="text-align: center">CreateDate</td>
-                  <td width="5%"></td>
-                </tr>
-                <tr>
-                  <td width="10%"></td>
-                  <td width="45%" style="text-align: center">OrderNo</td>
-                  <td width="45%" style="text-align: center">CreateDate</td>
-                  <td width="10%"></td>
-                </tr>
-              </table>
-            </td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <table class="orderTable" id="rowTwo" width="100%">
-          <tr>
-            <td width="50%">Customer information</td>
-            <td width="50%">Delivery address</td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <table class="orderTable" id="rowThree"  width="100%">
-          <tr>
-            <td width="100%">Order Details</td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <table class="orderTable" id="rowFour"  width="100%">
-          <tr>
-            <td width="60%">Banking Details</td>
-            <td width="40%">Order totals</td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-  </table>
+<div id="main">
+  <div id="companyprofile">
+    <h3>RUGAYA MIA CATERING CC.</h3>
+    43 Stamen Street<br />
+    Retreat<br />
+    Cape Town<br />
+    South Africa<br />
+    7945<br /><br />
+    Tel: 021 712 5588<br />
+    Cell: 074 884 1122<br />
+    Email: gayamia@hotmail.com
+  </div>
+</div>
+<br />
+<div id="footer">
+  1234124134
 </div>

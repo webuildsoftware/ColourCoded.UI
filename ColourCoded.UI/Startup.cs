@@ -76,6 +76,7 @@ namespace ColourCoded.UI
       });
 
       RotativaConfiguration.Setup(env);
+      app.UseStaticFiles();
     }
   }
 }
