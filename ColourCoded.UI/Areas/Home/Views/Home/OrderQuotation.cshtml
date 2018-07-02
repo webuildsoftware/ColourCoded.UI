@@ -10,8 +10,8 @@
     height:1000px;
   }
 
-  table tr td {
-    border: solid 1px;
+  .solid-border {
+    border: 1px solid;
   }
 
   #rowOne tr:first-child {
@@ -30,24 +30,104 @@
     height: 150px;
   }
 
+  #companyprofile tr:first-child {
+    height: 100px;
+  }
+
+  #ordersummary tr:first-child {
+    height: 50px;
+  }
+
 </style>
 
 @*width 595 pixels x 842 length*@
 <div id="pagecontent">
-  <table width="100%" style="border:solid 1px;">
+  <table width="100%">
     <tr>
       <td>
         <table id="rowOne" width="100%">
           <tr>
-            <td width="50%">Company Profile information</td>
-            <td width="50%">Order summary</td>
+            <td class="solid-border" width="50%">
+              <table id="companyprofile" width="100%">
+                <tr>
+                  <td width="10%"></td>
+                  <td width="80%" style="text-align: center">Picture</td>
+                  <td width="10%"></td>
+                </tr>
+                <tr>
+                  <td width="10%"></td>
+                  <td width="80%">CompanyName</td>
+                  <td width="10%"></td>
+                </tr>
+                <tr>
+                  <td width="10%"></td>
+                  <td width="80%">CompanyContactNo</td>
+                  <td width="10%"></td>
+                </tr>
+                <tr> 
+                  <td width="10%"></td>
+                  <td width="80%">CompanyRegistrationNo</td>
+                  <td width="10%"></td>
+                </tr>
+                <tr>
+                  <td width="10%"></td>
+                  <td width="80%">CompanyEmail</td>
+                  <td width="10%"></td>
+                </tr>
+                <tr> 
+                  <td width="10%"></td>
+                  <td width="80%">CompanyAddress</td>
+                  <td width="10%"></td>
+                </tr>
+              </table>
+            </td>
+            <td  class="solid-border" width="50%">
+              <table id="ordersummary" width="100%">
+                <tr>
+                  <td width="5%"></td>
+                  <td width="45%" style="text-align: center">OrderNo</td>
+                  <td width="45%" style="text-align: center">CreateDate</td>
+                  <td width="5%"></td>
+                </tr>
+                <tr>
+                  <td width="5%"></td>
+                  <td width="45%" style="text-align: center">OrderNo</td>
+                  <td width="45%" style="text-align: center">CreateDate</td>
+                  <td width="5%"></td>
+                </tr>
+                <tr>
+                  <td width="5%"></td>
+                  <td width="45%" style="text-align: center">OrderNo</td>
+                  <td width="45%" style="text-align: center">CreateDate</td>
+                  <td width="5%"></td>
+                </tr>
+                <tr>
+                  <td width="5%"></td>
+                  <td width="45%" style="text-align: center">OrderNo</td>
+                  <td width="45%" style="text-align: center">CreateDate</td>
+                  <td width="5%"></td>
+                </tr>
+                <tr>
+                  <td width="5%"></td>
+                  <td width="45%" style="text-align: center">OrderNo</td>
+                  <td width="45%" style="text-align: center">CreateDate</td>
+                  <td width="5%"></td>
+                </tr>
+                <tr>
+                  <td width="10%"></td>
+                  <td width="45%" style="text-align: center">OrderNo</td>
+                  <td width="45%" style="text-align: center">CreateDate</td>
+                  <td width="10%"></td>
+                </tr>
+              </table>
+            </td>
           </tr>
         </table>
       </td>
     </tr>
     <tr>
       <td>
-        <table id="rowTwo" width="100%">
+        <table class="orderTable" id="rowTwo" width="100%">
           <tr>
             <td width="50%">Customer information</td>
             <td width="50%">Delivery address</td>
@@ -57,7 +137,7 @@
     </tr>
     <tr>
       <td>
-        <table id="rowThree"  width="100%">
+        <table class="orderTable" id="rowThree"  width="100%">
           <tr>
             <td width="100%">Order Details</td>
           </tr>
@@ -66,7 +146,7 @@
     </tr>
     <tr>
       <td>
-        <table id="rowFour"  width="100%">
+        <table class="orderTable" id="rowFour"  width="100%">
           <tr>
             <td width="60%">Banking Details</td>
             <td width="40%">Order totals</td>
