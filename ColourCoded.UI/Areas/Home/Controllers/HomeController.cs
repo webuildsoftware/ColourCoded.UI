@@ -60,7 +60,7 @@ namespace ColourCoded.UI.Areas.Home.Controllers
     {
       string filename = orderNo + ".pdf";
 
-      var result = WebApiCaller.PostAsync<OrderQuotationViewModel>("WebApi:Orders:DownloadOrder", new DownloadOrderRequestModel { OrderId = orderId });
+      var result = WebApiCaller.PostAsync<OrderQuotationViewModel>("WebApi:Orders:GetOrderQuote", new GetOrderQuoteRequestModel { OrderId = orderId, CompanyProfileId = CurrentUser.CompanyProfileId});
 
       return new ViewAsPdf("OrderQuotation", result);
     }

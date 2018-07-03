@@ -1,4 +1,5 @@
-﻿
+﻿@model ColourCoded.UI.Areas.Home.Models.OrderQuotationViewModel;
+
 @{
   ViewData["Title"] = "OrderQuotation";
   Layout = null;
@@ -176,19 +177,22 @@
 </style>
 
 <div id="main">
-  
+
   <!-- COMPANY PROFILE INFORMATION -->
   <div id="companyprofile">
-    <h3 style="text-align: center">RUGAYA MIA CATERING CC.</h3>
-    Reg. No. 2018/83478234 &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;VAT. No. 398476234<br />
-    <hr />
-    43 Stamen Street<br />
-    Retreat, Cape Town<br />
-    South Africa<br />
-    7945<br />
-    Tel: 021 712 5588<br />
-    Cell: 074 884 1122<br />
-    Email: gayamia@hotmail.com
+    @if (!String.IsNullOrWhiteSpace(Model.CompanyProfile.Country))
+    {
+      <h3 style="text-align: center">@Model.CompanyProfile.DisplayName.ToUpper()</h3>
+      @Html.Raw("Reg.No.") @Model.CompanyProfile.RegistrationNo @Html.Raw("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VAT.No.") @Model.CompanyProfile.TaxReferenceNo<br />
+      <hr />
+      @Model.CompanyProfile.AddressLine1<br />
+      @Model.CompanyProfile.AddressLine2<br />
+      @Model.CompanyProfile.City@Html.Raw(",") @Model.CompanyProfile.Country<br />
+      @Model.CompanyProfile.PostalCode<br />
+      @Html.Raw("Tel: ")@Model.CompanyProfile.TelephoneNo<br />
+      @Html.Raw("Email: ")@Model.CompanyProfile.EmailAddress
+    }
+
   </div>
 
   <!-- CUSTOMER AND ORDER DETAILS-->
@@ -199,89 +203,101 @@
         <td>DATE CREATED</td>
       </tr>
       <tr>
-        <td>TEST34</td>
-        <td>24 July 2018</td>
+        <td>@Model.OrderTotals.OrderNo</td>
+        <td>@Model.OrderTotals.CreateDate.ToLongDateString()</td>
       </tr>
       <tr class="bold-row">
         <td>SALES PERSON</td>
         <td>CUSTOMER NAME</td>
       </tr>
       <tr>
-        <td>Nabeela Lagerdien</td>
-        <td>PresLes IT Staff Lagerdien</td>
+        <td>@Model.OrderTotals.CreateUser</td>
+        <td>
+          @if (!String.IsNullOrWhiteSpace(Model.CustomerDetail.CustomerName))
+          {
+            @Model.CustomerDetail.CustomerName
+          }
+        </td>
       </tr>
       <tr class="bold-row">
         <td>CUSTOMER CONTACT NO</td>
         <td>CUSTOMER ACC NO</td>
       </tr>
       <tr>
-        <td>021 714 5588</td>
-        <td>DE3298</td>
+        <td>
+          @if (!String.IsNullOrWhiteSpace(Model.CustomerDetail.CustomerContactNo))
+          {
+            @Model.CustomerDetail.CustomerContactNo
+          }
+        </td>
+        <td>
+          @if (!String.IsNullOrWhiteSpace(Model.CustomerDetail.CustomerAccountNo))
+          {
+            @Model.CustomerDetail.CustomerAccountNo
+          }
+        </td>
       </tr>
     </table>
   </div>
-  
+
   <!-- CUSTOMER CONTACT DETAILS -->
   <div id="contactdetails">
-    INVOICE TO<hr />
-    ZUNAID <br />
-    Contact No: 021 98354293<br />
-    Email: zlagerdine@dkj.com
+    <strong>INVOICE TO</strong><hr />
+    @if (!String.IsNullOrWhiteSpace(Model.CustomerDetail.ContactName))
+    {
+      @Model.CustomerDetail.ContactName <br />
+      @Html.Raw("ContactNo: ")@Model.CustomerDetail.ContactNo <br />
+    }
+    @if (!String.IsNullOrWhiteSpace(Model.CustomerDetail.ContactEmailAddress))
+    {
+      @Html.Raw("Email: ")@Model.CustomerDetail.ContactEmailAddress
+    }
   </div>
-  
+
   <!-- DELIVERY ADDRESS DETAILS -->
   <div id="deliveryaddress">
-    DELIVERY ADDRESS<hr />
-    43 Stamen Street<br />
-    Retreat, Cape Town<br />
-    South Africa<br />
-    7945<br />
+    <strong>DELIVERY ADDRESS</strong><hr />
+    @if (!String.IsNullOrWhiteSpace(Model.DeliveryAddress.AddressLine1))
+    {
+      @Model.DeliveryAddress.AddressLine1<br />
+      @Model.DeliveryAddress.AddressLine2@Html.Raw(", ")@Model.DeliveryAddress.City<br />
+      @Model.DeliveryAddress.Country<br />
+      @Model.DeliveryAddress.PostalCode
+    }
   </div>
-  
-  <!-- ORDER DETAILS (MAX 24 Lines) -->
-  
-  <div id="orderdetail">
-    <table id="grid-orderdetail" width="100%">
-      <tr class="bold-row">
-        <td>ITEM DESCRIPTION</td>
-        <td>UNIT QTY</td>
-        <td>UNIT PRICE</td>
-        <td>DISCOUNT</td>
-        <td>LINE TOTAL</td>
-      </tr>
-      <tr>
-        <td>Mince Samoosas</td>
-        <td>3</td>
-        <td>4.00</td>
-        <td>0.00</td>
-        <td>888888888.00</td>
-      </tr>
-      <tr>
-        <td>Mince Samoosas</td>
-        <td>3</td>
-        <td>4.00</td>
-        <td>0.00</td>
-        <td>12.00</td>
-      </tr>
-      <tr>
-        <td>Mince Samoosas</td>
-        <td>3</td>
-        <td>4.00</td>
-        <td>0.00</td>
-        <td>12.00</td>
-      </tr>
-      @for (int i = 1; i < 24; i++)
-      {
-        <tr>
-          <td>&nbsp;</td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
+
+    <!-- ORDER DETAILS (MAX 27 Lines) -->
+    <div id="orderdetail">
+      <table id="grid-orderdetail" width="100%">
+        <tr class="bold-row">
+          <td>ITEM DESCRIPTION</td>
+          <td>UNIT QTY</td>
+          <td>UNIT PRICE</td>
+          <td>DISCOUNT</td>
+          <td>LINE TOTAL</td>
         </tr>
-      }
-    </table>
-  </div>
+        @foreach (var lineDetail in Model.OrderTotals.OrderLineDetails)
+        {
+          <tr>
+            <td>@lineDetail.ItemDescription</td>
+            <td>@lineDetail.Quantity</td>
+            <td>@lineDetail.UnitPrice.ToString("0.00")</td>
+            <td>@lineDetail.Discount.ToString("0.00")</td>
+            <td>@lineDetail.LineTotal.ToString("0.00")</td>
+          </tr>
+        }
+        @for (int i = Model.OrderTotals.OrderLineDetails.Count; i < 26; i++)
+        {
+          <tr>
+            <td>&nbsp;</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        }
+      </table>
+    </div>
 
 </div>
 <br/>
@@ -289,11 +305,15 @@
 
   <!-- COMPANY BANKING DETAILS -->
   <div id="bankingdetails">
-    Banking details<hr/>
-    Bank: ABSA <br/>
-    Branch code: 632005<br/>
-    Account Name: Something Deposit account<br/>
-    Account No: 401 558 887
+    <strong>BANKING DETAILS</strong><hr />
+    @if (!String.IsNullOrWhiteSpace(Model.CompanyProfile.BankingDetails.BankName))
+    {
+      @Html.Raw("Bank: ")@Model.CompanyProfile.BankingDetails.BankName<br />
+      @Html.Raw("Branch Code: ")@Model.CompanyProfile.BankingDetails.BranchCode<br />
+      @Html.Raw("Account No: ")@Model.CompanyProfile.BankingDetails.AccountNo<br />
+      @Html.Raw("Account Type: ")@Model.CompanyProfile.BankingDetails.AccountType<br />
+      @Html.Raw("Account Holder: ")@Model.CompanyProfile.BankingDetails.AccountHolder<br />
+    }
   </div>
 
   <!-- ORDER TOTALS -->
@@ -301,15 +321,15 @@
     <table id="grid-ordertotals" width="100%">
       <tr class="bold-row">
         <td>SUB-TOTAL</td>
-        <td>1234345.00</td>
+        <td>@Model.OrderTotals.SubTotal.ToString("0.00")</td>
       </tr>
       <tr class="bold-row">
         <td>VAT INCLUDED</td>
-        <td>2134.00</td>
+        <td>@Model.OrderTotals.VatTotal.ToString("0.00")</td>
       </tr>
       <tr class="bold-row">
         <td>INVOICE TOTAL</td>
-        <td>1234345.00</td>
+        <td>@Model.OrderTotals.Total.ToString("0.00")</td>
       </tr>
     </table>
   </div>

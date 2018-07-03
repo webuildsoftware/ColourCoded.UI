@@ -7,6 +7,5 @@
     public string AccountType { get; set; }
     public string AccountNo { get; set; }
     public string AccountHolder { get; set; }
-
   }
 }

@@ -8,6 +8,7 @@ namespace ColourCoded.UI.Areas.Orders.Models.ResponseModels
     public int OrderId { get; set; }
     public string OrderNo { get; set; }
     public DateTime CreateDate { get; set; }
+    public string CreateUser { get; set; }
     public decimal SubTotal { get; set; }
     public decimal VatTotal { get; set; }
     public decimal Total { get; set; }

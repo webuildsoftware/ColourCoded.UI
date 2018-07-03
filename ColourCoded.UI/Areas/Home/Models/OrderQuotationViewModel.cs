@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using ColourCoded.UI.Areas.Orders.Models.ResponseModels;
+﻿using ColourCoded.UI.Areas.Orders.Models.ResponseModels;
 
 namespace ColourCoded.UI.Areas.Home.Models
 {

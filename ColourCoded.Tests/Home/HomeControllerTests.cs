@@ -212,9 +212,9 @@ namespace ColourCoded.Tests.Home
         }
       };
 
-      var requestModel = new DownloadOrderRequestModel { OrderId = orderId };
+      var requestModel = new GetOrderQuoteRequestModel { OrderId = orderId, CompanyProfileId = 1 };
 
-      resources.MockApiCaller.AddMockResponse("WebApi:Orders:DownloadOrder", requestModel, responseModel);
+      resources.MockApiCaller.AddMockResponse("WebApi:Orders:GetOrderQuote", requestModel, responseModel);
 
       // when
       var result = resources.Controller.DownloadOrder(orderId, orderNo) as ViewAsPdf;
