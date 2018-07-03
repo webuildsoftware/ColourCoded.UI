@@ -6,10 +6,11 @@
 
 <style>
   #main {
-    top:40px;
+    top: 40px;
     width: 880px;
-    height: 1000px;
+    height: 1050px;
     border: 1px solid;
+    font-family: Arial, Helvetica, sans-serif;
   }
 
   #footer {
@@ -22,36 +23,85 @@
     position: absolute;
     left: 20px;
     top: 10px;
-    height: 250px;
-    width: 400px;
-    display: inline-block;
+    right: 20px;
+    height: 245px;
+    width: 375px;
     border: 1px solid;
-    padding-left: 20px;
-    font-family: Arial, Helvetica, sans-serif;
+    padding-left: 10px;
   }
 
   #ordersummary {
-    height: 250px;
-    width: 430px;
+    position: absolute;
+    left: 420px;
+    top: 10px;
+    height: 245px;
+    width: 460px;
+  }
+
+  #grid-ordersummary tr td {
+    text-align: center;
+    width: 50%;
+    border: 1px solid;
+  }
+
+  #grid-ordersummary {
+    border-collapse: collapse;
     display: inline-block;
+    vertical-align: bottom;
+    height:100%;
+  }
+
+  .bold-row {
+    font-weight: bold;
   }
 </style>
 
 @*width 595 pixels x 842 length*@
 <div id="main">
+
   <div id="companyprofile">
-    <h3>RUGAYA MIA CATERING CC.</h3>
+    <h3 style="text-align: center">RUGAYA MIA CATERING CC.</h3>
+    Reg. No. 2018/83478234 &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;VAT. No. 398476234<br />
+    <hr />
     43 Stamen Street<br />
-    Retreat<br />
-    Cape Town<br />
+    Retreat, Cape Town<br />
     South Africa<br />
-    7945<br /><br />
+    7945<br />
     Tel: 021 712 5588<br />
     Cell: 074 884 1122<br />
     Email: gayamia@hotmail.com
   </div>
+
+  <div id="ordersummary">
+    <table id="grid-ordersummary" width="100%">
+      <tr class="bold-row">
+        <td>ORDER NUMBER</td>
+        <td>DATE CREATED</td>
+      </tr>
+      <tr>
+        <td>TEST34</td>
+        <td>24 July 2018</td>
+      </tr>
+      <tr class="bold-row">
+        <td>SALES PERSON</td>
+        <td>CUSTOMER NAME</td>
+      </tr>
+      <tr>
+        <td>Nabeela Lagerdien</td>
+        <td>PresLes IT Staff Lagerdien</td>
+      </tr>
+      <tr class="bold-row">
+        <td>CUSTOMER CONTACT NO</td>
+        <td>CUSTOMER ACC NO</td>
+      </tr>
+      <tr>
+        <td>021 714 5588</td>
+        <td>DE3298</td>
+      </tr>
+    </table>
+  </div>
 </div>
 <br />
 <div id="footer">
-  1234124134
+
 </div>
