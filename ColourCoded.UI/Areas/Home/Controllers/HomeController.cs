@@ -6,6 +6,7 @@ using ColourCoded.UI.Shared.WebApiCaller;
 using ColourCoded.UI.Areas.Security.Models.Login;
 using System;
 using System.Collections.Generic;
+using ColourCoded.UI.Areas.Orders.Models.RequestModels;
 using Rotativa.AspNetCore;
 
 namespace ColourCoded.UI.Areas.Home.Controllers
@@ -58,7 +59,10 @@ namespace ColourCoded.UI.Areas.Home.Controllers
     public IActionResult DownloadOrder(int orderId, string orderNo)
     {
       string filename = orderNo + ".pdf";
-      return new ViewAsPdf("OrderQuotation");
+
+      var result = WebApiCaller.PostAsync<OrderQuotationViewModel>("WebApi:Orders:DownloadOrder", new DownloadOrderRequestModel { OrderId = orderId });
+
+      return new ViewAsPdf("OrderQuotation", result);
     }
 
     public ViewResult Error(GlobalErrorModel webApiErrorModel)

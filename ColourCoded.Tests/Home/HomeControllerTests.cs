@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using ColourCoded.UI.Areas.Home.Controllers;
 using ColourCoded.UI.Areas.Home.Models;
+using ColourCoded.UI.Areas.Orders.Models.RequestModels;
+using ColourCoded.UI.Areas.Orders.Models.ResponseModels;
 using ColourCoded.UI.Areas.Security.Models.Login;
 using ColourCoded.UI.Shared;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using Rotativa.AspNetCore;
 
 namespace ColourCoded.Tests.Home
 {
@@ -118,6 +121,113 @@ namespace ColourCoded.Tests.Home
       Assert.AreEqual(1, model.Orders.Count);
       Assert.AreEqual(orders[0].OrderNo, model.Orders[0].OrderNo);
       Assert.AreEqual(orders[0].Total, model.Orders[0].Total);
+    }
+
+    [TestMethod]
+    public void DownloadOrderQuotation()
+    {
+      // given
+      var resources = new Resources();
+      const string orderNo = "TEST123";
+      const int orderId = 123;
+      var responseModel = new OrderQuotationViewModel
+      {
+        CustomerDetail = new OrderCustomerDetailModel
+        {
+          OrderId = orderId,
+          CustomerName = "Test Costume",
+          CustomerDetails = "This is some long customer description",
+          CustomerContactNo = "0214472215",
+          CustomerAccountNo = "DC1122",
+          CustomerMobileNo = "0728543333",
+          CustomerEmailAddress = "someemail@gmail.com",
+          ContactAdded = false,
+          ContactName = "Contraption",
+          ContactNo = "0214472215",
+          ContactEmailAddress = "someemail@gmail.com",
+        },
+        DeliveryAddress = new AddressDetailsModel
+        {
+          AddressDetailId = 1,
+          AddressType = "Work",
+          AddressLine1 = "24 Victoria Street",
+          AddressLine2 = "Muizenberg",
+          City = "Cape Town",
+          PostalCode = "7786",
+          Country = "RSA",
+          CreateUser = resources.TestUsername,
+          CreateDate = DateTime.Now
+        },
+        OrderTotals = new OrderDetailModel
+        {
+          OrderId = orderId,
+          OrderNo = "CCoT" + orderId.ToString(),
+          CreateDate = DateTime.Now,
+          SubTotal = 800M,
+          VatTotal = 120M,
+          Total = 920M,
+          Discount = 0M,
+          OrderLineDetails = new List<OrderLineDetailModel>
+          {
+            new OrderLineDetailModel
+            {
+              OrderId = orderId,
+              ItemDescription = "TestProduct",
+              UnitPrice = 100M,
+              Quantity = 2,
+              Discount = 0M,
+              LineTotal = 200M
+            },
+            new OrderLineDetailModel
+            {
+              OrderId = orderId,
+              ItemDescription = "AnotherProductName",
+              UnitPrice = 300M,
+              Quantity = 2,
+              Discount = 0M,
+              LineTotal = 600M
+            },
+          }
+        },
+        CompanyProfile = new CompanyProfileModel
+        {
+          AddressLine1 = "24 Victoria Street",
+          AddressLine2 = "Muizenberg",
+          City = "Cape Town",
+          PostalCode = "7786",
+          Country = "RSA",
+          EmailAddress = "someemail@gmail.com",
+          DisplayName = "A Nice Company Name",
+          RegistrationNo = "2018/2378945",
+          TaxReferenceNo = "819823",
+          TelephoneNo = "0217123344",
+          BankingDetails = new BankingDetailsModel
+          {
+            AccountNo = "4075896644",
+            AccountHolder = "Some Account Holder",
+            AccountType = "Cheque",
+            BankName = "ABSA",
+            BranchCode = "632005"
+          }
+        }
+      };
+
+      var requestModel = new DownloadOrderRequestModel { OrderId = orderId };
+
+      resources.MockApiCaller.AddMockResponse("WebApi:Orders:DownloadOrder", requestModel, responseModel);
+
+      // when
+      var result = resources.Controller.DownloadOrder(orderId, orderNo) as ViewAsPdf;
+
+      // then
+      Assert.IsNotNull(result);
+      var model = (OrderQuotationViewModel) result.Model;
+      Assert.IsNotNull(model);
+      Assert.AreEqual("OrderQuotation", result.ViewName);
+      Assert.AreEqual(model.CompanyProfile, responseModel.CompanyProfile);
+      Assert.AreEqual(model.CustomerDetail, responseModel.CustomerDetail);
+      Assert.AreEqual(model.DeliveryAddress, responseModel.DeliveryAddress);
+      Assert.AreEqual(model.OrderTotals, responseModel.OrderTotals);
     }
   }
 }
