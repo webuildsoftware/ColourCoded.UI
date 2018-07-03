@@ -8,25 +8,35 @@
   #main {
     top: 40px;
     width: 880px;
-    height: 1050px;
+    height: 1110px;
     border: 1px solid;
+    border-radius: 2px;
     font-family: Arial, Helvetica, sans-serif;
   }
 
   #footer {
+    position: relative;
     width: 880px;
-    height: 200px;
+    height: 165px;
     border: 1px solid;
+    border-radius: 2px;
+    font-family: Arial, Helvetica, sans-serif;
   }
 
+  .bold-row {
+    font-weight: bold;
+  }
+
+  /* ROW 1 */ 
   #companyprofile {
     position: absolute;
     left: 20px;
     top: 10px;
     right: 20px;
     height: 245px;
-    width: 375px;
+    width: 380px;
     border: 1px solid;
+    border-radius: 2px;
     padding-left: 10px;
   }
 
@@ -42,23 +52,132 @@
     text-align: center;
     width: 50%;
     border: 1px solid;
+    border-radius: 2px;
   }
 
   #grid-ordersummary {
     border-collapse: collapse;
     display: inline-block;
     vertical-align: bottom;
-    height:100%;
+    height: 100%;
   }
 
-  .bold-row {
-    font-weight: bold;
+  /* ROW 2 */
+  #contactdetails {
+    position: absolute;
+    left: 20px;
+    top: 265px;
+    right: 20px;
+    height: 130px;
+    width: 380px;
+    border: 1px solid;
+    border-radius: 1px;
+    padding-left: 10px;
+  }
+
+  #deliveryaddress {
+    position: absolute;
+    left: 420px;
+    top: 265px;
+    height: 130px;
+    width: 447px;
+    border: 1px solid;
+    border-radius: 1px;
+    padding-left: 10px;
+  }
+
+  /* ROW 3 */
+
+  #orderdetail {
+    position: absolute;
+    left: 10px;
+    top: 405px;
+    right: 20px;
+    height: 650px;
+    width: 860px;
+    padding-left: 10px;
+  }
+
+  #grid-orderdetail tr td {
+    text-align: right;
+    border-left: 1px solid;
+    border-right: 1px solid;
+    padding: 3px;
+  }
+
+
+  #grid-orderdetail tr:first-child td {
+    border: 1px solid;
+  }
+
+  #grid-orderdetail tr td:first-child {
+    width: 500px;
+    text-align: left;
+  }
+
+  #grid-orderdetail tr td:nth-child(2) {
+    width: 50px;
+    text-align: center;
+  }
+
+  #grid-orderdetail tr td:nth-child(3) {
+    width: 90px;
+    text-align: center;
+  }
+
+  #grid-orderdetail tr:last-child {
+    border-bottom: 1px solid;
+  }
+
+  #grid-orderdetail {
+    border-collapse: collapse;
+  }
+
+  /* ROW 4 */
+
+  #bankingdetails {
+    position: absolute;
+    left: 10px;
+    top: 5px;
+    right: 20px;
+    height: 150px;
+    width: 480px;
+    border: 1px solid;
+    border-radius: 1px;
+    padding-left: 10px;
+  }
+
+  #ordertotals {
+    position: absolute;
+    left: 520px;
+    top: 5px;
+    height: 150px;
+    width: 355px;
+  }
+
+  #grid-ordertotals tr td {
+    width: 50%;
+    padding-left: 10px;
+    padding-right: 10px;
+    border: 1px solid;
+    border-radius: 1px;
+  }
+
+  #grid-ordertotals tr td:last-child {
+    text-align: right;
+  }
+
+  #grid-ordertotals {
+    border-collapse: collapse;
+    display: inline-block;
+    vertical-align: bottom;
+    height: 100%;
   }
 </style>
 
-@*width 595 pixels x 842 length*@
 <div id="main">
-
+  
+  <!-- COMPANY PROFILE INFORMATION -->
   <div id="companyprofile">
     <h3 style="text-align: center">RUGAYA MIA CATERING CC.</h3>
     Reg. No. 2018/83478234 &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;VAT. No. 398476234<br />
@@ -72,6 +191,7 @@
     Email: gayamia@hotmail.com
   </div>
 
+  <!-- CUSTOMER AND ORDER DETAILS-->
   <div id="ordersummary">
     <table id="grid-ordersummary" width="100%">
       <tr class="bold-row">
@@ -100,8 +220,98 @@
       </tr>
     </table>
   </div>
+  
+  <!-- CUSTOMER CONTACT DETAILS -->
+  <div id="contactdetails">
+    INVOICE TO<hr />
+    ZUNAID <br />
+    Contact No: 021 98354293<br />
+    Email: zlagerdine@dkj.com
+  </div>
+  
+  <!-- DELIVERY ADDRESS DETAILS -->
+  <div id="deliveryaddress">
+    DELIVERY ADDRESS<hr />
+    43 Stamen Street<br />
+    Retreat, Cape Town<br />
+    South Africa<br />
+    7945<br />
+  </div>
+  
+  <!-- ORDER DETAILS (MAX 24 Lines) -->
+  
+  <div id="orderdetail">
+    <table id="grid-orderdetail" width="100%">
+      <tr class="bold-row">
+        <td>ITEM DESCRIPTION</td>
+        <td>UNIT QTY</td>
+        <td>UNIT PRICE</td>
+        <td>DISCOUNT</td>
+        <td>LINE TOTAL</td>
+      </tr>
+      <tr>
+        <td>Mince Samoosas</td>
+        <td>3</td>
+        <td>4.00</td>
+        <td>0.00</td>
+        <td>888888888.00</td>
+      </tr>
+      <tr>
+        <td>Mince Samoosas</td>
+        <td>3</td>
+        <td>4.00</td>
+        <td>0.00</td>
+        <td>12.00</td>
+      </tr>
+      <tr>
+        <td>Mince Samoosas</td>
+        <td>3</td>
+        <td>4.00</td>
+        <td>0.00</td>
+        <td>12.00</td>
+      </tr>
+      @for (int i = 1; i < 24; i++)
+      {
+        <tr>
+          <td>&nbsp;</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+      }
+    </table>
+  </div>
+
 </div>
-<br />
+<br/>
 <div id="footer">
+
+  <!-- COMPANY BANKING DETAILS -->
+  <div id="bankingdetails">
+    Banking details<hr/>
+    Bank: ABSA <br/>
+    Branch code: 632005<br/>
+    Account Name: Something Deposit account<br/>
+    Account No: 401 558 887
+  </div>
+
+  <!-- ORDER TOTALS -->
+  <div id="ordertotals">
+    <table id="grid-ordertotals" width="100%">
+      <tr class="bold-row">
+        <td>SUB-TOTAL</td>
+        <td>1234345.00</td>
+      </tr>
+      <tr class="bold-row">
+        <td>VAT INCLUDED</td>
+        <td>2134.00</td>
+      </tr>
+      <tr class="bold-row">
+        <td>INVOICE TOTAL</td>
+        <td>1234345.00</td>
+      </tr>
+    </table>
+  </div>
 
 </div>
