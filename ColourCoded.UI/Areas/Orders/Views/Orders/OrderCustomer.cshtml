@@ -73,7 +73,7 @@
       <div>
         <span>Customer Contact No</span>
         <br />
-        <input type="text" id="customercontactno" placeholder="Enter a contact no" maxlength="10" />
+        <input type="text" id="customercontactno" class="number" placeholder="Enter a contact no" maxlength="10" />
       </div>
       <div>
         <span>Customer Account No</span>
@@ -83,7 +83,7 @@
       <div>
         <span>Customer Mobile No</span>
         <br />
-        <input type="text" id="customermobileno" placeholder="Enter mobile no (optional)" maxlength="10" />
+        <input type="text" id="customermobileno" class="number" placeholder="Enter mobile no (optional)" maxlength="10" />
       </div>
       <div>
         <span>Customer Email</span>
@@ -110,7 +110,7 @@
       <div>
         <span>Contact No</span>
         <br />
-        <input type="text" id="contactno" placeholder="Enter a contact no" maxlength="10" />
+        <input type="text" id="contactno" class="number" placeholder="Enter a contact no" maxlength="10" />
       </div>
       <div>
         <span>Contact Email</span>
@@ -163,9 +163,7 @@
         }
       });
 
-      // check to see if the change customer details button was clicked
       if (queryString != undefined) {
-
         // get order id from query string
         orderId = queryString.split("&")[0].split("=")[1];
         orderNo = queryString.split("&")[1].split("=")[1];
@@ -249,28 +247,14 @@
       location.href = '@Url.Action("Index", "Home", new { area = "Home" })'
     });
 
-    $("#customercontactno").keypress(function (event) {
-      var quantity = $(this).val();
+    $("input[class='number']").keyup(function (event) {
+      var keyValue = $(this).val();
 
       if (!$.isNumeric(event.key))
-        $(this).val(quantity.replace(event.key, ""));
-
+        $(this).val(keyValue.replace(event.key, ""));
     });
 
-    $("#customercontactno").change(function (event) {
-      if (!$.isNumeric($(this).val()))
-        $(this).val("");
-    });
-
-    $("#customermobileno").keypress(function (event) {
-      var quantity = $(this).val();
-
-      if (!$.isNumeric(event.key))
-        $(this).val(quantity.replace(event.key, ""));
-
-    });
-
-    $("#customermobileno").change(function (event) {
+    $("input[class='number']").change(function (event) {
       if (!$.isNumeric($(this).val()))
         $(this).val("");
     });
@@ -278,21 +262,6 @@
     $("#contactname").keypress(function (event) { $(this).removeClass(); });
     $("#customername").keypress(function (event) { $(this).removeClass(); });
     $("#customercontactno").keypress(function (event) { $(this).removeClass(); });
-
-    $("#contactno").keypress(function (event) {
-      $(this).removeClass();
-      var quantity = $(this).val();
-
-      if (!$.isNumeric(event.key))
-        $(this).val(quantity.replace(event.key, ""));
-
-      if (event.keyCode == 13) { $("#done").click(); }
-    });
-
-    $("#contactno").change(function (event) {
-      if (!$.isNumeric($(this).val()))
-        $(this).val("");
-    });
 
     function validateEmail(email) {
       var pattern = /^[a-zA-Z0-9\-_]+(\.[a-zA-Z0-9\-_]+)*@@[a-z0-9]+(\-[a-z0-9]+)*(\.[a-z0-9]+(\-[a-z0-9]+)*)*\.[a-z]{2,4}$/;

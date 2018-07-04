@@ -56,13 +56,14 @@ namespace ColourCoded.UI.Areas.Home.Controllers
       }
     }
 
+    [Authorize]
     public IActionResult DownloadOrder(int orderId, string orderNo)
     {
       string filename = orderNo + ".pdf";
 
       var result = WebApiCaller.PostAsync<OrderQuotationViewModel>("WebApi:Orders:GetOrderQuote", new GetOrderQuoteRequestModel { OrderId = orderId, CompanyProfileId = CurrentUser.CompanyProfileId});
 
-      return new ViewAsPdf("OrderQuotation", result);
+      return new ViewAsPdf("OrderQuotation", result) { FileName = filename };
     }
 
     public ViewResult Error(GlobalErrorModel webApiErrorModel)

@@ -233,6 +233,12 @@
     $("#city").keypress(function (event) { $(this).removeClass(); });
     $("#postalcode").keypress(function (event) { $(this).removeClass(); });
 
+    $("input[type=text]").keyup(function (event) {
+      if (event.keyCode == 13) {
+        $("#done").click();
+      }
+    });
+
     function isValidForm() {
       var valid = true;
 

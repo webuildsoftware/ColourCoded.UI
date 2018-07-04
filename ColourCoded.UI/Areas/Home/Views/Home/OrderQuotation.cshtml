@@ -246,10 +246,10 @@
     @if (!String.IsNullOrWhiteSpace(Model.CustomerDetail.ContactName))
     {
       @Model.CustomerDetail.ContactName <br />
-      @Html.Raw("ContactNo: ")@Model.CustomerDetail.ContactNo <br />
     }
-    @if (!String.IsNullOrWhiteSpace(Model.CustomerDetail.ContactEmailAddress))
+    @if (!String.IsNullOrWhiteSpace(Model.CustomerDetail.ContactNo))
     {
+      @Html.Raw("ContactNo: ")@Model.CustomerDetail.ContactNo <br />
       @Html.Raw("Email: ")@Model.CustomerDetail.ContactEmailAddress
     }
   </div>
