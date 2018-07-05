@@ -43,33 +43,37 @@
   }
 
   .orderno {
-    width:100px;
+    width:110px;
   }
 </style>
 <h3 id="header">Create Quote</h3>
 <div id="main">
   <div>
-    <span>Item Description</span>
-    <br />
+    <span>Order No</span><br />
+    <input type="text" id="ordernoprefix" class="orderno" placeholder="Enter prefix" />
+    <input type="text" id="ordernoseed" style="width:64px" disabled="disabled" onkeypress="return false;" />
+  </div>
+  <div>
+    <span>Item Description</span><br />
     <input type="text" id="product" placeholder="Enter item description" />
   </div>
   <div>
-    <span>Unit Price</span>
-    <br />
+    <span>Unit Price</span><br />
     <input type="text" id="unitprice" class="number" placeholder="Enter unit price" />
   </div>
   <div>
-    <span>Quantity</span>
-    <br />
+    <span>Quantity</span><br />
     <input type="text" id="quantity" class="number" placeholder="Enter quantity" />
   </div>
   <div>
-    <span>Discount</span>
-    <br />
+    <span>Discount</span><br />
     <input type="text" id="discount" class="number" placeholder="Enter discount amount" />
   </div>
   <div>
-    <input id="lineitem" value="Add" type="button" />
+    <input id="lineitem" value="Add" type="button" />&nbsp;&nbsp;
+    <input id="cancel" value="Cancel" type="button" />&nbsp;&nbsp;
+    <input id="done" value="Done" type="button" />
+    <label id="validorder" class="validationLabel"></label>
   </div>
   <div>
     <br />
@@ -77,7 +81,7 @@
       <thead>
         <tr>
           <td>Item Description</td>
-          <td>Unit</td>
+          <td>Qty</td>
           <td>Unit Price</td>
           <td>Discount</td>
           <td>Line Total</td>
@@ -85,14 +89,6 @@
       </thead>
       <tbody></tbody>
     </table>
-  </div>
-  <div>
-    <br /><span>Order No</span><br />
-    <input type="text" id="ordernoprefix" class="orderno" placeholder="Enter prefix" />
-    <input type="text" id="ordernoseed" class="orderno" onkeypress="return false;" />&nbsp;&nbsp;
-    <input id="done" value="Done" type="button" />
-    <input id="cancel" value="Cancel" type="button" />
-    <label id="validorder" class="validationLabel"></label>
   </div>
 </div>
 

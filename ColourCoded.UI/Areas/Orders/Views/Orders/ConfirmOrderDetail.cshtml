@@ -68,30 +68,30 @@
             <tr>
               <td style="border-right:1px solid">@lineDetail.ItemDescription</td>
               <td style="border-right:1px solid" align="center">@lineDetail.Quantity</td>
-              <td style="border-right:1px solid" align="right">R @lineDetail.UnitPrice.ToString("0.00")</td>
-              <td style="border-right:1px solid" align="right">R @lineDetail.Discount.ToString("0.00")</td>
-              <td align="right">R @lineDetail.LineTotal.ToString("0.00")</td>
+              <td style="border-right:1px solid" align="right">@lineDetail.UnitPrice.ToString("0.00")</td>
+              <td style="border-right:1px solid" align="right">@lineDetail.Discount.ToString("0.00")</td>
+              <td align="right">@lineDetail.LineTotal.ToString("0.00")</td>
             </tr>
           }
           <tr style="border-top:1px solid">
-            <td colspan="3" style="border-right:1px solid"></td>
-            <td style="border-right:1px solid"><strong>Sub Total</strong></td>
-            <td align="right"><strong>R @Model.SubTotal.ToString("0.00")</strong></td>
+            <td colspan="2" style="border-right:1px solid"></td>
+            <td colspan="2" style="border-right:1px solid"><strong>Sub Total</strong></td>
+            <td align="right"><strong>@Model.SubTotal.ToString("0.00")</strong></td>
           </tr>
           <tr>
-            <td colspan="3" style="border-right:1px solid"></td>
-            <td style="border-right:1px solid"><strong>VAT</strong></td>
-            <td align="right"><strong>R @Model.VatTotal.ToString("0.00")</strong></td>
+            <td colspan="2" style="border-right:1px solid"></td>
+            <td colspan="2" style="border-right:1px solid"><strong>VAT</strong></td>
+            <td align="right"><strong>@Model.VatTotal.ToString("0.00")</strong></td>
           </tr>
           <tr>
-            <td colspan="3" style="border-right:1px solid"></td>
-            <td style="border-right:1px solid"><strong>Discount Included&nbsp;</strong></td>
-            <td align="right"><strong>R @Model.Discount.ToString("0.00")</strong></td>
+            <td colspan="2" style="border-right:1px solid"></td>
+            <td colspan="2" style="border-right:1px solid"><strong>Discount&nbsp;</strong></td>
+            <td align="right"><strong>@Model.Discount.ToString("0.00")</strong></td>
           </tr>
           <tr>
-            <td colspan="3" style="border-right:1px solid"></td>
-            <td style="border-right:1px solid"><strong>Total</strong></td>
-            <td align="right"><strong>R @Model.Total.ToString("0.00")</strong></td>
+            <td colspan="2" style="border-right:1px solid"></td>
+            <td colspan="2" style="border-right:1px solid"><strong>Total</strong></td>
+            <td align="right"><strong>@Model.Total.ToString("0.00")</strong></td>
           </tr>
         }
       </tbody>

@@ -2,80 +2,89 @@
 
 @{
   ViewData["Title"] = "Login";
-  Layout = "_Layout";
 }
 
-<style>
-  input[type=button] {
-    width: 100px;
-  }
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <link href="~/css/bootstrap.css" rel="stylesheet" />
+  <link href="~/css/font-awesome.css" rel="stylesheet" />
+  <link href="~/css/sb-admin-2.css" rel="stylesheet" />
+  <script src="~/lib/jquery/dist/jquery.min.js"></script>
+</head>
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4 col-md-offset-4">
+        <div class="login-panel panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Please Sign In</h3>
+          </div>
+          <div class="panel-body">
+            @using (Html.BeginForm("Login", "Authenticate", FormMethod.Post, new { id = "loginForm" }))
+            {
+            <fieldset>
+              <div id="divusername" class="form-group">
+                <input class="form-control" placeholder="Username" name="username" id="username" type="text" autofocus />
+              </div>
+              <div id="divpassword" class="form-group">
+                <input class="form-control" placeholder="Password" name="password" id="password" type="password" />
+              </div>
+              <input id="login" class="btn btn-lg btn-success btn-block" value="Login" type="button" />
+              <input id="register" class="btn btn-lg btn-success btn-block" value="Register" type="button" />
+              <div class="checkbox">
+                <a class="link-small" href="@Url.Action("ForgottenPasswordIndex", "Authenticate")">Forgotten password?</a>
+              </div>
+              @if (!string.IsNullOrWhiteSpace(Model.ErrorMessage))
+              {
+                <div class="alert alert-danger">
+                  <span>@Html.DisplayFor(m => Model.ErrorMessage)</span>
+                </div>
+              }
+            </fieldset>
+              @Html.AntiForgeryToken();
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
 
-  .link-small {
-    font-size: 11px;
-    cursor: pointer;
-  }
+<script>
+  $("#register").click(function () {
+    window.location.href = 'https://www.ccinvoice.com/' + '@Url.Action("RegisterIndex", "Authenticate")';
+  });
 
-  .validationLabel {
-    color: red;
-    width: 150px;
-    font-size: 11px;
-  }
-</style>
+  $("#login").click(function () {
+    if (validForm()) {
 
-<h2>Login</h2>
 
-@using (Html.BeginForm("Login", "Authenticate", FormMethod.Post, new { id = "loginForm" }))
-{
-  <label for="username">Username: </label>
-  <input id="username" name="username" type="text" value="@Model.Username" /><br /><br />
-
-  <label for="password">Password: </label>
-  <input id="password" name="password" type="password" /><br /><br />
-
-  <input type="button" id="login" value="Login" />
-  <input type="button" id="register" value="Register" />
-  <span class="validationLabel">@Html.DisplayFor(m => Model.ErrorMessage, new { @class = "validationLabel" })</span>
-
-  @Html.AntiForgeryToken();
-}
-
-<a class="link-small" href="@Url.Action("ForgottenPasswordIndex", "Authenticate")">Forgotten password?</a>
-
-@section Scripts
-  {
-  <script>
-    $("#register").click(function () {
-      window.location.href = 'https://www.ccinvoice.com/' + '@Url.Action("RegisterIndex", "Authenticate")';
-    });
-
-    $("#username").keyup(function () {
-      $(this).removeClass();
-    });
-
-    $("#password").keyup(function () {
-      $(this).removeClass();
-    });
-
-    $("#login").click(function () {
-      if (validForm()) {
-        $("#loginForm").submit();
-      }
-    });
-
-    function validForm() {
-      var isValid = true;
-
-      if ($("#username").val() == "") {
-        $("#username").addClass("alert-danger");
-        isValid = false;
-      }
-
-      if ($("#password").val() == "") {
-        $("#password").addClass("alert-danger");
-        isValid = false;
-      }
-
-      return isValid;
+      $("div").removeClass("has-error");
+      $("#loginForm").submit();
     }
-  </script>
-}
+
+  });
+
+  function validForm() {
+    var isValid = true;
+
+    if ($("#username").val() == "") {
+      $("#username").addClass("text-danger");
+      $("#divusername").addClass("has-error");
+      isValid = false;
+    }
+
+    if ($("#password").val() == "") {
+      $("#password").addClass("text-danger");
+      $("#divpassword").addClass("has-error");
+      isValid = false;
+    }
+
+    return isValid;
+  }
+
+</script>
