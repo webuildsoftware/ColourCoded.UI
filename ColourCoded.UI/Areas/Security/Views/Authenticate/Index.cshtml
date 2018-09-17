@@ -10,10 +10,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="">
   <meta name="author" content="">
-  <link href="~/css/bootstrap.css" rel="stylesheet" />
-  <link href="~/css/font-awesome.css" rel="stylesheet" />
+
+  <link href="~/lib/font-awesome/css/font-awesome.css" rel="stylesheet" />
+  <link href="~/lib/bootstrap/css/bootstrap.css" rel="stylesheet" />
   <link href="~/css/sb-admin-2.css" rel="stylesheet" />
+  <link href="~/css/metisMenu.css" rel="stylesheet" />
+
   <script src="~/lib/jquery/dist/jquery.min.js"></script>
+  <script src="~/lib/metismenu/metisMenu.min.js"></script>
+  <script src="~/lib/theme/sb-admin-2.js"></script>
+  <script src="~/lib/bootstrap/js/bootstrap.js"></script>
 </head>
 <body>
   <div class="container">
@@ -26,25 +32,25 @@
           <div class="panel-body">
             @using (Html.BeginForm("Login", "Authenticate", FormMethod.Post, new { id = "loginForm" }))
             {
-            <fieldset>
-              <div id="divusername" class="form-group">
-                <input class="form-control" placeholder="Username" name="username" id="username" type="text" autofocus />
-              </div>
-              <div id="divpassword" class="form-group">
-                <input class="form-control" placeholder="Password" name="password" id="password" type="password" />
-              </div>
-              <input id="login" class="btn btn-lg btn-success btn-block" value="Login" type="button" />
-              <input id="register" class="btn btn-lg btn-success btn-block" value="Register" type="button" />
-              <div class="checkbox">
-                <a class="link-small" href="@Url.Action("ForgottenPasswordIndex", "Authenticate")">Forgotten password?</a>
-              </div>
-              @if (!string.IsNullOrWhiteSpace(Model.ErrorMessage))
-              {
-                <div class="alert alert-danger">
-                  <span>@Html.DisplayFor(m => Model.ErrorMessage)</span>
+              <fieldset>
+                <div id="divusername" class="form-group">
+                  <input class="form-control" placeholder="Username" name="username" id="username" type="text" autofocus />
                 </div>
-              }
-            </fieldset>
+                <div id="divpassword" class="form-group">
+                  <input class="form-control" placeholder="Password" name="password" id="password" type="password" />
+                </div>
+                <input id="login" class="btn btn-lg btn-success btn-block" value="Login" type="button" />
+                <input id="register" class="btn btn-lg btn-success btn-block" value="Register" type="button" />
+                <div class="checkbox">
+                  <a class="link-small" href="@Url.Action("ForgottenPasswordIndex", "Authenticate")">Forgotten password?</a>
+                </div>
+                @if (!string.IsNullOrWhiteSpace(Model.ErrorMessage))
+                {
+                  <div class="alert alert-danger">
+                    <span>@Html.DisplayFor(m => Model.ErrorMessage)</span>
+                  </div>
+                }
+              </fieldset>
               @Html.AntiForgeryToken();
             }
           </div>
@@ -56,7 +62,7 @@
 
 <script>
   $("#register").click(function () {
-    window.location.href = 'https://www.ccinvoice.com/' + '@Url.Action("RegisterIndex", "Authenticate")';
+    window.location.href = '@Url.Action("RegisterIndex", "Authenticate", new { @area="Security"})';
   });
 
   $("#login").click(function () {

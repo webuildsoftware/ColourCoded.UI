@@ -1,55 +1,152 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>@ViewData["Title"] - ColourCoded.UI</title>
-  <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
-  <link href="~/css/themes/base/jquery-ui.min.css" rel="stylesheet" />
-  <link rel="stylesheet" href="~/css/site.css" />
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link href="~/lib/font-awesome/css/font-awesome.css" rel="stylesheet" />
+  <link href="~/lib/bootstrap/css/bootstrap.css" rel="stylesheet" />
+  <link href="~/css/sb-admin-2.css" rel="stylesheet" />
+  <link href="~/css/metisMenu.css" rel="stylesheet" />
+  <link href="~/lib/jquery-ui/jquery-ui.css" rel="stylesheet" />
+
   <script src="~/lib/jquery/dist/jquery.min.js"></script>
   <script src="~/lib/jquery-ui/jquery-ui-1.12.1.min.js"></script>
+  <script src="~/lib/metismenu/metisMenu.min.js"></script>
+  <script src="~/lib/theme/sb-admin-2.js"></script>
+  <script src="~/lib/bootstrap/js/bootstrap.js"></script>
+  <script src="~/lib/jquery-ui/jquery-ui-1.12.1.js"></script>
 </head>
 <body>
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">Colour Coded</a>
-            </div>
-            <div class="navbar-collapse collapse">
-              <ul class="nav navbar-nav">
-                <li><a asp-area="Home" asp-controller="Home" asp-action="Index">Home</a></li>
-                <li><a asp-area="Security" asp-controller="Roles" asp-action="Index">Roles</a></li>
-                <li><a asp-area="Security" asp-controller="Permissions" asp-action="Index">Permissions</a></li>
-                <li><a asp-area="Security" asp-controller="Authenticate" asp-action="ChangePasswordIndex">Change Password</a></li>
-                <li><a id="logout" asp-area="Security" asp-controller="Authenticate" asp-action="Logout">Logout</a></li>
+  <div id="wrapper">
+    <!-- Navigation -->
+    <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand">EZ Invoice</a>
+      </div>
+      <!-- /.navbar-header -->
+
+      <ul class="nav navbar-top-links navbar-right">
+        <!-- /. Top right corner dropdown -->
+        <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+            <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
+          </a>
+          <ul class="dropdown-menu dropdown-user">
+            <li>
+              <a><i class="fa fa-user fa-fw"></i> User Profile</a>
+            </li>
+            <li>
+              <a asp-area="Security" asp-controller="Authenticate" asp-action="ChangePasswordIndex"><i class="fa fa-gear fa-fw"></i> Change Password</a>
+            </li>
+            <li class="divider"></li>
+            <li>
+              <a data-toggle="modal" data-target="#SignOutModal"><i class="fa fa-sign-out fa-fw"></i> Sign Out</a>
+            </li>
+          </ul>
+          <!-- /.dropdown-user -->
+        </li>
+        <!-- /. Top right corner dropdown -->
+      </ul>
+      <!-- /.navbar-top-links -->
+
+      <div class="navbar-default sidebar" role="navigation">
+        <div class="sidebar-nav navbar-collapse">
+          <ul class="nav" id="side-menu">
+
+            @*<li class="sidebar-search">
+              <div class="input-group custom-search-form">
+                <input type="text" class="form-control" placeholder="Find Order...">
+                <span class="input-group-btn">
+                  <button class="btn btn-default" type="button">
+                    <i class="fa fa-search"></i>
+                  </button>
+                </span>
+              </div>
+            </li>*@
+            <li>
+              <a><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+            </li>
+            <li>
+              <a asp-area="Home" asp-controller="Home" asp-action="Index"><i class="fa fa-table fa-fw"></i> Orders</a>
+            </li>
+            <li>
+              <a><i class="fa fa-bar-chart-o fa-fw"></i> Customers<span class="fa arrow"></span></a>
+              <ul class="nav nav-second-level">
+                <li>
+                  <a>Manage Customers</a>
+                </li>
+                <li>
+                  <a>Statements</a>
+                </li>
               </ul>
-            </div>
+            </li>
+            <li>
+              <a><i class="fa fa-edit fa-fw"></i> Manage Products</a>
+            </li>
+            <li>
+              <a><i class="fa fa-edit fa-fw"></i> Company Profile</a>
+            </li>
+            <li>
+              <a><i class="fa fa-bar-chart-o fa-fw"></i> Security<span class="fa arrow"></span></a>
+              <ul class="nav nav-second-level">
+                <li>
+                  <a asp-area="Security" asp-controller="Roles" asp-action="Index">Roles</a>
+                </li>
+                <li>
+                  <a asp-area="Security" asp-controller="Permissions" asp-action="Index">Permissions</a>
+                </li>
+              </ul>
+            </li>
+          </ul>
         </div>
+        <!-- /.sidebar-collapse -->
+      </div>
+      <!-- /.navbar-static-side -->
     </nav>
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; 2018 - Colour Coded</p>
-        </footer>
+
+    <div id="page-wrapper">
+      @RenderBody()
     </div>
 
-    @RenderSection("Scripts", required: false)
+    <!-- Modal -->
+    <div class="modal fade" id="SignOutModal" tabindex="-1" role="dialog" aria-labelledby="SignOutModalLabel" aria-hidden="true">
+      <div class="modal-dialog" style="width:300px">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="SignOutModalLabel">Sign Out</h4>
+          </div>
+          <div class="modal-body">
+            Are you sure you would like to Sign Out?
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" id="logout">Yes</button>
+          </div>
+        </div>
+        <!-- /.modal-content -->
+      </div>
+      <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
+  </div>
+
+  @RenderSection("Scripts", required: false)
 
   <script>
     $('#logout').click(function (event) {
-      if (!confirm('Are you sure you want to log out?')) {
-        event.preventDefault();
-      }
-
+      window.location.href = '@Url.Action("Logout", "Authenticate", new { @area="Security"})';
     });
   </script>
+
 </body>
 </html>

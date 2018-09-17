@@ -6,124 +6,152 @@
 }
 
 <style>
-  table thead tr td {
-    background-color: lightgray;
+
+
+  .input-md {
+    width: 260px;
   }
 
-  table tr td {
-    padding: 2px;
+  #orders thead tr td {
+    font-weight:bold;
   }
 
-  table thead tr td:first-child {
-    width: 150px;
-  }
-
-  table tr td:last-child {
-    width: 25px;
+  #orders tbody tr td:nth-child(n+2) {
     cursor: pointer;
   }
 
-  input[type=button] {
-    width: 100px;
+  @@media only screen and (max-width: 600px) {
+    .modal-dialog {
+      position: absolute;
+      float: left;
+      top: 30%;
+      transform: translate(-50%, -50%);
+      width: auto;
+      margin: 10px;
+    }
   }
 
-  .validationLabel {
-    color: red;
-    width: 150px;
-    font-size: 11px;
-  }
-
-  .spaced {
-    padding: 3px;
-  }
-
-  #search tr td:first-child {
-    width: 50px;
-  }
-
-  #search tr td:nth-child(2) {
-    width: 200px;
-  }
-
-  table input[type=button]{
-    width:70px;
+  @@media only screen and (min-width: 600px) {
+    .modal-dialog {
+      position: absolute;
+      float: left;
+      left: 40%;
+      top: 30%;
+      transform: translate(-50%, -50%);
+      width: auto;
+      margin: 10px;
+    }
   }
 
 </style>
-<h3>Create a Quote in 3 easy steps</h3>
-<ol>
-  <li>Add Order Detail</li>
-  <li>Add Customer Detail [Optional]</li>
-  <li>Add Delivery Address Detail [Optional]</li>
-</ol>
-<input value="Create Quote" id="quote" type="button" /> &nbsp;&nbsp;
-<input id="findorder" type="button" value="Find Order" />
-<br />
-<br />
-<form id="period" method="post" action="@Url.Action("GetHomeOrdersByPeriod")">
-  <table id="search">
-    <tr>
-      <td>From:</td>
-      <td><input type="date" id="startDate" name="startDate" min="2018-01-01" max="2018-12-31" /></td>
-    </tr>
-    <tr>
-      <td>To:</td>
-      <td><input type="date" id="endDate" name="endDate" min="2018-01-01" max="2018-12-31" /></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td><input id="find" type="button" value="Find" />&nbsp;&nbsp;<input id="refresh" type="button" value="Cancel" /></td>
-    </tr>
-  </table>
-</form>
-@if (Model.Orders.Count > 0)
-{
 
-<div id="recentorders">
-  <h4>Recent Orders:</h4>
-  <input id="filter" type="text" placeholder="Filter" style="width:100px" /><br /><br />
-  <table id="orders">
-    <thead>
-      <tr>
-        <td>OrderNo</td>
-        <td>CreateDate</td>
-        <td>Total</td>
-        <td>Status</td>
-        <td></td>
-      </tr>
-    </thead>
-    <tbody>
-      @foreach (var order in Model.Orders)
-      {
-        <tr orderno="@order.OrderNo.ToUpper()">
-          <td data-orderId="@order.OrderId"><a href='@Url.Action("ConfirmOrderDetail", "Orders", new { area="Orders" })?orderId=@order.OrderId'>@order.OrderNo</a></td>
-          <td>@order.CreateDate</td>
-          <td style="text-align: right">@order.Total</td>
-          <td style="text-align: center">@order.Status</td>
-          <td style="text-align: center;">
-            @if (order.Status.ToUpper() == "ACCEPTED")
-            {
-              <i class="glyphicon glyphicon-download-alt" title="Download PDF" orderId="@order.OrderId" orderno="@order.OrderNo">
-
-              </i>
-            }
-          </td>
-        </tr>
-      }
-    </tbody>
-  </table>
-  <br />
+<div class="row">
+  <div class="col-md-5">
+    <h3 class="page-header">
+      Orders
+      <div class="pull-right">
+        <button type="button" id="quote" class="btn btn-success">New Quote</button>&nbsp;
+        <button type="button" id="findorder" class="btn btn-info">Find Order</button>
+      </div>
+    </h3>
+  </div>
 </div>
 
+<div class="row">
+  <div class="col-md-5">
+    <form id="period" method="post" action="@Url.Action("GetHomeOrdersByPeriod")">
+      <div class="form-group">
+        <label>Date from</label>
+        <input type="date" id="startDate" class="form-control input-md" name="startDate" min="2018-01-01" max="2018-12-31" />
+      </div>
+
+      <div class="form-group">
+        <label>Date To</label>
+        <input type="date" id="endDate" class="form-control input-md" name="endDate" min="2018-01-01" max="2018-12-31" />
+      </div>
+
+      <div class="form-group">
+        <button type="button" id="find" class="btn btn-primary">&nbsp;Find&nbsp;</button>&nbsp;
+        <button type="button" id="refresh" class="btn btn-default">Cancel</button>
+      </div>
+
+    </form>
+  </div>
+</div>
+
+@if (Model.Orders.Count > 0)
+{
+  <div class="row">
+    <div class="col-md-5">
+      <div id="recentorders">
+        <input type="text" id="filter" class="form-control input-md" placeholder="Filter">
+        <br />
+        <table width="100%" id="orders" class="table table-striped table-bordered table-hover">
+          <thead>
+            <tr>
+              <td></td>
+              <td>OrderNo</td>
+              <td>Status</td>
+              <td>Created</td>
+              <td>Total</td>
+            </tr>
+          </thead>
+          <tbody>
+            @foreach (var order in Model.Orders)
+            {
+              <tr orderno="@order.OrderNo.ToUpper()" data-orderId="@order.OrderId" data-toggle="modal" data-target="#ViewOrderModal">
+                <td style="text-align: center;">
+                  @if (order.Status.ToUpper() == "ACCEPTED")
+                  {
+                    <button type="button" class="btn btn-info btn-circle" title="Download PDF">
+                      <i class="fa fa-download" orderId="@order.OrderId" orderno="@order.OrderNo"></i>
+                    </button>
+                  }
+                </td>
+                <td>@order.OrderNo</td>
+                <td style="text-align: center">@order.Status</td>
+                <td>@order.CreateDate</td>
+                <td style="text-align: right">@order.Total</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+        <br />
+      </div>
+    </div>
+  </div>
 }
+
+<!-- Modal -->
+<div class="modal fade" id="ViewOrderModal" tabindex="-1" role="dialog" aria-labelledby="ViewOrderModalLabel" aria-hidden="true">
+  <div class="modal-dialog" style="width:300px">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="ViewOrderModalLabel">Leave Page</h4>
+      </div>
+      <div class="modal-body">
+        Would you like to view the order details?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="vieworder">Yes</button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
 
 @section Scripts
   {
-<script>
+  <script>
 
   $(document).ready(function () {
     $("#search tr td").addClass("spaced");
     $("#period").hide();
+
   });
 
   $("#findorder").click(function () {
@@ -168,10 +196,19 @@
     }
   });
 
-  $("i").click(function () {
+    $(".fa-download").click(function () {
     var orderId = $(this).attr("orderid");
     var orderNo = $(this).attr("orderno");
     location.href = '@Url.Action("DownloadOrder")' + '?orderId=' + orderId + '&orderNo=' + orderNo;
-  });
-</script>
+    });
+
+    $("#orders tbody tr").click(function () {
+      $("#vieworder").data("orderid", $(this).data("orderid"));
+      
+    });
+
+    $("#vieworder").click(function () {
+      window.location.href = '@Url.Action("ConfirmOrderDetail", "Orders", new { area = "Orders" })?orderId=' + $(this).data("orderid");
+    });
+  </script>
 }
