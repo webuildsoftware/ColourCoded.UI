@@ -88,7 +88,7 @@
           data: { orderId: orderId },
           success: function () {
             // send home with a orderId in the request string to download
-            location.href = '@Url.Action("Index", "Home", new { area = "Home" })' + '?orderId=' + orderId;
+            location.href = '@Url.Action("Index", "Orders", new { area = "Orders" })' + '?orderId=' + orderId;
           },
           error: function (xhr, options, error) {
             alert("OOPS! The was an error processing your request - " + jQuery.parseJSON(xhr.responseText).message);
@@ -124,7 +124,7 @@
     });
 
     $("#cancel").click(function () {
-      location.href = '@Url.Action("Index", "Home", new { area = "Home" })'
+      location.href = '@Url.Action("Index", "Orders", new { area = "Orders" })'
     });
   </script>
 }

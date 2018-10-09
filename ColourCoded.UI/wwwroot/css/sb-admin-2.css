@@ -3,6 +3,7 @@
  * Copyright 2013-2016 Start Bootstrap
  * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap/blob/gh-pages/LICENSE)
  */
+
 body {
   background-color: #f8f8f8;
 }
@@ -17,7 +18,7 @@ body {
 @media (min-width: 768px) {
   #page-wrapper {
     position: inherit;
-    margin: 0 0 0 250px;
+    margin: 0 0 0 200px;
     padding: 0 15px;
     border-left: 1px solid #e7e7e7;
   }
@@ -104,7 +105,7 @@ body {
   .sidebar {
     z-index: 1;
     position: absolute;
-    width: 250px;
+    width: 200px;
     margin-top: 51px;
   }
   .navbar-top-links .dropdown-messages,
@@ -201,6 +202,7 @@ table.dataTable thead .sorting:after {
   font-family: fontawesome;
   color: rgba(50, 50, 50, 0.5);
 }
+
 .btn-circle {
   width: 30px;
   height: 30px;
@@ -208,6 +210,15 @@ table.dataTable thead .sorting:after {
   border-radius: 15px;
   text-align: center;
   font-size: 12px;
+  line-height: 1.428571429;
+}
+.btn-circle-sm {
+  width: 20px;
+  height: 20px;
+  padding: 0px 0;
+  border-radius: 10px;
+  text-align: center;
+  font-size: 10px;
   line-height: 1.428571429;
 }
 .btn-circle.btn-lg {

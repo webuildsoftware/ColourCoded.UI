@@ -134,7 +134,7 @@
     });
 
     $("#cancel").click(function () {
-      location.href = '@Url.Action("Index", "Home", new { area = "Home" })'
+      location.href = '@Url.Action("Index", "Orders", new { area = "Orders" })'
     });
 
     $("#accept").click(function () {
@@ -145,7 +145,7 @@
           data: { orderId: $(this).data("orderid") },
           success: function () {
             // send home with a orderId in the request string to download
-            location.href = '@Url.Action("Index", "Home", new { area = "Home" })' + '?orderId=' + $(this).data("orderid");
+            location.href = '@Url.Action("Index", "Orders", new { area = "Orders" })' + '?orderId=' + $(this).data("orderid");
           },
           error: function (xhr, options, error) {
             alert("OOPS! The was an error processing your request - " + jQuery.parseJSON(xhr.responseText).message);

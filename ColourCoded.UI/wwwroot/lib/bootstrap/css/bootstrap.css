@@ -1083,7 +1083,7 @@ html {
 }
 body {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 14px;
+  font-size: 12px;
   line-height: 1.42857143;
   color: #333;
   background-color: #fff;
@@ -1410,6 +1410,11 @@ a.bg-danger:focus {
 .page-header {
   padding-bottom: 9px;
   margin: 40px 0 20px;
+  border-bottom: 1px solid #eee;
+}
+.page-header-sm{
+  padding-bottom: 9px;
+  margin: 10px 0 20px;
   border-bottom: 1px solid #eee;
 }
 ul,
@@ -3021,6 +3026,28 @@ select[multiple].input-lg {
   border: 1px solid transparent;
   border-radius: 4px;
 }
+.btn-thin {
+  display: inline-block;
+  padding: 6px 12px;
+  width:80px;
+  margin-bottom: 0;
+  font-size: 12px;
+  font-weight: normal;
+  line-height: 1.42857143;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  -ms-touch-action: manipulation;
+  touch-action: manipulation;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  background-image: none;
+  border: 1px solid transparent;
+  border-radius: 4px;
+}
 .btn:focus,
 .btn:active:focus,
 .btn.active:focus,
@@ -3527,7 +3554,7 @@ tbody.collapse.in {
   min-width: 160px;
   padding: 5px 0;
   margin: 2px 0 0;
-  font-size: 14px;
+  font-size: 12px;
   text-align: left;
   list-style: none;
   background-color: #fff;
@@ -3634,8 +3661,8 @@ tbody.collapse.in {
 }
 @media (min-width: 768px) {
   .navbar-right .dropdown-menu {
-    right: 0;
-    left: auto;
+    right: auto;
+    left: 0;
   }
   .navbar-right .dropdown-menu-left {
     right: auto;
@@ -4486,6 +4513,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   }
   .navbar-right {
     float: right !important;
+    position:relative;
     margin-right: -15px;
   }
   .navbar-right ~ .navbar-right {
@@ -5968,6 +5996,37 @@ button.close {
   height: 50px;
   overflow: scroll;
 }
+.loader {
+  position: relative;
+  text-align: center;
+  margin: 15px auto 35px auto;
+  z-index: 9999;
+  display: block;
+  width: 80px;
+  height: 80px;
+  border: 10px solid rgba(0, 0, 0, .3);
+  border-radius: 50%;
+  border-top-color: #000;
+  animation: spin 1s ease-in-out infinite;
+  -webkit-animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@-webkit-keyframes spin {
+  to {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+.modal-backdrop.show {
+  opacity: 0.75;
+}
+
 @media (min-width: 768px) {
   .modal-dialog {
     width: 600px;
@@ -5979,6 +6038,10 @@ button.close {
   }
   .modal-sm {
     width: 300px;
+  }
+
+  .modal-xsm {
+    width: 200px;
   }
 }
 @media (min-width: 992px) {

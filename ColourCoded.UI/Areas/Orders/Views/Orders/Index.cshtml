@@ -1,0 +1,230 @@
+﻿@model ColourCoded.UI.Areas.Orders.Models.ResponseModels.HomeViewModel;
+
+@{
+  ViewData["Title"] = "Home";
+  Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+  .input-md {
+    width: 200px;
+  }
+
+  #orders thead tr td {
+    font-weight: bold;
+  }
+
+  #orders tbody tr td:nth-child(n+2) {
+    cursor: pointer;
+  }
+
+  @@media (max-width: 600px) {
+    .modal-dialog {
+      position: absolute;
+      float: left;
+      left: 15%;
+      top: 15%;
+      transform: translate(-50%, -50%);
+      width: auto;
+      margin: 10px;
+    }
+  }
+
+  @@media (min-width: 600px) {
+    .modal-dialog {
+      position: absolute;
+      float: left;
+      left: 20%;
+      top: 15%;
+      transform: translate(-50%, -50%);
+      width: auto;
+      margin: 10px;
+    }
+  }
+</style>
+
+<div class="row">
+  <div class="col-md-5">
+    <h3 class="page-header-sm">
+      Orders
+      <div class="pull-right">
+        <button type="button" id="quote" class="btn-thin btn-success">Create</button>&nbsp;
+        <button type="button" id="findorder" class="btn-thin btn-success">Search</button>
+      </div>
+    </h3>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-5">
+    <form id="period" method="post" action="@Url.Action("GetHomeOrdersByPeriod")">
+      <div class="form-group">
+        <label>Date from</label>
+        <input type="date" id="startDate" class="form-control input-md" name="startDate" min="2018-01-01" max="2018-12-31" />
+      </div>
+
+      <div class="form-group">
+        <label>Date To</label>
+        <input type="date" id="endDate" class="form-control input-md" name="endDate" min="2018-01-01" max="2018-12-31" />
+      </div>
+
+      <div class="form-group">
+        <button type="button" id="find" class="btn-thin btn-success">&nbsp;Find&nbsp;</button>&nbsp;
+        <button type="button" id="refresh" class="btn-thin btn-default">Cancel</button>
+      </div>
+
+    </form>
+  </div>
+</div>
+
+@if (Model.Orders.Count > 0)
+{
+  <div class="row">
+    <div class="col-md-5">
+      <div id="recentorders">
+        <input type="text" id="filter" class="form-control input-md" placeholder="Filter">
+        <br />
+        <table width="100%" id="orders" class="table table-striped table-bordered table-hover">
+          <thead>
+            <tr>
+              <td></td>
+              <td>OrderNo</td>
+              <td>Status</td>
+              <td>Created</td>
+              <td>Total</td>
+            </tr>
+          </thead>
+          <tbody>
+            @foreach (var order in Model.Orders)
+            {
+              <tr data-orderNo="@order.OrderNo.ToUpper()" data-orderId="@order.OrderId">
+                <td style="text-align: center;">
+                  @if (order.Status.ToUpper() == "ACCEPTED")
+                  {
+                    <button type="button" class="btn btn-danger btn-circle-sm" title="Download PDF" data-toggle="modal" data-target="#DownloadOrderModal">
+                      <i class="fa fa-download"></i>
+                    </button>
+                  }
+                </td>
+                <td data-toggle="modal" data-target="#ViewOrderModal">@order.OrderNo</td>
+                <td data-toggle="modal" data-target="#ViewOrderModal" style="text-align: center">@order.Status</td>
+                <td data-toggle="modal" data-target="#ViewOrderModal">@order.CreateDate</td>
+                <td data-toggle="modal" data-target="#ViewOrderModal" style="text-align: right">@order.Total</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+        <br />
+      </div>
+    </div>
+  </div>
+}
+
+<!-- View Order Details Modal -->
+<div class="modal fade" id="ViewOrderModal" tabindex="-1" role="dialog" aria-labelledby="ViewOrderModalLabel" aria-hidden="true">
+  <div class="modal-dialog" style="width:250px">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="ViewOrderModalLabel">Are you sure?</h4>
+      </div>
+      <div class="modal-body">Would you like to view the order?</div>
+      <div class="modal-footer">
+        <button type="button" class="btn-thin btn-primary" id="vieworder">Yes</button>
+        <button type="button" class="btn-thin btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- /.modal -->
+
+<!-- Download Order Modal -->
+<div class="modal fade" id="DownloadOrderModal" tabindex="-1" role="dialog" aria-labelledby="DownloadOrderModalLabel" aria-hidden="true">
+  <div class="modal-dialog" style="width:250px">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="DownloadOrderModalLabel">Are you sure?<span></span></h4>
+      </div>
+      <div class="modal-body">Download order - <span id="lblorderno"></span>?</div>
+      <div class="modal-footer">
+        <button type="button" class="btn-thin btn-primary" id="downloadorder">Yes</button>
+        <button type="button" class="btn-thin btn-default" data-dismiss="modal" id="canceldownload">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- /.modal -->
+
+@section Scripts
+  {
+  <script>
+
+    $(document).ready(function () {
+      $("#search tr td").addClass("spaced");
+      $("#period").hide();
+
+    });
+
+    $("#findorder").click(function () {
+      $("#period").show();
+      $("#recentorders").hide();
+    });
+
+
+    $("#quote").click(function () {
+      location.href = '@Url.Action("OrderDetail", "Orders", new { area = "Orders" })'
+    });
+
+
+    $("#refresh").click(function () {
+      location.href = '@Url.Action("Index", "Orders", new { area = "Orders" })'
+    });
+
+    $("#filter").keyup(function () {
+      var filter = $("#filter").val().toUpperCase();
+
+      if (filter !== "") {
+        $("#orders tbody tr").hide();
+        $("#orders tbody tr[orderno*='" + filter + "']").show();
+      }
+      else {
+        $("#orders tbody tr").show();
+      }
+    });
+
+    $("#find").click(function () {
+      var patternV1 = /(2018)\/([0-9]{2})\/([0-9]{2})/;
+      var patternV2 = /(2018)-([0-9]{2})-([0-9]{2})/;
+
+      var startDate = $("#startDate").val();
+      var endDate = $("#endDate").val();
+
+      if (patternV1.test(startDate) || patternV2.test(startDate)) {
+
+        if (patternV1.test(endDate) || patternV2.test(endDate)) {
+          $('#period').submit();
+        }
+      }
+    });
+
+    $("#orders tbody tr").click(function () {
+      var orderId = $(this).data("orderid");
+      var orderNo = $(this).data("orderno");
+
+      $("#vieworder").data("orderid", orderId);
+      $("#downloadorder").data("orderid", orderId);
+      $("#downloadorder").data("orderno", orderNo);
+      $("#lblorderno").text(orderNo);
+    });
+
+    $("#vieworder").click(function () {
+      window.location.href = '@Url.Action("ConfirmOrderDetail", "Orders", new { area = "Orders" })?orderId=' + $(this).data("orderid");
+    });
+
+    $("#downloadorder").click(function () {
+      location.href = '@Url.Action("DownloadOrder")' + '?orderId=' + $(this).data("orderid") + '&orderNo=' + $(this).data("orderno");
+      $("#canceldownload").click();
+    });
+  </script>
+}

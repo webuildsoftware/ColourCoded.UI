@@ -74,7 +74,7 @@ namespace ColourCoded.Tests.Security.Login
       // Then
       Assert.IsNotNull(result);
       Assert.AreEqual("Index", result.ActionName);
-      Assert.AreEqual("Home", result.ControllerName);
+      Assert.AreEqual("Orders", result.ControllerName);
     }
 
     [TestMethod]
@@ -137,7 +137,7 @@ namespace ColourCoded.Tests.Security.Login
       // Then
       Assert.IsNotNull(result);
       Assert.AreEqual("Index", result.ActionName);
-      Assert.AreEqual("Home", result.ControllerName);
+      Assert.AreEqual("Orders", result.ControllerName);
     }
 
     [TestMethod]
@@ -249,7 +249,7 @@ namespace ColourCoded.Tests.Security.Login
       // Then
       Assert.IsNotNull(result);
       Assert.AreEqual("Index", result.ActionName);
-      Assert.AreEqual("Home", result.ControllerName);
+      Assert.AreEqual("Orders", result.ControllerName);
     }
 
     [TestMethod]

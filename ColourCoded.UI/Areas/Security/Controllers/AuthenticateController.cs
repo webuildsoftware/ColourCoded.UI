@@ -88,7 +88,7 @@ namespace ColourCoded.UI.Areas.Security.Controllers
           {
             CookieHelper.SignIn(userModel);
             CookieHelper.SetCookie("LoggedInUser", JsonConvert.SerializeObject(userModel)); // put the encrypted version of the api session token
-            return RedirectToAction("Index", "Home", new { area = "Home", userModel.Username });
+            return RedirectToAction("Index", "Orders", new { area = "Orders", userModel.Username });
           }
           else
             return RedirectToAction("Index", "Authenticate", new AuthenticateViewModel { Username = username, ErrorMessage = "Invalid password. Please try again." });
@@ -138,7 +138,7 @@ namespace ColourCoded.UI.Areas.Security.Controllers
           {
             CookieHelper.SignIn(userModel);
             CookieHelper.SetCookie("LoggedInUser", JsonConvert.SerializeObject(userModel));
-            return RedirectToAction("Index", "Home", new { area = "Home" });
+            return RedirectToAction("Index", "Orders", new { area = "Orders" });
           }
           else
             return RedirectToAction("Register", new { ErrorMessage = "Unable to perform registration. Please contact IT support." });
@@ -206,7 +206,7 @@ namespace ColourCoded.UI.Areas.Security.Controllers
           });
 
           CookieHelper.SignIn(userModel);
-          return RedirectToAction("Index", "Home", new { area = "Home", userModel.Username });
+          return RedirectToAction("Index", "Orders", new { area = "Orders", userModel.Username });
         }
         else
           return RedirectToAction("ChangePasswordIndex", "Authenticate", new AuthenticateViewModel { Username = username, ErrorMessage = "Invalid current password. Please try again." });

@@ -1,11 +1,4 @@
 ﻿using System.Collections.Generic;
-using System;
-using ColourCoded.UI.Areas.Home.Models;
-using ColourCoded.UI.Areas.Orders.Models.RequestModels;
-using ColourCoded.UI.Areas.Orders.Models.ResponseModels;
-using ColourCoded.UI.Areas.Orders.Models.InputModels;
-using ColourCoded.UI.Areas.Security.Models.Login;
-using ColourCoded.UI.Areas.Security.Models.Login.RequestModels;
 
 namespace ColourCoded.UI.Shared.WebApiCaller
 {

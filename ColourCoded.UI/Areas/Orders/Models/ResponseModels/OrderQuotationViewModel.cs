@@ -1,6 +1,4 @@
-﻿using ColourCoded.UI.Areas.Orders.Models.ResponseModels;
-
-namespace ColourCoded.UI.Areas.Home.Models
+﻿namespace ColourCoded.UI.Areas.Orders.Models.ResponseModels
 {
   public class OrderQuotationViewModel
   {

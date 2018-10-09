@@ -8,6 +8,7 @@ using ColourCoded.UI.Shared;
 using ColourCoded.UI.Shared.WebApiCaller;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Rotativa.AspNetCore;
 
 namespace ColourCoded.UI.Areas.Orders.Controllers
 {
@@ -88,6 +89,44 @@ namespace ColourCoded.UI.Areas.Orders.Controllers
         return View("AddressDetail");
 
       return View("ConfirmCustomerAddress");
+    }
+
+    public IActionResult Index()
+    {
+      try
+      {
+        var orders = WebApiCaller.PostAsync<List<HomeOrdersModel>>("WebApi:Home:GetHomeOrders", new GetHomeOrdersRequestModel { Username = CurrentUser.Username, CompanyProfileId = CurrentUser.CompanyProfileId });
+
+        return View("Index", new HomeViewModel { Orders = orders });
+      }
+      catch (Exception Ex)
+      {
+        return RedirectToAction("Error", new GlobalErrorModel(Ex.Message, Ex.StackTrace, Ex.GetBaseException().Message));
+      }
+    }
+
+    [HttpPost]
+    public IActionResult GetHomeOrdersByPeriod(DateTime startDate, DateTime endDate)
+    {
+      try
+      {
+        var result = WebApiCaller.PostAsync<List<HomeOrdersModel>>("WebApi:Home:GetHomeOrdersInPeriod", new GetHomeOrdersPeriodRequestModel { Username = CurrentUser.Username, CompanyProfileId = CurrentUser.CompanyProfileId, StartDate = startDate, EndDate = endDate });
+
+        return View("Index", new HomeViewModel { Orders = result, StartDate = startDate, EndDate = endDate });
+      }
+      catch (Exception Ex)
+      {
+        return RedirectToAction("Error", new GlobalErrorModel(Ex.Message, Ex.StackTrace, Ex.GetBaseException().Message));
+      }
+    }
+
+    public IActionResult DownloadOrder(int orderId, string orderNo)
+    {
+      string filename = orderNo + ".pdf";
+
+      var result = WebApiCaller.PostAsync<OrderQuotationViewModel>("WebApi:Orders:GetOrderQuote", new GetOrderQuoteRequestModel { OrderId = orderId, CompanyProfileId = CurrentUser.CompanyProfileId });
+
+      return new ViewAsPdf("OrderQuotation", result) { FileName = filename };
     }
 
     [HttpGet]

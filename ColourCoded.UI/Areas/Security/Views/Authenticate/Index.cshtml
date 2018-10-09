@@ -20,14 +20,15 @@
   <script src="~/lib/metismenu/metisMenu.min.js"></script>
   <script src="~/lib/theme/sb-admin-2.js"></script>
   <script src="~/lib/bootstrap/js/bootstrap.js"></script>
+
 </head>
 <body>
   <div class="container">
     <div class="row">
       <div class="col-md-4 col-md-offset-4">
         <div class="login-panel panel panel-default">
-          <div class="panel-heading">
-            <h3 class="panel-title">Please Sign In</h3>
+          <div class="panel-heading" style="text-align:center;">
+            <h3 class="panel-title">CC Invoice</h3>
           </div>
           <div class="panel-body">
             @using (Html.BeginForm("Login", "Authenticate", FormMethod.Post, new { id = "loginForm" }))
@@ -58,6 +59,15 @@
       </div>
     </div>
   </div>
+
+  <!-- Loader Modal -->
+  <div class="modal fade" id="loader" tabindex="-1" role="dialog" aria-labelledby="loadMeLabel">
+    <div class="modal-dialog modal-sm" role="document">
+      <div class="modal-content">
+        <div class="loader"></div>
+      </div>
+    </div>
+  </div>
 </body>
 
 <script>
@@ -66,13 +76,25 @@
   });
 
   $("#login").click(function () {
+
     if (validForm()) {
 
-
+      GlobalLoader(true);
       $("div").removeClass("has-error");
       $("#loginForm").submit();
     }
 
+  });
+
+  $("#password").keyup(function (event) {
+    if (event.keyCode == "13") {
+      if (validForm()) {
+
+
+        $("div").removeClass("has-error");
+        $("#loginForm").submit();
+      }
+    }
   });
 
   function validForm() {
@@ -93,4 +115,18 @@
     return isValid;
   }
 
+  function GlobalLoader(visible) {
+
+    if (visible) {
+      $("#loader").modal({
+        backdrop: "static", //remove ability to close modal with click
+        keyboard: false, //remove option to close with keyboard
+        show: true //Display loader!
+      });
+    }
+    else {
+      $("#loader").modal("hide");
+    }
+
+  }
 </script>

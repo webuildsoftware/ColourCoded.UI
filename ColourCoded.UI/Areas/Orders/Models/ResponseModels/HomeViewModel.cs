@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace ColourCoded.UI.Areas.Home.Models
+namespace ColourCoded.UI.Areas.Orders.Models.ResponseModels
 {
   public class HomeViewModel
   {
