@@ -186,7 +186,7 @@
 
       if (filter !== "") {
         $("#orders tbody tr").hide();
-        $("#orders tbody tr[orderno*='" + filter + "']").show();
+        $("#orders tbody tr[data-orderno*='" + filter + "']").show();
       }
       else {
         $("#orders tbody tr").show();
