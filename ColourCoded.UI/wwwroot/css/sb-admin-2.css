@@ -23,6 +23,18 @@ body {
     border-left: 1px solid #e7e7e7;
   }
 }
+
+@media (max-width: 600px) {
+  .hidecolumn {
+    display: none;
+  }
+}
+@media (min-width: 600px) {
+  .hidecolumn {
+    display: table-cell;
+  }
+}
+
 .navbar-top-links {
   margin-right: 0;
 }

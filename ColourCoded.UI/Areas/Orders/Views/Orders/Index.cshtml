@@ -89,9 +89,10 @@
             <tr>
               <td></td>
               <td>OrderNo</td>
-              <td>Status</td>
+
               <td>Created</td>
               <td>Total</td>
+              <td class="hidecolumn">Status</td>
             </tr>
           </thead>
           <tbody>
@@ -107,15 +108,24 @@
                   }
                 </td>
                 <td data-toggle="modal" data-target="#ViewOrderModal">@order.OrderNo</td>
-                <td data-toggle="modal" data-target="#ViewOrderModal" style="text-align: center">@order.Status</td>
+
                 <td data-toggle="modal" data-target="#ViewOrderModal">@order.CreateDate</td>
                 <td data-toggle="modal" data-target="#ViewOrderModal" style="text-align: right">@order.Total</td>
+                <td data-toggle="modal" data-target="#ViewOrderModal" style="text-align: center" class="hidecolumn">@order.Status</td>
               </tr>
             }
           </tbody>
         </table>
         <br />
       </div>
+    </div>
+  </div>
+}
+else if (Model.StartDate.ToShortDateString() != "1/1/0001")
+{
+  <div class="row">
+    <div class="col-md-5" id="zerosearch">
+      Search results - 0 Orders.
     </div>
   </div>
 }
@@ -137,7 +147,6 @@
   </div>
 </div>
 <!-- /.modal -->
-
 <!-- Download Order Modal -->
 <div class="modal fade" id="DownloadOrderModal" tabindex="-1" role="dialog" aria-labelledby="DownloadOrderModalLabel" aria-hidden="true">
   <div class="modal-dialog" style="width:250px">
