@@ -1413,8 +1413,8 @@ a.bg-danger:focus {
   border-bottom: 1px solid #eee;
 }
 .page-header-sm{
-  padding-bottom: 9px;
-  margin: 10px 0 20px;
+  padding-bottom: 10px;
+  margin: 10px 0 5px;
   border-bottom: 1px solid #eee;
 }
 ul,
@@ -2277,7 +2277,7 @@ th {
 .table > tbody > tr > td,
 .table > tfoot > tr > td {
   padding: 8px;
-  line-height: 1.42857143;
+  line-height: 1.02857143;
   vertical-align: top;
   border-top: 1px solid #ddd;
 }
@@ -2327,6 +2327,10 @@ th {
 }
 .table-hover > tbody > tr:hover {
   background-color: #f5f5f5;
+}
+.table-head {
+  background-color: #f5f5f5;
+  font-weight:bold;
 }
 table col[class*="col-"] {
   position: static;
@@ -2554,10 +2558,10 @@ output {
 .form-control {
   display: block;
   width: 100%;
-  height: 34px;
-  padding: 6px 12px;
-  font-size: 14px;
-  line-height: 1.42857143;
+  height: 30px;
+  padding: 6px 10px;
+  font-size: 12px;
+  line-height: 1.02857143;
   color: #555;
   background-color: #fff;
   background-image: none;
@@ -2569,6 +2573,61 @@ output {
        -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
           transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
 }
+
+.form-control-header {
+  height: 25px;
+  padding: 6px 6px;
+  font-size: 12px;
+  line-height: 1.02857143;
+  color: #555;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+  -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+  -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+  transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+}
+
+.form-control-normal {
+  display: block;
+  width: 200px;
+  height: 28px;
+  padding: 6px 6px;
+  font-size: 12px;
+  line-height: 1.02857143;
+  color: #555;
+  background-color: #fff;
+  background-image: none;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+  -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+  -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+  transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+}
+
+.form-control-small {
+  display: block;
+  width: 100px;
+  height: 28px;
+  padding: 6px 6px;
+  font-size: 12px;
+  line-height: 1.02857143;
+  color: #555;
+  background-color: #fff;
+  background-image: none;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+  -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+  -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+  transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+}
+
+
 .form-control:focus {
   border-color: #66afe9;
   outline: 0;
@@ -3026,6 +3085,7 @@ select[multiple].input-lg {
   border: 1px solid transparent;
   border-radius: 4px;
 }
+
 .btn-thin {
   display: inline-block;
   padding: 6px 12px;
@@ -3033,7 +3093,7 @@ select[multiple].input-lg {
   margin-bottom: 0;
   font-size: 12px;
   font-weight: normal;
-  line-height: 1.42857143;
+  line-height: 0.92857143;
   text-align: center;
   white-space: nowrap;
   vertical-align: middle;

@@ -7,5 +7,7 @@
     public string CreateDate { get; set; }
     public string Total { get; set; }
     public string Status { get; set; }
+    public string CustomerName { get; set; }
+    public string ContactName { get; set; }
   }
 }

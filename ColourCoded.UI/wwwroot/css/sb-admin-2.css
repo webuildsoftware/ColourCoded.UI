@@ -35,6 +35,36 @@ body {
   }
 }
 
+@media (max-width: 600px) {
+  .md-column {
+    max-width: 130px;
+  }
+}
+
+@media (max-width: 600px) {
+  .modal-dialog {
+    position: absolute;
+    float: left;
+    left: 15%;
+    top: 15%;
+    transform: translate(-50%, -50%);
+    width: auto;
+    margin: 10px;
+  }
+}
+
+@media (min-width: 600px) {
+  .modal-dialog {
+    position: absolute;
+    float: left;
+    left: 20%;
+    top: 15%;
+    transform: translate(-50%, -50%);
+    width: auto;
+    margin: 10px;
+  }
+}
+
 .navbar-top-links {
   margin-right: 0;
 }

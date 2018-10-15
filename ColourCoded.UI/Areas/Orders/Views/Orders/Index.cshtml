@@ -7,56 +7,33 @@
 
 <style>
   .input-md {
-    width: 200px;
+    width: 175px;
   }
 
   #orders thead tr td {
     font-weight: bold;
   }
 
-  #orders tbody tr td:nth-child(n+2) {
+  #orders tr td:nth-child(n+2) {
     cursor: pointer;
   }
 
-  @@media (max-width: 600px) {
-    .modal-dialog {
-      position: absolute;
-      float: left;
-      left: 15%;
-      top: 15%;
-      transform: translate(-50%, -50%);
-      width: auto;
-      margin: 10px;
-    }
-  }
-
-  @@media (min-width: 600px) {
-    .modal-dialog {
-      position: absolute;
-      float: left;
-      left: 20%;
-      top: 15%;
-      transform: translate(-50%, -50%);
-      width: auto;
-      margin: 10px;
-    }
-  }
 </style>
 
 <div class="row">
-  <div class="col-md-5">
-    <h3 class="page-header-sm">
-      Orders
+  <div class="col-md-8">
+    <h4 class="page-header-sm">
+      Recent Orders
       <div class="pull-right">
-        <button type="button" id="quote" class="btn-thin btn-success">Create</button>&nbsp;
+        <button type="button" id="quote" class="btn-thin btn-success">Add New</button>&nbsp;
         <button type="button" id="findorder" class="btn-thin btn-success">Search</button>
       </div>
-    </h3>
+    </h4>
   </div>
 </div>
 
 <div class="row">
-  <div class="col-md-5">
+  <div class="col-md-8">
     <form id="period" method="post" action="@Url.Action("GetHomeOrdersByPeriod")">
       <div class="form-group">
         <label>Date from</label>
@@ -80,7 +57,7 @@
 @if (Model.Orders.Count > 0)
 {
   <div class="row">
-    <div class="col-md-5">
+    <div class="col-md-8">
       <div id="recentorders">
         <input type="text" id="filter" class="form-control input-md" placeholder="Filter">
         <br />
@@ -89,30 +66,32 @@
             <tr>
               <td></td>
               <td>OrderNo</td>
-
-              <td>Created</td>
-              <td>Total</td>
+              <td>CreateDate</td>
+              <td>Customer</td>
+              <td class="hidecolumn">Contact</td>
+              <td class="hidecolumn">Total</td>
               <td class="hidecolumn">Status</td>
             </tr>
           </thead>
           <tbody>
             @foreach (var order in Model.Orders)
             {
-              <tr data-orderNo="@order.OrderNo.ToUpper()" data-orderId="@order.OrderId">
-                <td style="text-align: center;">
-                  @if (order.Status.ToUpper() == "ACCEPTED")
-                  {
-                    <button type="button" class="btn btn-danger btn-circle-sm" title="Download PDF" data-toggle="modal" data-target="#DownloadOrderModal">
-                      <i class="fa fa-download"></i>
-                    </button>
-                  }
-                </td>
-                <td data-toggle="modal" data-target="#ViewOrderModal">@order.OrderNo</td>
-
-                <td data-toggle="modal" data-target="#ViewOrderModal">@order.CreateDate</td>
-                <td data-toggle="modal" data-target="#ViewOrderModal" style="text-align: right">@order.Total</td>
-                <td data-toggle="modal" data-target="#ViewOrderModal" style="text-align: center" class="hidecolumn">@order.Status</td>
-              </tr>
+            <tr data-orderNo="@order.OrderNo.ToUpper()" data-orderId="@order.OrderId">
+              <td style="text-align: center;">
+                @if (order.Status.ToUpper() == "ACCEPTED")
+                {
+                  <button type="button" class="btn btn-warning btn-circle-sm" title="Download PDF" data-toggle="modal" data-target="#DownloadOrderModal">
+                    <i class="fa fa-download"></i>
+                  </button>
+                }
+              </td>
+              <td data-toggle="modal" data-target="#ViewOrderModal">@order.OrderNo</td>
+              <td data-toggle="modal" data-target="#ViewOrderModal">@order.CreateDate</td>
+              <td data-toggle="modal" data-target="#ViewOrderModal">@order.CustomerName</td>
+              <td data-toggle="modal" data-target="#ViewOrderModal" class="hidecolumn">@order.ContactName</td>
+              <td data-toggle="modal" data-target="#ViewOrderModal" style="text-align: right" class="hidecolumn">@order.Total</td>
+              <td data-toggle="modal" data-target="#ViewOrderModal" style="text-align: center" class="hidecolumn">@order.Status</td>
+            </tr>
             }
           </tbody>
         </table>
@@ -121,11 +100,11 @@
     </div>
   </div>
 }
-else if (Model.StartDate.ToShortDateString() != "1/1/0001")
+else
 {
   <div class="row">
-    <div class="col-md-5" id="zerosearch">
-      Search results - 0 Orders.
+    <div class="col-md-8" id="zerosearch">
+      Results - 0 Orders.
     </div>
   </div>
 }

@@ -860,14 +860,16 @@ namespace ColourCoded.Tests.Orders
           OrderId = 1,
           OrderNo = "Moq001",
           Total = "R 2 999.99",
-          Status = "Accepted"
+          Status = "Accepted",
+          CustomerName = "City of Cape Town"
         },
         new HomeOrdersModel
         {
           OrderId = 1,
           OrderNo = "Moq001",
           Total = "R 2 999.99",
-          Status = "N/A"
+          Status = "N/A",
+          CustomerName = "Maria Sharpova"
         },
       };
 
