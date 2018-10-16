@@ -6,7 +6,7 @@
 
 <style>
   #orderdetail {
-    font-size:10px
+    font-size: 11px
   }
 
   .validationLabel {
@@ -18,12 +18,12 @@
     padding: 3px;
   }
 
-  #main div span {
-    font-size: 10px;
-  }
+    #main div span {
+      font-size: 10px;
+    }
 </style>
 <div class="row">
-  <div class="col-md-8">
+  <div class="col-md-6">
     <h4 class="page-header-sm">
       Add New Order
       <div class="pull-right">
@@ -34,7 +34,7 @@
   </div>
 </div>
 <div class="row">
-  <div class="col-md-8">
+  <div class="col-md-6">
     <div id="main">
       <div>
         <span>Item Description</span><br />
@@ -55,26 +55,43 @@
       <div style="padding-bottom:10px; padding-top:10px;">
         <input id="lineitem" value="Add Item" type="button" class="btn-thin btn-success" />&nbsp;&nbsp;
         <input id="cancel" value="Cancel" type="button" class="btn-thin btn-default" />&nbsp;&nbsp;
-        <input id="done" value="Complete" type="button" class="btn-thin btn-success" />&nbsp;&nbsp;
-        <label id="validorder"  class="validationLabel"></label>
+        <input id="done" value="Next" type="button" class="btn-thin btn-success" data-toggle="modal" data-target="#ConfirmModal"/>&nbsp;&nbsp;
+        <label id="validorder" class="validationLabel"></label>
       </div>
     </div>
   </div>
 </div>
 <div class="row">
-  <div class="col-md-8">
-    <table id="orderdetail" class="table table-striped table-bordered table-hover">
+  <div class="col-md-6">
+    <table id="orderdetail" class="table table-bordered">
       <thead class="table-head">
         <tr>
           <td>Item Description</td>
           <td>Qty</td>
           <td>Price</td>
-          <td>Disc.</td>
+          <td>Discount</td>
           <td>Line Total</td>
         </tr>
       </thead>
       <tbody></tbody>
     </table>
+  </div>
+</div>
+
+<!-- Confirm Popup -->
+<div class="modal fade" id="ConfirmModal" tabindex="-1" role="dialog" aria-labelledby="ConfirmModalLabel" aria-hidden="true">
+  <div class="modal-dialog" style="width:250px">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="ConfirmModalLabel">Are you sure?</h4>
+      </div>
+      <div class="modal-body">Any unsaved changes will be lost</div>
+      <div class="modal-footer">
+        <button type="button" class="btn-thin btn-primary" id="confirm">Yes</button>
+        <button type="button" class="btn-thin btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -219,7 +236,8 @@
     });
 
     function updateOrderDetailGrid() {
-      var grid = $("#orderdetail tbody").html("");
+      $("#orderdetail tbody").html("");
+      var grid = $("#orderdetail tbody");
       var subtotal = 0.0;
       var vattotal = 0.0;
       var discount = 0.0;
@@ -232,15 +250,25 @@
         discount += lineitem.discount;
 
         // append to grid
-        grid.append("<tr >");
-        grid.append("<td class='table-bordered md-column' style='padding-left:7px'>" + lineitem.product + "</td>");
-        grid.append("<td class='table-bordered' align='center'>" + lineitem.quantity + "</td>");
-        grid.append("<td class='table-bordered' style='padding-right:5px' align='right'>R " + lineitem.unitprice.toFixed(2) + "</td>");
-        grid.append("<td class='table-bordered' style='padding-right:5px' align='right'>R " + lineitem.discount.toFixed(2) + "</td>");
-        grid.append("<td class='table-bordered' style='padding-right:5px' align='right'>R " + lineitem.linetotal.toFixed(2) + "</td>");
-        grid.append("<td><button type='button' class='btn btn-danger btn-circle-sm' title='remove'><i class='fa fa-times' onclick='removeLineItem(" + index + ")'></i></button></td> ");
-        grid.append("</tr>");
-        exists = true;
+        grid.append("<tr><td class='md-column' style='padding-left:7px'>" +
+          lineitem.product +
+          "</td>" +
+          "<td align='center'>" +
+          lineitem.quantity +
+          "</td>" +
+          "<td style='padding-right:5px' align='right'>" +
+          lineitem.unitprice.toFixed(2) +
+          "</td>" +
+          "<td style='padding-right:5px' align='right'>" +
+          lineitem.discount.toFixed(2) +
+          "</td>" +
+          "<td style='padding-right:5px' align='right'>" +
+          lineitem.linetotal.toFixed(2) +
+          "</td>" +
+          "<td class='table-nonbordered-right'><button type='button' class='btn btn-danger btn-circle-sm' title='remove'><i class='fa fa-times' onclick='removeLineItem(" +
+          index +
+          ")'></i></button></td></tr> ");
+          exists = true;
       });
 
       if (exists) {
@@ -249,32 +277,32 @@
         ordertotal += subtotal + vattotal;
 
         //  Sub Total
-        grid.append("<tr>");
-        grid.append("<td style='height:18px' colspan='3'></td>");
-        grid.append("<td class='table-bordered' align='right' style='padding-right:5px' ><strong>Sub Total</strong></td>");
-        grid.append("<td class='table-bordered' align='right' style='padding-right:5px' ><strong>R " + subtotal.toFixed(2) + "</strong></td>");
-        grid.append("</tr>");
+        grid.append("<tr>" +
+          "<td style='height:18px' colspan='3'></td>" +
+          "<td align='right' style='padding-right:5px' ><strong>Sub-Total</strong></td>" +
+          "<td align='right' style='padding-right:5px' ><strong>R " + subtotal.toFixed(2) + "</strong></td>" +
+          "</tr>");
 
         // Discount Total
-        grid.append("<tr>");
-        grid.append("<td style='height:18px' colspan='3'></td>");
-        grid.append("<td class='table-bordered' align='right' style='padding-right:5px' ><strong>Discount</strong></td>");
-        grid.append("<td class='table-bordered' align='right' style='padding-right:5px' ><strong>R " + discount.toFixed(2) + "</strong></td>");
-        grid.append("</tr>");
+        grid.append("<tr>" +
+          "<td style='height:18px' colspan='3'></td>" +
+          "<td align='right' style='padding-right:5px' ><strong>Discount</strong></td>" +
+          "<td align='right' style='padding-right:5px' ><strong>R " + discount.toFixed(2) + "</strong></td>" +
+          "</tr>");
 
         // Vat Total
-        grid.append("<tr>");
-        grid.append("<td style='height:18px' colspan='3'></td>");
-        grid.append("<td class='table-bordered' align='right' style='padding-right:5px' ><strong>VAT</strong></td>");
-        grid.append("<td class='table-bordered' align='right' style='padding-right:5px' ><strong>R " + vattotal.toFixed(2) + "</strong></td>");
-        grid.append("</tr>");
+        grid.append("<tr>" +
+          "<td style='height:18px' colspan='3'></td>" +
+          "<td align='right' style='padding-right:5px' ><strong>VAT</strong></td>" +
+          "<td align='right' style='padding-right:5px' ><strong>R " + vattotal.toFixed(2) + "</strong></td>" +
+          "</tr>");
 
         // Order Total
-        grid.append("<tr>");
-        grid.append("<td style='height:18px' colspan='3'></td>");
-        grid.append("<td class='table-bordered' align='right' style='padding-right:5px' ><strong>Total</strong></td>");
-        grid.append("<td class='table-bordered' align='right' style='padding-right:5px' ><strong>R " + ordertotal.toFixed(2) + "</strong></td>");
-        grid.append("</tr>");
+        grid.append("<tr>" +
+          "<td style='height:18px' colspan='3'></td>" +
+          "<td align='right' style='padding-right:5px' ><strong>Total</strong></td>" +
+          "<td align='right' style='padding-right:5px' ><strong>R " + ordertotal.toFixed(2) + "</strong></td>" +
+          "</tr>");
 
         $("#validorder").html("");
       }
@@ -285,18 +313,19 @@
       updateOrderDetailGrid();
     }
 
-    $("#done").click(function () {
+    $("#confirm").click(function () {
 
       if (order.orderdetail.length == 0) {
         $("#validorder").html("Please add item(s).");
       }
       else {
+        var orderNo = $("#ordernoprefix").val() + $("#ordernoseed").val();
 
         if (orderId == 0) {
           // perform the add of the new order
           $.ajax({
             url: '@Url.Action("AddOrder")',
-            data: { orderNo: $("#ordernoprefix").val() + $("#ordernoseed").val() },
+            data: { orderNo: orderNo },
             type: 'POST',
             success: function (data) {
               // if success: send orderId and json orderdetail list to controller to add new  order detail
@@ -309,7 +338,7 @@
                 success: function (validResult) {
                   // if success: route to confirmation screen
                   if (validResult.isValid) {
-                    window.location.href = '@Url.Action("ConfirmOrderDetail")' + '?orderId=' + orderId;
+                    window.location.href = '@Url.Action("OrderCustomer")' + '?orderId=' + orderId + '&orderNo=' + orderNo ;
                   }
                   else {
                     $("#validorder").html("Error occured: " + validResult.messages[0].message);
@@ -331,7 +360,7 @@
           // perform the edit of the order
           $.ajax({
             url: '@Url.Action("EditOrderNo")',
-            data: { orderId: orderId, orderNo: $("#ordernoprefix").val() + $("#ordernoseed").val() },
+            data: { orderId: orderId, orderNo: orderNo },
             type: 'POST',
             success: function (data) {
 
@@ -343,7 +372,7 @@
                 success: function (validResult) {
                   // if success: route to confirmation screen
                   if (validResult.isValid) {
-                    window.location.href = '@Url.Action("ConfirmOrderDetail")' + '?orderId=' + orderId;
+                    window.location.href = '@Url.Action("OrderCustomer")' + '?orderId=' + orderId + '&orderNo=' + orderNo ;
                   }
                   else {
                     $("#validorder").html("Error occured: " + validResult.messages[0].message);

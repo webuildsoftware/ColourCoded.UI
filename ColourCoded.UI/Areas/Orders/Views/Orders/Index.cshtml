@@ -201,13 +201,14 @@ else
       var orderNo = $(this).data("orderno");
 
       $("#vieworder").data("orderid", orderId);
+      $("#vieworder").data("orderno", orderNo);
       $("#downloadorder").data("orderid", orderId);
       $("#downloadorder").data("orderno", orderNo);
       $("#lblorderno").text(orderNo);
     });
 
     $("#vieworder").click(function () {
-      window.location.href = '@Url.Action("ConfirmOrderDetail", "Orders", new { area = "Orders" })?orderId=' + $(this).data("orderid");
+      window.location.href = '@Url.Action("OrderDetail")' + '?orderId=' + $(this).data("orderid") + '&orderNo=' + $(this).data("orderno");
     });
 
     $("#downloadorder").click(function () {
