@@ -6,41 +6,19 @@
 
 
 <style>
-  table thead tr td {
-    background-color: lightgray;
+
+  .main div {
     padding: 3px;
+  }
+
+  .main div span {
+    font-size: 11px;
     font-weight: bold;
   }
 
-  table tbody tr td {
-    padding: 3px;
-  }
-
-  table i {
-    cursor: pointer;
-  }
-
-  .validationLabel {
-    color: red;
-    width: 150px;
-    font-size: 11px;
-  }
-
-  .main div {
-    padding: 7px;
-  }
-
-    .main div span {
-      font-size: 11px;
-      font-weight: bold;
-    }
-
-  .orderno {
-    width: 100px;
-  }
 </style>
 <div class="row">
-  <div class="col-md-3">
+  <div class="col-md-4">
     <h4 class="page-header-sm">
       Customer Details
     </h4>
@@ -48,53 +26,50 @@
       <div>
         <span>Available Customers</span>
         <br />
-        <select id="existingcustomers" class="form-control-large">
-          <option value='0'></option>
+        <select id="existingcustomers" class="form-control-normal">
+          <option value='0'>New Customer</option>
         </select>
       </div>
       <div>
         <span>Customer Name (*)</span>
         <br />
-        <input type="text" id="customername" placeholder="Enter Name" class="form-control-large" />
-      </div>
-      <div>
-        <span>Customer Contact No (*)</span>
-        <br />
-        <input type="text" id="customercontactno" class="number form-control-large" placeholder="Enter Contact No" maxlength="10" />
+        <input type="text" id="customername" placeholder="Enter Name" class="form-control-normal" />
       </div>
       <div>
         <span>Customer Details</span>
         <br />
-        <textarea id="customerdetails" class="form-control-large" rows="4">
+        <textarea id="customerdetails" class="form-control-normal" rows="3">
         </textarea>
       </div>
       <div>
         <span>Customer Account No</span>
         <br />
-        <input type="text" id="customeraccountno" class="form-control-large" placeholder="Enter Account No" />
+        <input type="text" id="customeraccountno" class="form-control-normal" placeholder="Enter Account No" />
+      </div>
+      <div>
+        <span>Customer Contact No (*)</span>
+        <br />
+        <input type="text" id="customercontactno" class="number form-control-normal" placeholder="Enter Contact No" maxlength="10" />
       </div>
       <div>
         <span>Customer Mobile No</span>
         <br />
-        <input type="text" id="customermobileno" class="number form-control-large" placeholder="Enter Mobile No" maxlength="10" />
+        <input type="text" id="customermobileno" class="number form-control-normal" placeholder="Enter Mobile No" maxlength="10" />
       </div>
       <div>
         <span>Customer Email</span>
         <br />
-        <input type="text" id="customeremail" class="form-control-large" placeholder="Enter Email" />
+        <input type="text" id="customeremail" class="form-control-normal" placeholder="Enter Email" />
       </div>
       <div style="padding-top: 10px">
-        <input id="done" value="Delivery Address" type="button" class="btn-large btn-success" data-toggle="modal" data-target="#ConfirmModal" />&nbsp;&nbsp;
-        <input id="addcontact" value="Add Contact Person" type="button" class="btn-large btn-success" />&nbsp;&nbsp;
+        <input id="save" value="Save" type="button" class="btn-normal btn-success" />&nbsp;&nbsp;
+        <input id="addcontact" value="Link Contact" type="button" class="btn btn-success" />&nbsp;&nbsp;
+        <input id="cancel" value="Cancel" type="button" class="btn-normal btn-default" />&nbsp;&nbsp;
+        <input id="hidden" type="button" style="visibility: hidden" data-toggle="modal" data-target="#ConfirmModal" />
       </div>
-      <div style="padding-top: 10px">
-        <input id="complete" value="Complete Order" type="button" class="btn-large btn-success" data-toggle="modal" data-target="#CompleteModal" />&nbsp;&nbsp;
-        <input id="cancel" value="Cancel" type="button" class="btn-large btn-default" />&nbsp;&nbsp;
-      </div>
-      <br />
     </div>
   </div>
-  <div id="pnlContact" style="display: none;" class="col-md-3">
+  <div id="pnlContact" style="display: none;" class="col-md-4">
     <h4 class="page-header-sm">
       Contact Person
     </h4>
@@ -102,66 +77,49 @@
       <div>
         <span>Available Contacts</span>
         <br />
-        <select id="existingcontacts" class="form-control-large">
-          <option value='0'></option>
+        <select id="existingcontacts" class="form-control-normal">
+          <option value='0'>New Contact</option>
         </select>
       </div>
 
       <div>
         <span>Contact Name</span>
         <br />
-        <input type="text" id="contactname" placeholder="Enter Name" class="form-control-large" />
+        <input type="text" id="contactname" placeholder="Enter Name" class="form-control-normal" />
       </div>
       <div>
         <span>Contact No</span>
         <br />
-        <input type="text" id="contactno" class="number form-control-large" placeholder="Enter Contact No" maxlength="10" />
+        <input type="text" id="contactno" class="number form-control-normal" placeholder="Enter Contact No" maxlength="10" />
       </div>
       <div>
         <span>Contact Email</span>
         <br />
-        <input type="text" id="contactemail" placeholder="Enter Email" class="form-control-large" />
+        <input type="text" id="contactemail" placeholder="Enter Email" class="form-control-normal" />
       </div>
       <br />
     </div>
   </div>
 </div>
 
-<!-- Confirm Popup -->
+<!-- Saved Successful Popup -->
 <div class="modal fade" id="ConfirmModal" tabindex="-1" role="dialog" aria-labelledby="ConfirmModalLabel" aria-hidden="true">
-  <div class="modal-dialog" style="width:250px">
+  <div class="modal-dialog" style="width:300px">
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" id="ConfirmModalLabel">Delivery Address</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" id="closeconfirm">&times;</button>
+        <h4 class="modal-title" id="ConfirmModalLabel">Successfully Saved</h4>
       </div>
-      <div class="modal-body">Leave page? Any unsaved changes will be lost.</div>
+      <div class="modal-body">What would you like to do next?</div>
       <div class="modal-footer">
-        <button type="button" class="btn-normal btn-primary" id="deliveryaddress">Yes</button>
-        <button type="button" class="btn-normal btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="deliveryaddress">Link Address</button>
+        <button type="button" class="btn btn-primary" id="accept">Accept Order</button>
       </div>
     </div>
   </div>
 </div>
 
-
-<!-- Complete Order Popup -->
-<div class="modal fade" id="CompleteModal" tabindex="-1" role="dialog" aria-labelledby="CompleteModalLabel" aria-hidden="true">
-  <div class="modal-dialog" style="width:250px">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" id="CompleteModalLabel">Complete Order</h4>
-      </div>
-      <div class="modal-body">Leave page? Any unsaved changes will be lost.</div>
-      <div class="modal-footer">
-        <button type="button" class="btn-normal btn-primary" id="accept">Yes</button>
-        <button type="button" class="btn-normal btn-default" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
-
+<input type="hidden" id="hdnCustomerId" />
 
 @section Scripts{
   <script>
@@ -204,6 +162,24 @@
         // get order id from query string
         orderId = queryString.split("&")[0].split("=")[1];
         orderNo = queryString.split("&")[1].split("=")[1];
+
+        // get the customers details for the existing order
+        $.ajax({
+          url: '@Url.Action("GetOrderCustomerDetails")' + '?orderId=' + orderId,
+          type: "POST",
+          success: function (dataOrderDetails) {
+            var delay = 200;
+            setTimeout(function () {
+              $("#existingcustomers").val(dataOrderDetails.customerId);
+              $("#existingcustomers").change();
+              
+            }, delay);
+
+          },
+          error: function (xhr, options, error) {
+            alert("OOPS! The was an error processing your request - " + jQuery.parseJSON(xhr.responseText).message);
+          }
+        });
       }
 
     });
@@ -227,7 +203,7 @@
 
               order.customerContacts = [];
               $("#existingcontacts").html("");
-              $("#existingcontacts").append("<option value='0'></option>");
+              $("#existingcontacts").append("<option value='0'>New Contact</option>");
 
               // loop through contacts and append to the contacts drop down list
               $.each(customercontactslist, function (index, contact) {
@@ -263,7 +239,7 @@
           $("input[type=text]").val("");
           $("textarea").val("");
           $("#existingcontacts").html("");
-          $("#existingcontacts").append("<option value='0'>new contact</option>");
+          $("#existingcontacts").append("<option value='0'>New Contact</option>");
           order.customerContacts = [];
         }
 
@@ -329,7 +305,7 @@
       if (event.keyCode == 13) { $("#done").click(); }
     });
 
-    $("#deliveryaddress").click(function () {
+    $("#save").click(function () {
       // get the customer panel details
       var customerid = $("#existingcustomers").val();
       var customername = $("#customername").val();
@@ -346,12 +322,7 @@
 
       if (!validCustomerForm()) return;
 
-      if (!validContactForm()) {
-        if (confirm("No contact person has been added. Continue with only the customer details?")) {
-          contactAdded = false;
-        }
-        else { return; }
-      }
+      contactAdded = validContactForm();
 
       $.ajax({
         url: '@Url.Action("AddCustomerOrder")',
@@ -362,13 +333,32 @@
           ContactId: contactid, ContactName: contactname, ContactEmailAddress: contactemail, ContactNo: contactno, ContactAdded: contactAdded
         },
         success: function (data) {
-          window.location.href = '@Url.Action("AddressDetail")' + '?orderId=' + data.orderId + '&orderNo=' + data.orderNo + '&customerId=' + data.customerId;
+          $("#hdnCustomerId").val(data.customerId);
+          $("#hidden").click();
         },
         error: function (xhr, options, error) {
           alert("OOPS! The was an error processing your request - " + jQuery.parseJSON(xhr.responseText).message);
         }
       });
 
+    });
+
+    $("#deliveryaddress").click(function () {
+      window.location.href = '@Url.Action("AddressDetail")' + '?orderId=' + orderId + '&orderNo=' + orderNo + '&customerId=' + $("#hdnCustomerId").val();
+    });
+
+    $("#accept").click(function () {
+      $.ajax({
+          url: '@Url.Action("AcceptOrder")',
+          type: "POST",
+          data: { orderId: orderId },
+          success: function () {
+            location.href = '@Url.Action("Index", "Orders", new { area = "Orders" })';
+          },
+          error: function (xhr, options, error) {
+            alert("OOPS! The was an error processing your request - " + jQuery.parseJSON(xhr.responseText).message);
+          }
+        });
     });
 
     function removeContact() {
@@ -381,8 +371,8 @@
       var contactno = $("#contactno").val();
       var contactemail = $("#contactemail").val();
 
-      if (contactname == "") { $("#contactname").addClass("alert-danger"); valid = false; }
-      if (contactno == "") { $("#contactno").addClass("alert-danger"); valid = false; }
+      if (contactname == "") { valid = false; }
+      if (contactno == "") { valid = false; }
       if (contactemail != "" && (!validateEmail(contactemail))) { valid = false; }
 
       return valid;

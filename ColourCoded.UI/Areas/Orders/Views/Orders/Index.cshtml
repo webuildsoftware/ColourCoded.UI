@@ -68,7 +68,6 @@
               <td>OrderNo</td>
               <td>CreateDate</td>
               <td>Customer</td>
-              <td class="hidecolumn">Contact</td>
               <td class="hidecolumn">Total</td>
               <td class="hidecolumn">Status</td>
             </tr>
@@ -88,8 +87,7 @@
               <td data-toggle="modal" data-target="#ViewOrderModal">@order.OrderNo</td>
               <td data-toggle="modal" data-target="#ViewOrderModal">@order.CreateDate</td>
               <td data-toggle="modal" data-target="#ViewOrderModal">@order.CustomerName</td>
-              <td data-toggle="modal" data-target="#ViewOrderModal" class="hidecolumn">@order.ContactName</td>
-              <td data-toggle="modal" data-target="#ViewOrderModal" style="text-align: right" class="hidecolumn">@order.Total</td>
+              <td data-toggle="modal" data-target="#ViewOrderModal" style="text-align: right" class="hidecolumn">R @order.Total</td>
               <td data-toggle="modal" data-target="#ViewOrderModal" style="text-align: center" class="hidecolumn">@order.Status</td>
             </tr>
             }

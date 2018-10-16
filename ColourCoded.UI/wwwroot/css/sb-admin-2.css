@@ -1,8 +1,73 @@
-/*!
- * Start Bootstrap - SB Admin 2 v3.3.7+1 (http://startbootstrap.com/template-overviews/sb-admin-2)
- * Copyright 2013-2016 Start Bootstrap
- * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap/blob/gh-pages/LICENSE)
- */
+
+.nonbordered {
+  border: none !important;
+  max-width: 20px !important;
+  padding: 4px !important;
+}
+
+@media (max-width: 600px) {
+  .loader-dialog {
+    position: absolute;
+    float: left;
+    left: 45%;
+    top: 25%;
+    transform: translate(-50%, -50%);
+    width: auto;
+    margin: 10px;
+  }
+
+  .modal-sm {
+    width: 300px;
+  }
+
+  .modal-xsm {
+    width: 150px;
+  }
+}
+
+@media (min-width: 600px) {
+  .loader-dialog {
+    position: absolute;
+    float: left;
+    left: 50%;
+    top: 20%;
+    transform: translate(-50%, -50%);
+    width: auto;
+    margin: 10px;
+  }
+
+  .modal-sm {
+    width: 300px;
+  }
+
+  .modal-xsm {
+    width: 150px;
+  }
+}
+
+@media (max-width: 600px) {
+  .modal-dialog {
+    position: absolute;
+    float: left;
+    left: 15%;
+    top: 15%;
+    transform: translate(-50%, -50%);
+    width: auto;
+    margin: 10px;
+  }
+}
+
+@media (min-width: 600px) {
+  .modal-dialog {
+    position: absolute;
+    float: left;
+    left: 25%;
+    top: 15%;
+    transform: translate(-50%, -50%);
+    width: auto;
+    margin: 10px;
+  }
+}
 
 body {
   background-color: #f8f8f8;
@@ -38,30 +103,6 @@ body {
 @media (max-width: 600px) {
   .md-column {
     max-width: 130px;
-  }
-}
-
-@media (max-width: 600px) {
-  .modal-dialog {
-    position: absolute;
-    float: left;
-    left: 15%;
-    top: 15%;
-    transform: translate(-50%, -50%);
-    width: auto;
-    margin: 10px;
-  }
-}
-
-@media (min-width: 600px) {
-  .modal-dialog {
-    position: absolute;
-    float: left;
-    left: 20%;
-    top: 15%;
-    transform: translate(-50%, -50%);
-    width: auto;
-    margin: 10px;
   }
 }
 
@@ -262,6 +303,15 @@ table.dataTable thead .sorting:after {
   text-align: center;
   font-size: 10px;
   line-height: 1.428571429;
+}
+.btn-circle-xsm {
+  width: 17px;
+  height: 17px;
+  padding: 0px 0;
+  border-radius: 10px;
+  text-align: center;
+  font-size: 10px;
+  line-height: 1.228571429;
 }
 .btn-circle.btn-lg {
   width: 50px;

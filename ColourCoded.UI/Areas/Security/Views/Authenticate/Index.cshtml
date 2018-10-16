@@ -62,7 +62,7 @@
 
   <!-- Loader Modal -->
   <div class="modal fade" id="loader" tabindex="-1" role="dialog" aria-labelledby="loadMeLabel">
-    <div class="modal-dialog modal-sm" role="document">
+    <div class="loader-dialog modal-xsm" role="document">
       <div class="modal-content">
         <div class="loader"></div>
       </div>
@@ -90,7 +90,7 @@
     if (event.keyCode == "13") {
       if (validForm()) {
 
-
+        GlobalLoader(true);
         $("div").removeClass("has-error");
         $("#loginForm").submit();
       }

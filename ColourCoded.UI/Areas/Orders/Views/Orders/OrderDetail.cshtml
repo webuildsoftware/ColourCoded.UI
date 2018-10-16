@@ -23,18 +23,18 @@
     }
 </style>
 <div class="row">
-  <div class="col-md-6">
+  <div class="col-md-7">
     <h4 class="page-header-sm">
       Add New Order
       <div class="pull-right">
-        <input type="text" id="ordernoprefix" style="width:90px" placeholder="Enter Prefix" maxlength="10" class="form-control-header" />
-        <input type="text" id="ordernoseed" style="width:50px" disabled="disabled" onkeypress="return false;" class="form-control-header" />
+        <input type="text" id="ordernoprefix" style="width:110px" placeholder="Enter Order No" maxlength="10" class="form-control-header" />
+        <input type="text" id="ordernoseed" style="width:60px" disabled="disabled" onkeypress="return false;" class="form-control-header" />
       </div>
     </h4>
   </div>
 </div>
 <div class="row">
-  <div class="col-md-6">
+  <div class="col-md-7">
     <div id="main">
       <div>
         <span>Item Description</span><br />
@@ -54,15 +54,15 @@
       </div>
       <div style="padding-bottom:10px; padding-top:10px;">
         <input id="lineitem" value="Add Item" type="button" class="btn-normal btn-success" />&nbsp;&nbsp;
-        <input id="done" value="Add Customer" type="button" class="btn btn-success" data-toggle="modal" data-target="#ConfirmModal"/>&nbsp;&nbsp;
-        <input id="cancel" value="Cancel" type="button" class="btn-normal btn-default" />&nbsp;&nbsp;
-        <label id="validorder" class="validationLabel"></label>
+        <input id="done" value="Link Customer" type="button" class="btn btn-success" data-toggle="modal" data-target="#ConfirmModal"/>&nbsp;&nbsp;
+        <input id="cancel" value="Cancel" type="button" class="btn-normal btn-default" />&nbsp;&nbsp
       </div>
     </div>
   </div>
 </div>
 <div class="row">
-  <div class="col-md-6">
+  <div class="col-md-7">
+    <br />
     <table id="orderdetail" class="table table-bordered">
       <thead class="table-head">
         <tr>
@@ -75,6 +75,7 @@
       </thead>
       <tbody></tbody>
     </table>
+    &nbsp;<label id="validorder" class="validationLabel"></label>
   </div>
 </div>
 
@@ -89,7 +90,7 @@
       <div class="modal-body">Leave page? Any unsaved changes will be lost.</div>
       <div class="modal-footer">
         <button type="button" class="btn-normal btn-primary" id="confirm">Yes</button>
-        <button type="button" class="btn-normal btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn-normal btn-default" data-dismiss="modal" id="closemodal">Close</button>
       </div>
     </div>
   </div>
@@ -265,9 +266,9 @@
           "<td style='padding-right:5px' align='right'>" +
           lineitem.linetotal.toFixed(2) +
           "</td>" +
-          "<td class='table-nonbordered-right'><button type='button' class='btn btn-danger btn-circle-sm' title='remove'><i class='fa fa-times' onclick='removeLineItem(" +
+          "<td class='nonbordered'><button type='button' class='btn btn-danger btn-circle-xsm' title='remove' onclick='removeLineItem(" +
           index +
-          ")'></i></button></td></tr> ");
+          ")'><i class='fa fa-times'></i></button></td></tr> ");
           exists = true;
       });
 
@@ -316,6 +317,7 @@
     $("#confirm").click(function () {
 
       if (order.orderdetail.length == 0) {
+        $("#closemodal").click();
         $("#validorder").html("Please add item(s).");
       }
       else {
