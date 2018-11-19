@@ -3,6 +3,7 @@
   border: none !important;
   max-width: 20px !important;
   padding: 4px !important;
+  background-color: white;
 }
 
 @media (max-width: 600px) {
@@ -49,7 +50,16 @@
   .modal-dialog {
     position: absolute;
     float: left;
-    left: 15%;
+    left: 10%;
+    top: 15%;
+    transform: translate(-50%, -50%);
+    width: auto;
+    margin: 10px;
+  }
+  .modal-large-dialog {
+    position: absolute;
+    float: left;
+    left: 5%;
     top: 15%;
     transform: translate(-50%, -50%);
     width: auto;
@@ -59,6 +69,15 @@
 
 @media (min-width: 600px) {
   .modal-dialog {
+    position: absolute;
+    float: left;
+    left: 25%;
+    top: 15%;
+    transform: translate(-50%, -50%);
+    width: auto;
+    margin: 10px;
+  }
+  .modal-large-dialog {
     position: absolute;
     float: left;
     left: 25%;
@@ -253,6 +272,9 @@ body {
 }
 .login-panel {
   margin-top: 25%;
+}
+.register-panel {
+  margin-top: 10%;
 }
 .flot-chart {
   display: block;

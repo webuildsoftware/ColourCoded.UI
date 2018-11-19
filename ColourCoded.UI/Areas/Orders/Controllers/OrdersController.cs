@@ -130,7 +130,7 @@ namespace ColourCoded.UI.Areas.Orders.Controllers
     }
 
     [HttpGet]
-    public JsonResult ConfirmCustomerOrderAddress(int orderId, int customerId)
+    public JsonResult GetCustomerOrderAddress(int orderId, int customerId)
     {
       var result = WebApiCaller.PostAsync<AddressDetailsModel>("WebApi:Orders:GetCustomerOrderAddress", new GetOrderAddressRequestModel { OrderId = orderId, CustomerId = customerId });
 

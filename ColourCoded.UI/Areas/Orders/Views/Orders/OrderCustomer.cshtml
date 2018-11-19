@@ -4,116 +4,113 @@
   Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-
 <style>
 
   .main div {
     padding: 3px;
   }
 
-  .main div span {
-    font-size: 11px;
-    font-weight: bold;
-  }
-
+    .main div span {
+      font-size: 11px;
+      font-weight: bold;
+    }
 </style>
 <div class="row">
-  <div class="col-md-4">
+  <div class="col-md-5">
     <h4 class="page-header-sm">
       Customer Details
     </h4>
     <div class="main">
       <div>
-        <span>Available Customers</span>
+        <span>Order No</span>
         <br />
-        <select id="existingcustomers" class="form-control-normal">
+        <input type="text" id="orderno" disabled class="form-control-small" />
+      </div>
+      <div>
+        <span>Customers</span>
+        <br />
+        <select id="existingcustomers" class="form-control-small" style="width:200px">
           <option value='0'>New Customer</option>
         </select>
       </div>
       <div>
-        <span>Customer Name (*)</span>
+        <span>Name *</span>
         <br />
-        <input type="text" id="customername" placeholder="Enter Name" class="form-control-normal" />
+        <input type="text" id="customername" placeholder="Enter Name" class="form-control-small" style="width:200px" />
       </div>
       <div>
-        <span>Customer Details</span>
+        <span>Other</span>
         <br />
-        <textarea id="customerdetails" class="form-control-normal" rows="3">
+        <textarea id="customerdetails" class="form-control-normal" rows="3" maxlength="155">
         </textarea>
       </div>
       <div>
-        <span>Customer Account No</span>
+        <span>Email</span>
         <br />
-        <input type="text" id="customeraccountno" class="form-control-normal" placeholder="Enter Account No" />
+        <input type="text" id="customeremail" class="form-control-small" placeholder="Enter Email" style="width:200px" />
       </div>
       <div>
-        <span>Customer Contact No (*)</span>
+        <span>Account No</span>
         <br />
-        <input type="text" id="customercontactno" class="number form-control-normal" placeholder="Enter Contact No" maxlength="10" />
+        <input type="text" id="customeraccountno" class="form-control-small" placeholder="Enter Account No" />
       </div>
       <div>
-        <span>Customer Mobile No</span>
+        <span>Contact No *</span>
         <br />
-        <input type="text" id="customermobileno" class="number form-control-normal" placeholder="Enter Mobile No" maxlength="10" />
+        <input type="text" id="customercontactno" class="number form-control-small" placeholder="Enter Contact No" maxlength="10" />
       </div>
       <div>
-        <span>Customer Email</span>
+        <span>Cell No</span>
         <br />
-        <input type="text" id="customeremail" class="form-control-normal" placeholder="Enter Email" />
+        <input type="text" id="customermobileno" class="number form-control-small" placeholder="Enter Cell No" maxlength="10" />
+      </div>
+      <div class="main" id="pnlContact" style="display: none;">
+        <hr style="margin-top:10px; margin-bottom:2px" />
+        <div>
+          <span>Contacts</span>
+          <br />
+          <select id="existingcontacts" class="form-control-small" style="width:200px">
+            <option value='0'>New Contact</option>
+          </select>
+        </div>
+        <div>
+          <span>Contact Person Name</span>
+          <br />
+          <input type="text" id="contactname" placeholder="Enter Name" class="form-control-small" style="width:200px" />
+        </div>
+        <div>
+          <span>Email</span>
+          <br />
+          <input type="text" id="contactemail" placeholder="Enter Email" class="form-control-small" style="width:200px" />
+        </div>
+        <div>
+          <span>Cell No</span>
+          <br />
+          <input type="text" id="contactno" class="number form-control-small" placeholder="Enter Cell No" maxlength="10" />
+        </div>
       </div>
       <div style="padding-top: 10px">
-        <input id="save" value="Save" type="button" class="btn-normal btn-success" />&nbsp;&nbsp;
-        <input id="addcontact" value="Link Contact" type="button" class="btn btn-success" />&nbsp;&nbsp;
-        <input id="cancel" value="Cancel" type="button" class="btn-normal btn-default" />&nbsp;&nbsp;
-        <input id="hidden" type="button" style="visibility: hidden" data-toggle="modal" data-target="#ConfirmModal" />
+        <input id="save" value="Save Customer" type="button" class="btn-normal-thin btn-success" />&nbsp;&nbsp;
+        <input id="addcontact" value="Contact Person" type="button" class="btn-normal-thin btn-success" />&nbsp;&nbsp;
+        <input id="cancel" value="Cancel" type="button" class="btn-normal-thin btn-default" />&nbsp;&nbsp;
       </div>
     </div>
   </div>
-  <div id="pnlContact" style="display: none;" class="col-md-4">
-    <h4 class="page-header-sm">
-      Contact Person
-    </h4>
-    <div class="main">
-      <div>
-        <span>Available Contacts</span>
-        <br />
-        <select id="existingcontacts" class="form-control-normal">
-          <option value='0'>New Contact</option>
-        </select>
-      </div>
 
-      <div>
-        <span>Contact Name</span>
-        <br />
-        <input type="text" id="contactname" placeholder="Enter Name" class="form-control-normal" />
-      </div>
-      <div>
-        <span>Contact No</span>
-        <br />
-        <input type="text" id="contactno" class="number form-control-normal" placeholder="Enter Contact No" maxlength="10" />
-      </div>
-      <div>
-        <span>Contact Email</span>
-        <br />
-        <input type="text" id="contactemail" placeholder="Enter Email" class="form-control-normal" />
-      </div>
-      <br />
-    </div>
-  </div>
 </div>
-
+<input id="hidden" type="button" style="visibility: hidden" data-toggle="modal" data-target="#ConfirmModal" />
 <!-- Saved Successful Popup -->
 <div class="modal fade" id="ConfirmModal" tabindex="-1" role="dialog" aria-labelledby="ConfirmModalLabel" aria-hidden="true">
-  <div class="modal-dialog" style="width:300px">
+  <div class="modal-dialog" style="width:280px">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true" id="closeconfirm">&times;</button>
-        <h4 class="modal-title" id="ConfirmModalLabel">Successfully Saved</h4>
+        <h4 class="modal-title" id="ConfirmModalLabel">Successfully saved</h4>
       </div>
       <div class="modal-body">What would you like to do next?</div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary" id="deliveryaddress">Link Address</button>
-        <button type="button" class="btn btn-primary" id="accept">Accept Order</button>
+        <button type="button" class="btn-normal-thin btn-primary" id="deliveryaddress">Address Details</button>
+        <button type="button" class="btn-normal-thin btn-primary" id="accept">Accept Order</button>
       </div>
     </div>
   </div>
@@ -124,9 +121,10 @@
 @section Scripts{
   <script>
     var queryString = location.href.split("?")[1];
-    var orderId = 0;
-    var orderNo = "";
-    var contactAdded = true;
+    orderId = 0;
+    orderNo = "";
+
+    var contactAdded = false;
     var order = {
       "customerContacts": [],
       "customers": []
@@ -162,6 +160,7 @@
         // get order id from query string
         orderId = queryString.split("&")[0].split("=")[1];
         orderNo = queryString.split("&")[1].split("=")[1];
+        $("#orderno").val(orderNo);
 
         // get the customers details for the existing order
         $.ajax({
@@ -171,8 +170,8 @@
             var delay = 200;
             setTimeout(function () {
               $("#existingcustomers").val(dataOrderDetails.customerId);
+              $("#existingcustomers").data("contactid", dataOrderDetails.contactId);
               $("#existingcustomers").change();
-              
             }, delay);
 
           },
@@ -182,12 +181,6 @@
         });
       }
 
-    });
-
-    $('#addcontact').click(function() {
-      $('#pnlContact').fadeIn(600);
-      var scrollPos = $("#pnlContact").offset().top;
-      $(window).scrollTop(scrollPos);
     });
 
     $("#existingcustomers").change(function () {
@@ -217,17 +210,26 @@
               });
 
               // append the customer details to the customer details panel
-              var index = $('option:selected', $("#existingcustomers")).attr('index');
+              var customerindex = $('option:selected', $("#existingcustomers")).attr('index');
 
-              $("#customername").val(order.customers[index].customername);
-              $("#customerdetails").val(order.customers[index].customerdetails);
-              $("#customercontactno").val(order.customers[index].contactno);
-              $("#customeraccountno").val(order.customers[index].accountno);
-              $("#customermobileno").val(order.customers[index].mobileno);
-              $("#customeremail").val(order.customers[index].emailaddress);
-              $("#contactname").val("");
-              $("#contactno").val("");
-              $("#contactemail").val("");
+              $("#customername").val(order.customers[customerindex].customername);
+              $("#customerdetails").val(order.customers[customerindex].customerdetails);
+              $("#customercontactno").val(order.customers[customerindex].contactno);
+              $("#customeraccountno").val(order.customers[customerindex].accountno);
+              $("#customermobileno").val(order.customers[customerindex].mobileno);
+              $("#customeremail").val(order.customers[customerindex].emailaddress);
+
+              var contactId = $("#existingcustomers").data("contactid");
+              if (contactId != 0) {
+
+                $("#existingcontacts").val(contactId);
+                var contactindex = $('option:selected', $("#existingcontacts")).attr('index');
+
+                $("#contactname").val(order.customerContacts[contactindex].contactname);
+                $("#contactno").val(order.customerContacts[contactindex].contactno);
+                $("#contactemail").val(order.customerContacts[contactindex].emailaddress);
+                $('#addcontact').click();
+              }
 
             },
             error: function (xhr, options, error) {
@@ -235,74 +237,24 @@
             }
           });
         }
-        else {
-          $("input[type=text]").val("");
-          $("textarea").val("");
-          $("#existingcontacts").html("");
-          $("#existingcontacts").append("<option value='0'>New Contact</option>");
-          order.customerContacts = [];
-        }
 
       });
 
-      $("#existingcontacts").change(function () {
-        refreshContactsPanel();
+    $("#existingcontacts").change(function () {
+      refreshContactsPanel();
 
-        var selectedContact = $(this).val();
+      var selectedContact = $(this).val();
 
-        if (selectedContact != "") {
-          var index = $('option:selected', $("#existingcontacts")).attr('index');
+      if (selectedContact != "") {
+        var index = $('option:selected', $("#existingcontacts")).attr('index');
 
-          // populate the contact form inputs
-          $("#contactname").val(order.customerContacts[index].contactname);
-          $("#contactno").val(order.customerContacts[index].contactno);
-          $("#contactemail").val(order.customerContacts[index].emailaddress);
-          contactAdded = true;
-        }
+        // populate the contact form inputs
+        $("#contactname").val(order.customerContacts[index].contactname);
+        $("#contactno").val(order.customerContacts[index].contactno);
+        $("#contactemail").val(order.customerContacts[index].emailaddress);
 
-    });
-
-    $("#cancel").click(function () {
-      location.href = '@Url.Action("Index", "Orders", new { area = "Orders" })'
-    });
-
-    $("input[class='number form-control-large']").keyup(function (event) {
-      var keyValue = $(this).val();
-
-      if (!$.isNumeric(event.key))
-        $(this).val(keyValue.replace(event.key, ""));
-    });
-
-    $("input[class='number form-control-large']").change(function (event) {
-      if (!$.isNumeric($(this).val()))
-        $(this).val("");
-    });
-
-    function validateEmail(email) {
-      var pattern = /^[a-zA-Z0-9\-_]+(\.[a-zA-Z0-9\-_]+)*@@[a-z0-9]+(\-[a-z0-9]+)*(\.[a-z0-9]+(\-[a-z0-9]+)*)*\.[a-z]{2,4}$/;
-      return pattern.test(email);
-    }
-
-    $("#customeremail").change(function (event) {
-      var emailAddress = $(this).val();
-
-      if (!validateEmail(emailAddress) && emailAddress != "") {
-        $(this).addClass("alert-danger");
-        $(this).attr("placeholder", "Enter valid email");
       }
-    });
 
-    $("#contactemail").change(function (event) {
-      var emailAddress = $(this).val();
-
-      if (!validateEmail(emailAddress) && emailAddress != "") {
-        $(this).addClass("alert-danger");
-        $(this).attr("placeholder", "Enter valid email");
-      }
-    });
-
-    $("#contactemail").keypress(function (event) {
-      if (event.keyCode == 13) { $("#done").click(); }
     });
 
     $("#save").click(function () {
@@ -322,7 +274,10 @@
 
       if (!validCustomerForm()) return;
 
-      contactAdded = validContactForm();
+      if (contactAdded) {
+        if (!validContactForm()) return;
+      }
+        
 
       $.ajax({
         url: '@Url.Action("AddCustomerOrder")',
@@ -343,10 +298,6 @@
 
     });
 
-    $("#deliveryaddress").click(function () {
-      window.location.href = '@Url.Action("AddressDetail")' + '?orderId=' + orderId + '&orderNo=' + orderNo + '&customerId=' + $("#hdnCustomerId").val();
-    });
-
     $("#accept").click(function () {
       $.ajax({
           url: '@Url.Action("AcceptOrder")',
@@ -361,19 +312,40 @@
         });
     });
 
-    function removeContact() {
-      $("#contacts tbody").html("");
-    }
+    $("#deliveryaddress").click(function () {
+      window.location.href = '@Url.Action("AddressDetail")' + '?orderId=' + orderId + '&orderNo=' + orderNo + '&customerId=' + $("#hdnCustomerId").val();
+    });
+
+    $('#addcontact').click(function () {
+      if ($('#pnlContact').css('display') == 'none') {
+        contactAdded = true;
+        $('#pnlContact').fadeIn(500);
+        var scrollPos = $("#pnlContact").offset().top;
+        $(window).scrollTop(scrollPos);
+
+      }
+      else { 
+        $('#pnlContact').fadeOut(500);
+        var scrollPos = $("#addcontact").offset().top;
+        $(window).scrollTop(scrollPos);
+      }
+
+    });
+
+
+    $("#cancel").click(function () {
+      location.href = '@Url.Action("Index", "Orders", new { area = "Orders" })'
+    });
+
+    //////////////////    Private Helper Methods
+    ///////////////////////////////////////////////////
 
     function validContactForm() {
       var valid = true;
-      var contactname = $("#contactname").val();
-      var contactno = $("#contactno").val();
-      var contactemail = $("#contactemail").val();
 
-      if (contactname == "") { valid = false; }
-      if (contactno == "") { valid = false; }
-      if (contactemail != "" && (!validateEmail(contactemail))) { valid = false; }
+      if ($("#contactname").val() == "") { $("#contactname").addClass("alert-danger"); valid = false; }
+      if ($("#contactno").val() == "") { $("#contactno").addClass("alert-danger"); valid = false; }
+      if ($("#contactemail").val() != "" && (!validateEmail($("#contactemail").val()))) { valid = false; }
 
       return valid;
     }
@@ -398,5 +370,62 @@
       $("#divcontacts").hide();
       $("#contacts tbody").html("");
     }
+
+    function validateEmail(email) {
+      var pattern = /^[a-zA-Z0-9\-_]+(\.[a-zA-Z0-9\-_]+)*@@[a-z0-9]+(\-[a-z0-9]+)*(\.[a-z0-9]+(\-[a-z0-9]+)*)*\.[a-z]{2,4}$/;
+      return pattern.test(email);
+    }
+
+    ////////////////// END :  Private Helper Methods
+    //////////////////////////////////////////////////////
+
+    //////////////////    Key Press and Change events
+    ///////////////////////////////////////////////////
+
+    $("input[type='text']").keyup(function (event) {
+      $(this).removeClass("alert-danger");
+    });
+
+
+    $("input[class='number form-control-small']").keyup(function (event) {
+      if (!$.isNumeric(event.key))
+        $(this).val($(this).val().replace(event.key, ""));
+    });
+
+    $("input[class='number form-control-small']").keypress(function (event) {
+      if (!$.isNumeric(event.key))
+        $(this).val($(this).val().replace(event.key, ""));
+    });
+
+    $("input[class='number form-control-small']").change(function (event) {
+      if (!$.isNumeric($(this).val()))
+        $(this).val("");
+    });
+
+
+    $("#customeremail").change(function (event) {
+      var emailAddress = $(this).val();
+
+      if (!validateEmail(emailAddress) && emailAddress != "") {
+        $(this).addClass("alert-danger");
+        $(this).attr("placeholder", "Enter valid email");
+      }
+    });
+
+    $("#contactemail").change(function (event) {
+      var emailAddress = $(this).val();
+
+      if (!validateEmail(emailAddress) && emailAddress != "") {
+        $(this).addClass("alert-danger");
+        $(this).attr("placeholder", "Enter valid email");
+      }
+    });
+
+    $("#contactemail").keypress(function (event) {
+      if (event.keyCode == 13) { $("#done").click(); }
+    });
+
+    ////////////////// END :  Key Press and Change events
+    /////////////////////////////////////////////////////
   </script>
 }

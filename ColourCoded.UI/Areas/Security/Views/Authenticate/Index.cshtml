@@ -1,7 +1,7 @@
 ﻿@model ColourCoded.UI.Areas.Security.Models.Login.AuthenticateViewModel;
 
 @{
-  ViewData["Title"] = "Login";
+  ViewData["Title"] = "CC Invoice Login";
 }
 
 <head>
@@ -91,7 +91,6 @@
       if (validForm()) {
 
         GlobalLoader(true);
-        $("div").removeClass("has-error");
         $("#loginForm").submit();
       }
     }
@@ -101,14 +100,12 @@
     var isValid = true;
 
     if ($("#username").val() == "") {
-      $("#username").addClass("text-danger");
-      $("#divusername").addClass("has-error");
+      $("#username").addClass("alert-danger");
       isValid = false;
     }
 
     if ($("#password").val() == "") {
-      $("#password").addClass("text-danger");
-      $("#divpassword").addClass("has-error");
+      $("#password").addClass("alert-danger");
       isValid = false;
     }
 

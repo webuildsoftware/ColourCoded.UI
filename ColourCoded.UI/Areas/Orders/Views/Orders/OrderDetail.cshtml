@@ -25,10 +25,10 @@
 <div class="row">
   <div class="col-md-7">
     <h4 class="page-header-sm">
-      Add New Order
+      <span id="titleheader">Add</span> Order
       <div class="pull-right">
-        <input type="text" id="ordernoprefix" style="width:110px" placeholder="Enter Order No" maxlength="10" class="form-control-header" />
-        <input type="text" id="ordernoseed" style="width:60px" disabled="disabled" onkeypress="return false;" class="form-control-header" />
+        <input type="text" id="ordernoprefix" style="width:100px" placeholder="Enter Order No" maxlength="10" class="form-control-header" />
+        <input type="text" id="ordernoseed" style="width:50px; text-align: right" disabled="disabled" onkeypress="return false;" class="form-control-header" />
       </div>
     </h4>
   </div>
@@ -38,7 +38,7 @@
     <div id="main">
       <div>
         <span>Item Description</span><br />
-        <input type="text" id="product" placeholder="Enter item description" class="form-control-normal" />
+        <input type="text" id="product" placeholder="Enter item description" maxlength="155" style="width:245px" class="form-control-small" />
       </div>
       <div>
         <span>Unit Price</span><br />
@@ -46,23 +46,23 @@
       </div>
       <div>
         <span>Quantity</span><br />
-        <input type="text" id="quantity" class="number form-control-small" placeholder="Enter quantity" />
+        <input type="text" id="quantity" class="quantity form-control-small" placeholder="Enter quantity" />
       </div>
       <div>
         <span>Discount</span><br />
         <input type="text" id="discount" class="number form-control-small" placeholder="Enter discount" />
       </div>
-      <div style="padding-bottom:10px; padding-top:10px;">
-        <input id="lineitem" value="Add Item" type="button" class="btn-normal btn-success" />&nbsp;&nbsp;
-        <input id="done" value="Link Customer" type="button" class="btn btn-success" data-toggle="modal" data-target="#ConfirmModal"/>&nbsp;&nbsp;
-        <input id="cancel" value="Cancel" type="button" class="btn-normal btn-default" />&nbsp;&nbsp
+      <div style="padding-bottom:10px;">
+        <input id="lineitem" value="Add Item" type="button" class="btn-normal-thin btn-success" />&nbsp;&nbsp;
+        <input id="cancel" value="Cancel" type="button" class="btn-normal-thin btn-default" />&nbsp;&nbsp;
+        <input id="save" value="Save Order" type="button" class="btn-normal-thin btn-success" />&nbsp;&nbsp;
+        <input id="hidden" type="button" style="visibility: hidden" data-toggle="modal" data-target="#ConfirmModal" />
       </div>
     </div>
   </div>
 </div>
 <div class="row">
   <div class="col-md-7">
-    <br />
     <table id="orderdetail" class="table table-bordered">
       <thead class="table-head">
         <tr>
@@ -70,7 +70,7 @@
           <td>Qty</td>
           <td>Price</td>
           <td>Discount</td>
-          <td>Line Total</td>
+          <td></td>
         </tr>
       </thead>
       <tbody></tbody>
@@ -79,18 +79,18 @@
   </div>
 </div>
 
-<!-- Confirm Popup -->
+<!-- Saved Successful Popup -->
 <div class="modal fade" id="ConfirmModal" tabindex="-1" role="dialog" aria-labelledby="ConfirmModalLabel" aria-hidden="true">
-  <div class="modal-dialog" style="width:250px">
+  <div class="modal-dialog" style="width:280px">
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" id="ConfirmModalLabel">Add Customer</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" id="closeconfirm">&times;</button>
+        <h4 class="modal-title" id="ConfirmModalLabel">Successfully saved</h4>
       </div>
-      <div class="modal-body">Leave page? Any unsaved changes will be lost.</div>
+      <div class="modal-body">What would you like to do next?</div>
       <div class="modal-footer">
-        <button type="button" class="btn-normal btn-primary" id="confirm">Yes</button>
-        <button type="button" class="btn-normal btn-default" data-dismiss="modal" id="closemodal">Close</button>
+        <button type="button" class="btn-normal-thin btn-primary" id="customer">Customer Details</button>
+        <button type="button" class="btn-normal-thin btn-primary" id="accept">Accept Order</button>
       </div>
     </div>
   </div>
@@ -120,18 +120,6 @@
         }
       });
 
-       $.ajax({
-        url: '@Url.Action("GetOrderNoSeed")',
-        type: 'GET',
-        success: function (data) {
-          ordernoseed = data;
-          $("#ordernoseed").val(ordernoseed);
-        },
-        error: function (xhr, options, error) {
-          alert("OOPS! The was an error processing your request - " + jQuery.parseJSON(xhr.responseText).message);
-        }
-      });
-
       // check if the view is in edit mode
       if (queryString != undefined) {
         // get order id from query string
@@ -139,16 +127,15 @@
         orderNo = queryString.split("&")[1].split("=")[1];
 
         // change header and update ordernoprefix
-        $("#header").html("Edit Quote");
+        $("#titleheader").html("Edit");
         $("#ordernoprefix").val(orderNo);
+        $("#ordernoseed").attr("disabled", "disabled");
 
         $.ajax({
           url: '@Url.Action("GetOrderLineDetails")' + '?orderId=' + orderId,
           type: 'GET',
           success: function (lineitems) {
-            ordernoseed = "";
-            $("#ordernoseed").val(ordernoseed);
-            $("#ordernoseed").attr("disabled", "disabled");
+
             // loop through order line details
             $.each(lineitems, function (index, lineitem) {
               order.orderdetail.push(
@@ -167,27 +154,21 @@
           }
         });
       }
+      else {
+        // new order, so we need the order no seed
+        $.ajax({
+          url: '@Url.Action("GetOrderNoSeed")',
+          type: 'GET',
+          success: function (data) {
+            ordernoseed = data;
+            $("#ordernoseed").val(ordernoseed);
+          },
+          error: function (xhr, options, error) {
+            alert("OOPS! The was an error processing your request - " + jQuery.parseJSON(xhr.responseText).message);
+          }
+        });
 
-    });
-
-    $("#ordernoseed").change(function(event) {
-      $("#ordernoseed").val(ordernoseed);
-    });
-
-    $("input[class='number form-control-small']").keyup(function(event) {
-      var keyValue = $(this).val();
-
-      if (!$.isNumeric(event.key))
-        $(this).val(keyValue.replace(event.key, ""));
-
-      if (event.keyCode == 13) {
-        $("#lineitem").click();
       }
-    });
-
-    $("input[class='number form-control-small']").change(function(event) {
-      if (!$.isNumeric($(this).val()))
-        $(this).val("");
     });
 
     $("#lineitem").click(function () {
@@ -232,8 +213,12 @@
       }
 
       updateOrderDetailGrid();
-      product.focus(); product.val("");
-      $("input[class='number form-control-small']").val("");
+      product.focus();
+      product.val("");
+      quantity.val("");
+      unitprice.val("");
+      discount.val("");
+
     });
 
     function updateOrderDetailGrid() {
@@ -281,47 +266,42 @@
         grid.append("<tr>" +
           "<td style='height:18px' colspan='3'></td>" +
           "<td align='right' style='padding-right:5px' ><strong>Sub-Total</strong></td>" +
-          "<td align='right' style='padding-right:5px' ><strong>R " + subtotal.toFixed(2) + "</strong></td>" +
+          "<td align='right' style='padding-right:5px' ><strong>" + subtotal.toFixed(2) + "</strong></td>" +
           "</tr>");
 
         // Discount Total
         grid.append("<tr>" +
           "<td style='height:18px' colspan='3'></td>" +
           "<td align='right' style='padding-right:5px' ><strong>Discount</strong></td>" +
-          "<td align='right' style='padding-right:5px' ><strong>R " + discount.toFixed(2) + "</strong></td>" +
+          "<td align='right' style='padding-right:5px' ><strong>" + discount.toFixed(2) + "</strong></td>" +
           "</tr>");
 
         // Vat Total
         grid.append("<tr>" +
           "<td style='height:18px' colspan='3'></td>" +
           "<td align='right' style='padding-right:5px' ><strong>VAT</strong></td>" +
-          "<td align='right' style='padding-right:5px' ><strong>R " + vattotal.toFixed(2) + "</strong></td>" +
+          "<td align='right' style='padding-right:5px' ><strong>" + vattotal.toFixed(2) + "</strong></td>" +
           "</tr>");
 
         // Order Total
         grid.append("<tr>" +
           "<td style='height:18px' colspan='3'></td>" +
           "<td align='right' style='padding-right:5px' ><strong>Total</strong></td>" +
-          "<td align='right' style='padding-right:5px' ><strong>R " + ordertotal.toFixed(2) + "</strong></td>" +
+          "<td align='right' style='padding-right:5px' ><strong>" + ordertotal.toFixed(2) + "</strong></td>" +
           "</tr>");
 
         $("#validorder").html("");
       }
     }
 
-    function removeLineItem(index) {
-      order.orderdetail.splice(index, 1);
-      updateOrderDetailGrid();
-    }
-
-    $("#confirm").click(function () {
+    $("#save").click(function () {
 
       if (order.orderdetail.length == 0) {
         $("#closemodal").click();
         $("#validorder").html("Please add item(s).");
       }
       else {
-        var orderNo = $("#ordernoprefix").val() + $("#ordernoseed").val();
+        orderNo = $("#ordernoprefix").val() + $("#ordernoseed").val();
 
         if (orderId == 0) {
           // perform the add of the new order
@@ -331,7 +311,7 @@
             type: 'POST',
             success: function (data) {
               // if success: send orderId and json orderdetail list to controller to add new  order detail
-              var orderId = data;
+              orderId = data;
 
               $.ajax({
                 url: '@Url.Action("AddOrderDetail")',
@@ -340,7 +320,7 @@
                 success: function (validResult) {
                   // if success: route to confirmation screen
                   if (validResult.isValid) {
-                    window.location.href = '@Url.Action("OrderCustomer")' + '?orderId=' + orderId + '&orderNo=' + orderNo ;
+                    $("#hidden").click();
                   }
                   else {
                     $("#validorder").html("Error occured: " + validResult.messages[0].message);
@@ -374,7 +354,7 @@
                 success: function (validResult) {
                   // if success: route to confirmation screen
                   if (validResult.isValid) {
-                    window.location.href = '@Url.Action("OrderCustomer")' + '?orderId=' + orderId + '&orderNo=' + orderNo ;
+                    $("#hidden").click();
                   }
                   else {
                     $("#validorder").html("Error occured: " + validResult.messages[0].message);
@@ -396,8 +376,95 @@
       }
     });
 
+    function removeLineItem(index) {
+      order.orderdetail.splice(index, 1);
+      updateOrderDetailGrid();
+    }
+
     $("#cancel").click(function () {
       location.href = '@Url.Action("Index", "Orders", new { area = "Orders" })'
     });
+
+    $("#customer").click(function () {
+      window.location.href = '@Url.Action("OrderCustomer")' + '?orderId=' + orderId + '&orderNo=' + orderNo ;
+    });
+
+    $("#accept").click(function () {
+      $.ajax({
+        url: '@Url.Action("AcceptOrder")',
+        type: "POST",
+        data: { orderId: orderId },
+        success: function () {
+          location.href = '@Url.Action("Index", "Orders", new { area = "Orders" })';
+        },
+        error: function (xhr, options, error) {
+          alert("OOPS! The was an error processing your request - " + jQuery.parseJSON(xhr.responseText).message);
+        }
+      });
+    });
+
+    //////////////////    Key Press and Change events
+    ///////////////////////////////////////////////////
+
+    $("#ordernoseed").change(function (event) {
+      $("#ordernoseed").val(ordernoseed);
+    });
+
+    $("input[type='text']").keyup(function (event) {
+      $(this).removeClass("alert-danger");
+    });
+
+    $("input[class='number form-control-small']").keyup(function (event) {
+      if (!$.isNumeric(event.key) && event.keyCode != 110)
+        $(this).val($(this).val().replace(event.key, ""));
+    });
+
+    $("input[class='number form-control-small']").keypress(function (event) {
+      if (!$.isNumeric(event.key) && event.keyCode != 110)
+        $(this).val($(this).val().replace(event.key, ""));
+    });
+
+    $("input[class='quantity form-control-small']").keyup(function (event) {
+      if (!$.isNumeric(event.key))
+        $(this).val($(this).val().replace(event.key, ""));
+    });
+
+    $("input[class='quantity form-control-small']").keypress(function (event) {
+      if (!$.isNumeric(event.key))
+        $(this).val($(this).val().replace(event.key, ""));
+    });
+
+    $("input[class='number form-control-small']").change(function (event) {
+      if (!$.isNumeric($(this).val())) {
+        alert('Please enter a valid number.');
+        $(this).val("");
+        $(this).addClass("alert-danger");
+      }
+      else {
+        if ($(this).val() > 1000000000 || $(this).val() < 0) {
+          alert('Maximum value is R1 billion');
+          $(this).val("");
+          $(this).focus();
+        }
+      }
+    });
+
+    $("input[class='quantity form-control-small']").change(function (event) {
+      if (!$.isNumeric($(this).val())) {
+        alert('Please enter a valid number.');
+        $(this).val("");
+        $(this).addClass("alert-danger");
+      }
+      else {
+        if ($(this).val() > 10000000 || $(this).val() < 0) {
+          alert('Maximum quantity is 10 million units');
+          $(this).val("");
+          $(this).focus();
+        }
+      }
+    });
+
+    ////////////////// END :  Key Press and Change events
+    ///////////////////////////////////////////////////////
   </script>
 }

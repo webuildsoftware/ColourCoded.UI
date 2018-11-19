@@ -14,10 +14,6 @@
     font-weight: bold;
   }
 
-  #orders tr td:nth-child(n+2) {
-    cursor: pointer;
-  }
-
 </style>
 
 <div class="row">
@@ -25,7 +21,7 @@
     <h4 class="page-header-sm">
       Recent Orders
       <div class="pull-right">
-        <button type="button" id="quote" class="btn-thin btn-success">Add New</button>&nbsp;
+        <button type="button" id="quote" class="btn-thin btn-success">New Order</button>&nbsp;
         <button type="button" id="findorder" class="btn-thin btn-success">Search</button>
       </div>
     </h4>
@@ -64,32 +60,38 @@
         <table width="100%" id="orders" class="table table-striped table-bordered table-hover">
           <thead>
             <tr>
-              <td></td>
               <td>OrderNo</td>
               <td>CreateDate</td>
               <td>Customer</td>
-              <td class="hidecolumn">Total</td>
+              <td class="hidecolumn">Order Total</td>
               <td class="hidecolumn">Status</td>
+              <td></td>
             </tr>
           </thead>
           <tbody>
             @foreach (var order in Model.Orders)
             {
-            <tr data-orderNo="@order.OrderNo.ToUpper()" data-orderId="@order.OrderId">
-              <td style="text-align: center;">
-                @if (order.Status.ToUpper() == "ACCEPTED")
-                {
-                  <button type="button" class="btn btn-warning btn-circle-sm" title="Download PDF" data-toggle="modal" data-target="#DownloadOrderModal">
-                    <i class="fa fa-download"></i>
+              <tr data-orderNo="@order.OrderNo.ToUpper()" data-orderId="@order.OrderId" data-emailAddress="@order.EmailAddress" data-customerId="@order.CustomerId">
+                <td>@order.OrderNo</td>
+                <td>@order.CreateDate</td>
+                <td>@order.CustomerName</td>
+                <td style="text-align: right" class="hidecolumn">R @order.Total</td>
+                <td style="text-align: center" class="hidecolumn">@order.Status</td>
+                <td class="text-nowrap" style="width: 1%; white-space: nowrap;">
+                  <button type="button" class="btn btn-default btn-circle-sm" title="Edit Order" id="editorder" data-toggle="modal" data-target="#ViewOrderModal">
+                    <i class="fa fa-pencil"></i>
                   </button>
-                }
-              </td>
-              <td data-toggle="modal" data-target="#ViewOrderModal">@order.OrderNo</td>
-              <td data-toggle="modal" data-target="#ViewOrderModal">@order.CreateDate</td>
-              <td data-toggle="modal" data-target="#ViewOrderModal">@order.CustomerName</td>
-              <td data-toggle="modal" data-target="#ViewOrderModal" style="text-align: right" class="hidecolumn">R @order.Total</td>
-              <td data-toggle="modal" data-target="#ViewOrderModal" style="text-align: center" class="hidecolumn">@order.Status</td>
-            </tr>
+                  @if (order.Status.ToUpper() == "ACCEPTED")
+                  {
+                    <button type="button" class="btn btn-warning btn-circle-sm" title="Download PDF" data-toggle="modal" data-target="#DownloadOrderModal">
+                      <i class="fa fa-download"></i>
+                    </button>
+                    <button type="button" class="btn btn-info btn-circle-sm" title="Email" data-toggle="modal" data-target="#EmailModal">
+                      <i class="fa fa-envelope"></i>
+                    </button>
+                  }
+                </td>
+              </tr>
             }
           </tbody>
         </table>
@@ -109,39 +111,60 @@ else
 
 <!-- View Order Details Modal -->
 <div class="modal fade" id="ViewOrderModal" tabindex="-1" role="dialog" aria-labelledby="ViewOrderModalLabel" aria-hidden="true">
-  <div class="modal-dialog" style="width:250px">
+  <div class="modal-large-dialog" style="width:300px">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" id="ViewOrderModalLabel">Are you sure?</h4>
+        <h5 class="modal-title" id="ViewOrderModalLabel"><strong>Edit Order <span class="lblorderno"></span></strong></h5>
       </div>
-      <div class="modal-body">Would you like to view the order?</div>
+      <div class="modal-body">What would you like to Edit?</div>
       <div class="modal-footer">
-        <button type="button" class="btn-normal btn-primary" id="vieworder">Yes</button>
-        <button type="button" class="btn-normal btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn-small-thin btn-primary" id="vieworder">Products</button>
+        <button type="button" class="btn-small-thin btn-primary" id="customerinfo">Customer</button>
+        <button type="button" class="btn-small-thin btn-primary" id="addressinfo">Address</button>
+        <button type="button" class="btn-small-thin btn-default" data-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
 </div>
-<!-- /.modal -->
+
 <!-- Download Order Modal -->
 <div class="modal fade" id="DownloadOrderModal" tabindex="-1" role="dialog" aria-labelledby="DownloadOrderModalLabel" aria-hidden="true">
-  <div class="modal-dialog" style="width:250px">
+  <div class="modal-dialog" style="width:280px">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" id="DownloadOrderModalLabel">Are you sure?<span></span></h4>
+        <h5 class="modal-title" id="DownloadOrderModalLabel"><strong>Download Order <span class="lblorderno"></span></strong></h5>
       </div>
-      <div class="modal-body">Download order - <span id="lblorderno"></span>?</div>
+      <div class="modal-body">
+        Would you like to download the order?
+      </div>
       <div class="modal-footer">
-        <button type="button" class="btn-normal btn-primary" id="downloadorder">Yes</button>
-        <button type="button" class="btn-normal btn-default" data-dismiss="modal" id="canceldownload">Close</button>
+        <button type="button" class="btn-thin btn-primary" id="downloadorder">Yes</button>
+        <button type="button" class="btn-thin btn-default" data-dismiss="modal" id="canceldownload">Close</button>
       </div>
     </div>
   </div>
 </div>
-<!-- /.modal -->
 
+<!-- Email Modal -->
+<div class="modal fade" id="EmailModal" tabindex="-1" role="dialog" aria-labelledby="EmailModalLabel" aria-hidden="true">
+  <div class="modal-dialog" style="width:280px">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h5 class="modal-title" id="EmailModalLabel"><strong>Email Order <span class="lblorderno"></span></strong></h5>
+      </div>
+      <div class="modal-body">
+        Please enter a valid email address <input id="emailaddress" type="text" class="form-control-small" placeholder="Enter Email Address" style="width: 220px" />
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-thin btn-primary" id="emailorder">Send</button>
+        <button type="button" class="btn-thin btn-default" data-dismiss="modal" id="cancelemail">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
 @section Scripts
   {
   <script>
@@ -155,6 +178,8 @@ else
     $("#findorder").click(function () {
       $("#period").show();
       $("#recentorders").hide();
+      $("#zerosearch").hide();
+      
     });
 
 
@@ -200,13 +225,23 @@ else
 
       $("#vieworder").data("orderid", orderId);
       $("#vieworder").data("orderno", orderNo);
+      $("#vieworder").data("customerid", $(this).data("customerid"));
       $("#downloadorder").data("orderid", orderId);
       $("#downloadorder").data("orderno", orderNo);
-      $("#lblorderno").text(orderNo);
+      $("#emailaddress").val($(this).data("emailaddress"));
+      $(".lblorderno").text(orderNo);
     });
 
     $("#vieworder").click(function () {
-      window.location.href = '@Url.Action("OrderDetail")' + '?orderId=' + $(this).data("orderid") + '&orderNo=' + $(this).data("orderno");
+      window.location.href = '@Url.Action("OrderDetail")' + '?orderId=' + $("#vieworder").data("orderid") + '&orderNo=' + $("#vieworder").data("orderno");
+    });
+
+    $("#customerinfo").click(function () {
+      window.location.href = '@Url.Action("OrderCustomer")' + '?orderId=' + $("#vieworder").data("orderid") + '&orderNo=' + $("#vieworder").data("orderno");
+    });
+
+    $("#addressinfo").click(function () {
+      window.location.href = '@Url.Action("AddressDetail")' + '?orderId=' + $("#vieworder").data("orderid") + '&orderNo=' + $("#vieworder").data("orderno") + '&customerId=' + $("#vieworder").data("customerid");
     });
 
     $("#downloadorder").click(function () {

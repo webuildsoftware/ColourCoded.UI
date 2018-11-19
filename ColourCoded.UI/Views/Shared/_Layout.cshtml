@@ -61,31 +61,31 @@
       <div class="navbar-default sidebar" role="navigation">
         <div class="sidebar-nav navbar-collapse">
           <ul class="nav" id="side-menu">
-            <li>
+            @*<li>
               <a><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+            </li>*@
+            <li>
+              <a asp-area="Orders" asp-controller="Orders" asp-action="Index"><i class="fa fa-home  fa-fw"></i> Home</a>
             </li>
             <li>
-              <a asp-area="Orders" asp-controller="Orders" asp-action="Index"><i class="fa fa-table fa-fw"></i> Orders</a>
-            </li>
-            <li>
-              <a><i class="fa fa-bar-chart-o fa-fw"></i> Customers<span class="fa arrow"></span></a>
-              <ul class="nav nav-second-level">
+              <a><i class="fa fa-users fa-fw"></i> Manage Customers</a>
+              @*<ul class="nav nav-second-level">
                 <li>
                   <a>Manage Customers</a>
                 </li>
                 <li>
                   <a>Statements</a>
                 </li>
-              </ul>
+              </ul>*@
             </li>
             <li>
-              <a><i class="fa fa-edit fa-fw"></i> Manage Products</a>
+              <a><i class="fa fa-product-hunt fa-fw"></i> Manage Products</a>
             </li>
             <li>
-              <a><i class="fa fa-edit fa-fw"></i> Company Profile</a>
+              <a><i class="fa fa-building fa-fw"></i> Company Profile</a>
             </li>
             <li>
-              <a><i class="fa fa-bar-chart-o fa-fw"></i> Security<span class="fa arrow"></span></a>
+              <a><i class="fa fa-lock fa-fw"></i> Security<span class="fa arrow"></span></a>
               <ul class="nav nav-second-level">
                 <li>
                   <a asp-area="Security" asp-controller="Roles" asp-action="Index">Roles</a>

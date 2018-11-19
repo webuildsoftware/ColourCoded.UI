@@ -6,37 +6,6 @@
 
 
 <style>
-  table thead tr td {
-    background-color: lightgray;
-    padding: 3px;
-    font-weight: bold;
-  }
-
-  table tbody tr td {
-    padding: 3px;
-    cursor: pointer;
-  }
-
-  table thead tr td:nth-child(2) {
-    background-color: lightgray;
-    width: 150px;
-  }
-  table thead tr td:nth-child(3) {
-    background-color: lightgray;
-    width: 120px;
-  }
-
-  table i {
-    cursor: pointer;
-  }
-  
-  table {
-    font-size: 12px;
-  }
-
-  input[type=button] {
-    width: 100px;
-  }
 
   .validationLabel {
     color: red;
@@ -48,78 +17,109 @@
     padding: 3px;
   }
 
-  #main div span {
-    font-size: 11px;
-  }
+    #main div span {
+      font-size: 11px;
+    }
 
-  .orderno {
-    width: 100px;
+  #addressdetails tr td {
+    cursor: pointer;
   }
 </style>
-<h3 id="orderno">Order Address Details</h3>
-<div id="main">
-  <div>
-    <span>Address Type</span>
-    <br />
-    <select id="addresstype" style="width: 175px">
-      <option value="Delivery">Delivery</option>
-      <option value="Home">Home</option>
-      <option value="Work">Work</option>
-    </select>
+<div class="row">
+  <div class="col-md-7">
+    <h4 class="page-header-sm">
+      Address Details
+    </h4>
   </div>
-  <div>
-    <span>Address Line 1</span>
-    <br />
-    <input type="text" id="addressline1" placeholder="Enter street name/unit no" />
-  </div>
-  <div>
-    <span>Address Line 2</span>
-    <br />
-    <input type="text" id="addressline2" placeholder="Enter suburb" />
-  </div>
-  <div>
-    <span>City</span>
-    <br />
-    <input type="text" id="city" placeholder="Enter city" />
-  </div>
-  <div>
-    <span>Country</span>
-    <br />
-    <select id="country" style="width: 175px">
-      <option value="South Africa">South Africa</option>
-    </select>
-  </div>
-  <div>
-    <span>Postal Code</span>
-    <br />
-    <input type="text" id="postalcode" placeholder="Enter postal code" />
-  </div>
-  <div>
-    <input id="done" value="Done" type="button" />
-    <input id="cancel" value="Cancel" type="button" />
-    <input type="hidden" id="addressdetailid" value="0" />
-  </div>
-  <div>
-    <br />
-    <table id="addressdetails">
-      <thead>
-        <tr>
-          <td>Type</td>
-          <td>Line 1</td>
-          <td>Line 2</td>
-          <td>City</td>
-          <td>Country</td>
-          <td>Code</td>
-          <td></td>
-        </tr>
-      </thead>
-      <tbody>
-      </tbody>
-    </table>
+</div>
+<div class="row">
+  <div class="col-md-7">
+    <div id="main">
+      <div>
+        <span>Order No</span>
+        <br />
+        <input type="text" id="orderno" disabled class="form-control-small" />
+      </div>
+      <div>
+        <span>Address Type</span>
+        <br />
+        <select id="addresstype" class="form-control-small">
+          <option value="Delivery">Delivery</option>
+          <option value="Home">Home</option>
+          <option value="Work">Work</option>
+        </select>
+      </div>
+      <div>
+        <span>Street</span>
+        <br />
+        <input type="text" id="addressline1" placeholder="Enter street" class="form-control-normal" />
+      </div>
+      <div>
+        <span>Suburb</span>
+        <br />
+        <input type="text" id="addressline2" placeholder="Enter suburb" class="form-control-normal" />
+      </div>
+      <div>
+        <span>City</span>
+        <br />
+        <input type="text" id="city" placeholder="Enter city" class="form-control-normal" />
+      </div>
+      <div>
+        <span>Country</span>
+        <br />
+        <select id="country" class="form-control-normal">
+          <option value="South Africa">South Africa</option>
+        </select>
+      </div>
+      <div>
+        <span>Postal Code</span>
+        <br />
+        <input type="text" id="postalcode" placeholder="Enter code" class="form-control-small" />
+      </div>
+      <div style="padding-top: 10px; padding-bottom: 10px;">
+        <input id="save" value="Save Address" type="button" class="btn-normal-thin btn-success" />&nbsp;&nbsp;
+        <input id="cancel" value="Cancel" type="button" class="btn-normal-thin btn-default" />&nbsp;&nbsp;
+        <input id="hidden" type="button" style="visibility: hidden" data-toggle="modal" data-target="#ConfirmModal" />
+      </div>
+      <div>
+        <table id="addressdetails" class="table table-striped table-bordered table-hover">
+          <thead class="table-head">
+            <tr>
+              <td class="hidecolumn">Type</td>
+              <td>Street</td>
+              <td>Suburb</td>
+              <td>City</td>
+              <td class="hidecolumn">Country</td>
+              <td class="hidecolumn">Code</td>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
   </div>
 </div>
 
-@section Scripts{ 
+<input type="hidden" id="addressdetailid" />
+
+<!-- Saved Successful Popup -->
+<div class="modal fade" id="ConfirmModal" tabindex="-1" role="dialog" aria-labelledby="ConfirmModalLabel" aria-hidden="true">
+  <div class="modal-dialog" style="width:280px">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" id="closeconfirm">&times;</button>
+        <h4 class="modal-title" id="ConfirmModalLabel">Done! Order Complete</h4>
+      </div>
+      <div class="modal-body">What would you like to do next?</div>
+      <div class="modal-footer">
+        <button type="button" class="btn-normal-thin btn-primary" id="accept">Return Home</button>
+        <button type="button" class="btn-normal-thin btn-primary" id="downloadorder">Download Order</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+@section Scripts{
   <script>
     var queryString = location.href.split("?")[1];
     var orderId = 0;
@@ -135,50 +135,13 @@
         orderNo = queryString.split("&")[1].split("=")[1];
         customerId = queryString.split("&")[2].split("=")[1];
 
-        // load the customer addresses 
-        $.ajax({
-          url: '@Url.Action("GetCustomerAddresses")' + '?customerId=' + customerId,
-          type: 'GET',
-          success: function (addresslist) {
-           
-            $("#addressdetails tbody").html("");
-            $.each(addresslist, function (index, linedetail) {
-              $("#addressdetails").show();
-              $("#addressdetails tbody").append("<tr data-addresslineone='" + linedetail.addressLine1 + "' data-addresslinetwo='" + linedetail.addressLine2 + "' data-addressdetailid='" + linedetail.addressDetailId
-                + "' data-city='" + linedetail.city + "' data-country='" + linedetail.country + "' data-postalcode='" + linedetail.postalCode + "' data-addresstype='" + linedetail.addressType + "'>"
-                + "<td>" + linedetail.addressType + "</td>"
-                + "<td>" + linedetail.addressLine1 + "</td>"
-                + "<td>" + linedetail.addressLine2 + "</td>"
-                + "<td>" + linedetail.city + "</td>"
-                + "<td>" + linedetail.country + "</td>"
-                + "<td>" + linedetail.postalCode + "</td>"
-                + "<td><i class='glyphicon glyphicon-trash' onclick='removeAddress(" + linedetail.addressDetailId + ")'></i></td></tr>");
+        $("#orderno").val(orderNo);
 
-            });
+        if (customerId != 0) 
+          GetAllCustomerAddresses(customerId);
 
-          },
-          error: function (xhr, options, error) {
-            alert("OOPS! The was an error processing your request - " + jQuery.parseJSON(xhr.responseText).message);
-          }
-        });
       }
-
     });
-
-    function removeAddress(addressdetailid) {
-
-      $.ajax({
-        url: '@Url.Action("RemoveCustomerOrderAddress")',
-        data: { AddressDetailId: addressdetailid, customerId: customerId },
-        type: 'POST',
-        success: function () {
-          location.reload();
-        },
-        error: function (xhr, options, error) {
-          alert("OOPS! The was an error processing your request - " + jQuery.parseJSON(xhr.responseText).message);
-        }
-      });
-    }
 
     $(document).on("click", "#addressdetails tbody tr", function (e) {
       var addresslineone = $(this).data("addresslineone");
@@ -198,7 +161,7 @@
       $("#addressdetailid").val(addressid);
     });
 
-    $("#done").click(function () {
+    $("#save").click(function () {
       if (isValidForm()) {
 
         var addressType = $("#addresstype").val();
@@ -208,7 +171,7 @@
         var country = $("#country").val();
         var postalcode = $("#postalcode").val();
         var addressdetailid = $("#addressdetailid").val();
-        
+
         $.ajax({
           url: '@Url.Action("AddCustomerOrderAddress")',
           data: {
@@ -218,7 +181,7 @@
           },
           type: 'POST',
           success: function () {
-            window.location.href = '@Url.Action("ConfirmCustomerAddress")' + '?orderId=' + orderId + '&orderNo=' + orderNo + '&customerId=' + customerId + '&addressDetailId=' + addressdetailid;
+            $("#hidden").click();
           },
           error: function (xhr, options, error) {
             alert("OOPS! The was an error processing your request - " + jQuery.parseJSON(xhr.responseText).message);
@@ -229,37 +192,117 @@
 
     });
 
-    $("#addressline1").keypress(function (event) { $(this).removeClass(); });
-    $("#city").keypress(function (event) { $(this).removeClass(); });
-    $("#postalcode").keypress(function (event) { $(this).removeClass(); });
-
-    $("input[type=text]").keyup(function (event) {
-      if (event.keyCode == 13) {
-        $("#done").click();
-      }
+    $("#cancel").click(function () {
+      location.href = '@Url.Action("Index", "Orders", new { area = "Orders" })'
     });
+
+    $("#accept").click(function () {
+      $.ajax({
+          url: '@Url.Action("AcceptOrder")',
+          type: "POST",
+          data: { orderId: orderId },
+          success: function () {
+            location.href = '@Url.Action("Index", "Orders", new { area = "Orders" })';
+          },
+          error: function (xhr, options, error) {
+            alert("OOPS! The was an error processing your request - " + jQuery.parseJSON(xhr.responseText).message);
+          }
+        });
+    });
+
+    $("#downloadorder").click(function () {
+      location.href = '@Url.Action("DownloadOrder")' + '?orderId=' + orderId + '&orderNo=' + orderNo;
+      $("#downloadorder").hide();
+    });
+
+
+
+    //////////////////    Private Helper Methods
+    ///////////////////////////////////////////////////
+
+    function removeAddress(addressdetailid) {
+
+      $.ajax({
+        url: '@Url.Action("RemoveCustomerOrderAddress")',
+        data: { AddressDetailId: addressdetailid, customerId: customerId },
+        type: 'POST',
+        success: function () {
+          location.reload();
+        },
+        error: function (xhr, options, error) {
+          alert("OOPS! The was an error processing your request - " + jQuery.parseJSON(xhr.responseText).message);
+        }
+      });
+    }
+
 
     function isValidForm() {
       var valid = true;
 
       var addresslineone = $("#addressline1").val();
+      var addresslinetwo = $("#addressline2").val();
       var city = $("#city").val();
-      var postalcode = $("#postalcode").val();
 
-      $("#addressline1").removeClass();
-      $("#city").removeClass();
-      $("#postalcode").removeClass();
+      $("#addressline1").removeClass("alert-danger");
+      $("#addressline2").removeClass("alert-danger");
+      $("#city").removeClass("alert-danger");
 
       if (addresslineone == "") { $("#addressline1").addClass("alert-danger"); valid = false; }
+      if (addresslinetwo == "") { $("#addressline2").addClass("alert-danger"); valid = false; }
       if (city == "") { $("#city").addClass("alert-danger"); valid = false; }
-      if (postalcode == "") { $("#postalcode").addClass("alert-danger"); valid = false; }
 
       return valid;
     }
 
-    $("#cancel").click(function () {
-      location.href = '@Url.Action("Index", "Orders", new { area = "Orders" })'
+    function GetAllCustomerAddresses() {
+      $.ajax({
+        url: '@Url.Action("GetCustomerAddresses")' + '?customerId=' + customerId,
+        type: 'GET',
+        success: function (addresslist) {
+
+          $("#addressdetails tbody").html("");
+          $.each(addresslist, function (index, linedetail) {
+            $("#addressdetails").show();
+            $("#addressdetails tbody").append("<tr data-addresslineone='" + linedetail.addressLine1 + "' data-addresslinetwo='" + linedetail.addressLine2 + "' data-addressdetailid='" + linedetail.addressDetailId
+              + "' data-city='" + linedetail.city + "' data-country='" + linedetail.country + "' data-postalcode='" + linedetail.postalCode + "' data-addresstype='" + linedetail.addressType + "'>"
+              + "<td class='hidecolumn'>" + linedetail.addressType + "</td>"
+              + "<td>" + linedetail.addressLine1 + "</td>"
+              + "<td>" + linedetail.addressLine2 + "</td>"
+              + "<td>" + linedetail.city + "</td>"
+              + "<td class='hidecolumn'>" + linedetail.country + "</td>"
+              + "<td class='hidecolumn'>" + linedetail.postalCode + "</td>"
+              + "<td class='nonbordered'><button type='button' class='btn btn-danger btn-circle-xsm' title='remove' onclick='removeAddress(" + linedetail.addressDetailId
+              + ")'><i class='fa fa-times'></i></button></td></tr> ");
+
+          });
+
+        },
+        error: function (xhr, options, error) {
+          alert("OOPS! The was an error processing your request - " + jQuery.parseJSON(xhr.responseText).message);
+        }
+      });
+
+    }
+
+    ////////////////// END :  Private Helper Methods
+    //////////////////////////////////////////////////////
+
+    //////////////////    Key Press and Change events
+    ///////////////////////////////////////////////////
+
+    $("#addressline1").keypress(function (event) { $(this).removeClass("alert-danger"); });
+    $("#addressline2").keypress(function (event) { $(this).removeClass("alert-danger"); });
+    $("#city").keypress(function (event) { $(this).removeClass("alert-danger"); });
+
+    $("input[type=text]").keyup(function (event) {
+      if (event.keyCode == 13) {
+        $("#save").click();
+      }
     });
+
+    ////////////////// END :  Key Press and Change events
+    /////////////////////////////////////////////////////
+
   </script>
-  
+
 }

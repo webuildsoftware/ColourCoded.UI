@@ -813,7 +813,7 @@ namespace ColourCoded.Tests.Orders
       resources.MockApiCaller.AddMockResponse("WebApi:Orders:GetCustomerOrderAddress", requestModel, responseModel);
 
       // When 
-      var result = resources.Controller.ConfirmCustomerOrderAddress(orderId, 1) as JsonResult;
+      var result = resources.Controller.GetCustomerOrderAddress(orderId, 1) as JsonResult;
 
       // Then
       Assert.IsNotNull(result);
@@ -861,7 +861,8 @@ namespace ColourCoded.Tests.Orders
           OrderNo = "Moq001",
           Total = "R 2 999.99",
           Status = "Accepted",
-          CustomerName = "City of Cape Town"
+          CustomerName = "City of Cape Town",
+          EmailAddress = "someemail@address.co.za"
         },
         new HomeOrdersModel
         {
@@ -869,7 +870,8 @@ namespace ColourCoded.Tests.Orders
           OrderNo = "Moq001",
           Total = "R 2 999.99",
           Status = "N/A",
-          CustomerName = "Maria Sharpova"
+          CustomerName = "Maria Sharpova",
+          EmailAddress = "someemail@address.co.za"
         },
       };
 
@@ -900,7 +902,8 @@ namespace ColourCoded.Tests.Orders
           OrderId = 1,
           OrderNo = "Moq001",
           Total = "R 2 999.99",
-          Status = "Status"
+          Status = "Status",
+          EmailAddress = "someemail@address.co.za"
         }
       };
 
