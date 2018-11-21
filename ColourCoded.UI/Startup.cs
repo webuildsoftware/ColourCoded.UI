@@ -27,7 +27,7 @@ namespace ColourCoded.UI
       services.AddMvc(options =>
       {
         options.Filters.Add(new GlobalExceptionFilter());
-        options.Filters.Add(new RequireHttpsAttribute());
+       // options.Filters.Add(new RequireHttpsAttribute());
       });
 
       services.AddAuthentication(Configuration["CookieSecurityScheme"])
@@ -65,8 +65,6 @@ namespace ColourCoded.UI
       {
         app.UseExceptionHandler("/Home/Home/Error");
       }
-
-      app.UseStaticFiles();
 
       app.UseMvc(routes =>
       {

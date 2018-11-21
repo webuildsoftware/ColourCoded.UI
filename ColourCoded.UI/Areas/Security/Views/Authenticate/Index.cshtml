@@ -21,6 +21,12 @@
   <script src="~/lib/theme/sb-admin-2.js"></script>
   <script src="~/lib/bootstrap/js/bootstrap.js"></script>
 
+  <style>
+    #main div span {
+      font-size: 10px;
+    }
+  </style>
+
 </head>
 <body>
   <div class="container">
@@ -35,9 +41,11 @@
             {
               <fieldset>
                 <div id="divusername" class="form-group">
+                  <span>Username</span><br />
                   <input class="form-control" placeholder="Username" name="username" id="username" type="text" autofocus />
                 </div>
                 <div id="divpassword" class="form-group">
+                  <span>Password</span><br />
                   <input class="form-control" placeholder="Password" name="password" id="password" type="password" />
                 </div>
                 <input id="login" class="btn btn-lg btn-success btn-block" value="Login" type="button" />

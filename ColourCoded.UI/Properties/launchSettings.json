@@ -3,7 +3,7 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iis": {
-      "applicationUrl": "https://www.ccinvoice.com",
+      "applicationUrl": "http://localhost/www.ccinvoice.com",
       "sslPort": 0
     },
     "iisExpress": {
@@ -22,7 +22,7 @@
     "ColourCoded.UI": {
       "commandName": "IIS",
       "launchBrowser": true,
-      "launchUrl": "security/roles"
+      "launchUrl": "security/authenticate"
     }
   }
 }

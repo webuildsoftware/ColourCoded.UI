@@ -222,10 +222,17 @@ else
     $("#orders tbody tr").click(function () {
       var orderId = $(this).data("orderid");
       var orderNo = $(this).data("orderno");
+      var customerId = $(this).data("customerid");
+
+      if (customerId == 0) 
+        $("#addressinfo").hide();
+      else
+        $("#addressinfo").show();
+      
 
       $("#vieworder").data("orderid", orderId);
       $("#vieworder").data("orderno", orderNo);
-      $("#vieworder").data("customerid", $(this).data("customerid"));
+      $("#vieworder").data("customerid", customerId);
       $("#downloadorder").data("orderid", orderId);
       $("#downloadorder").data("orderno", orderNo);
       $("#emailaddress").val($(this).data("emailaddress"));
